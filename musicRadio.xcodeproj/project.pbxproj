@@ -22,6 +22,7 @@
 		B0AAF2DF18997BB400670924 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BE18997BB400670924 /* UIKit.framework */; };
 		B0AAF2E718997BB400670924 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2E518997BB400670924 /* InfoPlist.strings */; };
 		B0AAF2E918997BB400670924 /* musicRadioTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2E818997BB400670924 /* musicRadioTests.m */; };
+		B0AAF2F41899809300670924 /* MRPlaylistGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 		B0AAF2E418997BB400670924 /* musicRadioTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "musicRadioTests-Info.plist"; sourceTree = "<group>"; };
 		B0AAF2E618997BB400670924 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B0AAF2E818997BB400670924 /* musicRadioTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = musicRadioTests.m; sourceTree = "<group>"; };
+		B0AAF2F21899809300670924 /* MRPlaylistGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRPlaylistGenerator.h; path = Classess/MRPlaylistGenerator.h; sourceTree = "<group>"; };
+		B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRPlaylistGenerator.m; path = Classess/MRPlaylistGenerator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 				B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */,
 				B0AAF2D218997BB400670924 /* ViewController.h */,
 				B0AAF2D318997BB400670924 /* ViewController.m */,
+				B0AAF2F21899809300670924 /* MRPlaylistGenerator.h */,
+				B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */,
 				B0AAF2D518997BB400670924 /* Images.xcassets */,
 				B0AAF2C118997BB400670924 /* Supporting Files */,
 			);
@@ -253,6 +258,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0AAF2F41899809300670924 /* MRPlaylistGenerator.m in Sources */,
 				B0AAF2D418997BB400670924 /* ViewController.m in Sources */,
 				B0AAF2CB18997BB400670924 /* AppDelegate.m in Sources */,
 				B0AAF2C718997BB400670924 /* main.m in Sources */,
