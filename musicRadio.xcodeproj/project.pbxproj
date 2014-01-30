@@ -15,7 +15,6 @@
 		B0AAF2CB18997BB400670924 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2CA18997BB400670924 /* AppDelegate.m */; };
 		B0AAF2CE18997BB400670924 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2CC18997BB400670924 /* Main_iPhone.storyboard */; };
 		B0AAF2D118997BB400670924 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */; };
-		B0AAF2D418997BB400670924 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2D318997BB400670924 /* ViewController.m */; };
 		B0AAF2D618997BB400670924 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2D518997BB400670924 /* Images.xcassets */; };
 		B0AAF2DD18997BB400670924 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2DC18997BB400670924 /* XCTest.framework */; };
 		B0AAF2DE18997BB400670924 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BA18997BB400670924 /* Foundation.framework */; };
@@ -23,6 +22,8 @@
 		B0AAF2E718997BB400670924 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2E518997BB400670924 /* InfoPlist.strings */; };
 		B0AAF2E918997BB400670924 /* musicRadioTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2E818997BB400670924 /* musicRadioTests.m */; };
 		B0AAF2F41899809300670924 /* MRPlaylistGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */; };
+		B0AAF2F718998C4D00670924 /* MRMusicPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */; };
+		B0AAF2FA18998E3700670924 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F918998E3700670924 /* SearchViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,8 +49,6 @@
 		B0AAF2CA18997BB400670924 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		B0AAF2CD18997BB400670924 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
 		B0AAF2D018997BB400670924 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
-		B0AAF2D218997BB400670924 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		B0AAF2D318997BB400670924 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		B0AAF2D518997BB400670924 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B0AAF2DB18997BB400670924 /* musicRadioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = musicRadioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0AAF2DC18997BB400670924 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -58,6 +57,10 @@
 		B0AAF2E818997BB400670924 /* musicRadioTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = musicRadioTests.m; sourceTree = "<group>"; };
 		B0AAF2F21899809300670924 /* MRPlaylistGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRPlaylistGenerator.h; path = Classess/MRPlaylistGenerator.h; sourceTree = "<group>"; };
 		B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRPlaylistGenerator.m; path = Classess/MRPlaylistGenerator.m; sourceTree = "<group>"; };
+		B0AAF2F518998C4D00670924 /* MRMusicPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRMusicPlayer.h; path = Classess/MRMusicPlayer.h; sourceTree = "<group>"; };
+		B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRMusicPlayer.m; path = Classess/MRMusicPlayer.m; sourceTree = "<group>"; };
+		B0AAF2F818998E3700670924 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		B0AAF2F918998E3700670924 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,14 +120,16 @@
 		B0AAF2C018997BB400670924 /* musicRadio */ = {
 			isa = PBXGroup;
 			children = (
-				B0AAF2C918997BB400670924 /* AppDelegate.h */,
-				B0AAF2CA18997BB400670924 /* AppDelegate.m */,
 				B0AAF2CC18997BB400670924 /* Main_iPhone.storyboard */,
 				B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */,
-				B0AAF2D218997BB400670924 /* ViewController.h */,
-				B0AAF2D318997BB400670924 /* ViewController.m */,
+				B0AAF2C918997BB400670924 /* AppDelegate.h */,
+				B0AAF2CA18997BB400670924 /* AppDelegate.m */,
+				B0AAF2F818998E3700670924 /* SearchViewController.h */,
+				B0AAF2F918998E3700670924 /* SearchViewController.m */,
 				B0AAF2F21899809300670924 /* MRPlaylistGenerator.h */,
 				B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */,
+				B0AAF2F518998C4D00670924 /* MRMusicPlayer.h */,
+				B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */,
 				B0AAF2D518997BB400670924 /* Images.xcassets */,
 				B0AAF2C118997BB400670924 /* Supporting Files */,
 			);
@@ -259,8 +264,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0AAF2F41899809300670924 /* MRPlaylistGenerator.m in Sources */,
-				B0AAF2D418997BB400670924 /* ViewController.m in Sources */,
+				B0AAF2F718998C4D00670924 /* MRMusicPlayer.m in Sources */,
 				B0AAF2CB18997BB400670924 /* AppDelegate.m in Sources */,
+				B0AAF2FA18998E3700670924 /* SearchViewController.m in Sources */,
 				B0AAF2C718997BB400670924 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
