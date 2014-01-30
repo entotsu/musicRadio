@@ -1,13 +1,13 @@
 //
-//  SearchViewController.h
+//  MRLocalPlaylistManager.h
 //  musicRadio
 //
 //  Created by Takuya Okamoto on 2014/01/30.
 //  Copyright (c) 2014年 Takuya Okamoto. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface SearchViewController : UIViewController
+@interface MRLocalPlaylistManager : NSObject
 
 @end

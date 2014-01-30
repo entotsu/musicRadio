@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface MRMusicPlayer : NSObject
 
 
-- (int) setNowTrack: (NSString*)trackURL;
+-(int) setNowTrack: (NSString*)trackURL;
 -(NSURL*) getNowTrack;
 
 -(int) loveThisTrack;
@@ -20,5 +21,8 @@
 
 -(NSURL*) goPreviousTrack;
 -(NSURL*) goNextTrack;
+
+- (int) playMusicWithURL:(NSString*)urlString;
+
 
 @end

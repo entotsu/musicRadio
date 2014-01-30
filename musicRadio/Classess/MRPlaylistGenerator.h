@@ -11,12 +11,16 @@
 @interface MRPlaylistGenerator : NSObject
 
 //lastfmで検索してプレイリストを作成
-- (void) searchTrackWithName:(NSString *)trackName andArtist:(NSString*) artistName;
+//- (void) searchTrackWithName:(NSString *)trackName andArtist:(NSString*) artistName;
+-(int) generatePlaylistByArtistName: (NSString*)artistName callback:(id)callback;
 
 
--(NSURL*)goPreviousTrack;
+-(NSDictionary*)getRandomTrack;
+
 -(NSURL*)getNowTrack;
+-(NSURL*)goPreviousTrack;
 -(NSURL*)goNextTrack;
 
+-(int) resetPlaylist;
 
 @end

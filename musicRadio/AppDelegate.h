@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVAudioSession.h>
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

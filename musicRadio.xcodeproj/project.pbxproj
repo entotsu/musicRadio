@@ -23,7 +23,13 @@
 		B0AAF2E918997BB400670924 /* musicRadioTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2E818997BB400670924 /* musicRadioTests.m */; };
 		B0AAF2F41899809300670924 /* MRPlaylistGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */; };
 		B0AAF2F718998C4D00670924 /* MRMusicPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */; };
-		B0AAF2FA18998E3700670924 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F918998E3700670924 /* SearchViewController.m */; };
+		B0AAF2FC189A3ABD00670924 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2FB189A3ABD00670924 /* AVFoundation.framework */; };
+		B0AAF349189A7A1600670924 /* MRRadio.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF348189A7A1600670924 /* MRRadio.m */; };
+		B0AAF34C189A837000670924 /* MRLocalPlaylistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF34B189A837000670924 /* MRLocalPlaylistManager.m */; };
+		B0AAF34F189AB32B00670924 /* MRHttpRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF34E189AB32B00670924 /* MRHttpRequest.m */; };
+		B0AAF352189AB74300670924 /* MRLastfmRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF351189AB74300670924 /* MRLastfmRequest.m */; };
+		B0AAF355189AB87900670924 /* MRExfmRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF354189AB87900670924 /* MRExfmRequest.m */; };
+		B0AAF358189AE02000670924 /* TestplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF357189AE02000670924 /* TestplayViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,8 +65,19 @@
 		B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRPlaylistGenerator.m; path = Classess/MRPlaylistGenerator.m; sourceTree = "<group>"; };
 		B0AAF2F518998C4D00670924 /* MRMusicPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRMusicPlayer.h; path = Classess/MRMusicPlayer.h; sourceTree = "<group>"; };
 		B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRMusicPlayer.m; path = Classess/MRMusicPlayer.m; sourceTree = "<group>"; };
-		B0AAF2F818998E3700670924 /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
-		B0AAF2F918998E3700670924 /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
+		B0AAF2FB189A3ABD00670924 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		B0AAF347189A7A1600670924 /* MRRadio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRRadio.h; sourceTree = "<group>"; };
+		B0AAF348189A7A1600670924 /* MRRadio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRRadio.m; sourceTree = "<group>"; };
+		B0AAF34A189A837000670924 /* MRLocalPlaylistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRLocalPlaylistManager.h; path = Classess/MRLocalPlaylistManager.h; sourceTree = "<group>"; };
+		B0AAF34B189A837000670924 /* MRLocalPlaylistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRLocalPlaylistManager.m; path = Classess/MRLocalPlaylistManager.m; sourceTree = "<group>"; };
+		B0AAF34D189AB32B00670924 /* MRHttpRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRHttpRequest.h; path = Classess/MRHttpRequest.h; sourceTree = "<group>"; };
+		B0AAF34E189AB32B00670924 /* MRHttpRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRHttpRequest.m; path = Classess/MRHttpRequest.m; sourceTree = "<group>"; };
+		B0AAF350189AB74300670924 /* MRLastfmRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRLastfmRequest.h; path = Classess/MRLastfmRequest.h; sourceTree = "<group>"; };
+		B0AAF351189AB74300670924 /* MRLastfmRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRLastfmRequest.m; path = Classess/MRLastfmRequest.m; sourceTree = "<group>"; };
+		B0AAF353189AB87900670924 /* MRExfmRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRExfmRequest.h; path = Classess/MRExfmRequest.h; sourceTree = "<group>"; };
+		B0AAF354189AB87900670924 /* MRExfmRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRExfmRequest.m; path = Classess/MRExfmRequest.m; sourceTree = "<group>"; };
+		B0AAF356189AE02000670924 /* TestplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestplayViewController.h; sourceTree = "<group>"; };
+		B0AAF357189AE02000670924 /* TestplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestplayViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B0AAF2FC189A3ABD00670924 /* AVFoundation.framework in Frameworks */,
 				B0AAF2BD18997BB400670924 /* CoreGraphics.framework in Frameworks */,
 				B0AAF2BF18997BB400670924 /* UIKit.framework in Frameworks */,
 				B0AAF2BB18997BB400670924 /* Foundation.framework in Frameworks */,
@@ -109,6 +127,7 @@
 		B0AAF2B918997BB400670924 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B0AAF2FB189A3ABD00670924 /* AVFoundation.framework */,
 				B0AAF2BA18997BB400670924 /* Foundation.framework */,
 				B0AAF2BC18997BB400670924 /* CoreGraphics.framework */,
 				B0AAF2BE18997BB400670924 /* UIKit.framework */,
@@ -124,12 +143,22 @@
 				B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */,
 				B0AAF2C918997BB400670924 /* AppDelegate.h */,
 				B0AAF2CA18997BB400670924 /* AppDelegate.m */,
-				B0AAF2F818998E3700670924 /* SearchViewController.h */,
-				B0AAF2F918998E3700670924 /* SearchViewController.m */,
+				B0AAF356189AE02000670924 /* TestplayViewController.h */,
+				B0AAF357189AE02000670924 /* TestplayViewController.m */,
+				B0AAF347189A7A1600670924 /* MRRadio.h */,
+				B0AAF348189A7A1600670924 /* MRRadio.m */,
 				B0AAF2F21899809300670924 /* MRPlaylistGenerator.h */,
 				B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */,
 				B0AAF2F518998C4D00670924 /* MRMusicPlayer.h */,
 				B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */,
+				B0AAF34A189A837000670924 /* MRLocalPlaylistManager.h */,
+				B0AAF34B189A837000670924 /* MRLocalPlaylistManager.m */,
+				B0AAF350189AB74300670924 /* MRLastfmRequest.h */,
+				B0AAF351189AB74300670924 /* MRLastfmRequest.m */,
+				B0AAF353189AB87900670924 /* MRExfmRequest.h */,
+				B0AAF354189AB87900670924 /* MRExfmRequest.m */,
+				B0AAF34D189AB32B00670924 /* MRHttpRequest.h */,
+				B0AAF34E189AB32B00670924 /* MRHttpRequest.m */,
 				B0AAF2D518997BB400670924 /* Images.xcassets */,
 				B0AAF2C118997BB400670924 /* Supporting Files */,
 			);
@@ -264,9 +293,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				B0AAF2F41899809300670924 /* MRPlaylistGenerator.m in Sources */,
+				B0AAF34C189A837000670924 /* MRLocalPlaylistManager.m in Sources */,
+				B0AAF34F189AB32B00670924 /* MRHttpRequest.m in Sources */,
 				B0AAF2F718998C4D00670924 /* MRMusicPlayer.m in Sources */,
+				B0AAF355189AB87900670924 /* MRExfmRequest.m in Sources */,
+				B0AAF358189AE02000670924 /* TestplayViewController.m in Sources */,
 				B0AAF2CB18997BB400670924 /* AppDelegate.m in Sources */,
-				B0AAF2FA18998E3700670924 /* SearchViewController.m in Sources */,
+				B0AAF352189AB74300670924 /* MRLastfmRequest.m in Sources */,
+				B0AAF349189A7A1600670924 /* MRRadio.m in Sources */,
 				B0AAF2C718997BB400670924 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
