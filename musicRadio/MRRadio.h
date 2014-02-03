@@ -34,8 +34,11 @@
 
 
 -(int) resetPlaylist;
-
+-(NSString*) getNowPlayingTitle;
 //-(int) generatePlaylistWithThisTrack;
 
+
+- (int) test_random_play;//test
+- (void) setTestView :(id)view;//test
 
 @end

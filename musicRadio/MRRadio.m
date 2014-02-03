@@ -11,12 +11,16 @@
 #import "MRMusicPlayer.h"
 #import "MRLastfmRequest.h"
 #import "MRExfmRequest.h"
+#import "TestplayViewController.h" //test
 
 @implementation MRRadio {
     MRPlaylistGenerator *_playlistGanerator;
     MRLastfmRequest *_lastfmRequest;
     MRExfmRequest *_exfmRequest;
     MRMusicPlayer *_musicPlayer;
+    NSString *_nowPlayingName;//test
+    
+    TestplayViewController *_testView;//test
 }
 
 
@@ -99,6 +103,9 @@
     NSString *songSearhKeyword = [NSString stringWithFormat:@"%@ %@",
                                   randomTrack[@"artist"],randomTrack[@"name"]];
     
+    _nowPlayingName = [NSString stringWithFormat:@"%@ / %@",
+                          randomTrack[@"name"],randomTrack[@"artist"]];
+    
     NSLog(@"-----Song Search : %@",songSearhKeyword);
     
     NSDictionary *songSearchResult = [_exfmRequest searchSongByExfmWithKeyword:songSearhKeyword];
@@ -111,12 +118,10 @@
     }
     else {
         NSDictionary *song = songSearchResult[@"songs"][0];
+        [_testView setLabelText:_nowPlayingName];//test
         return song[@"url"];
     }
 }
-
-
-
 
 
 -(int) resetPlaylist {
@@ -124,7 +129,15 @@
     return 0;
 }
 
+-(NSString*) getNowPlayingTitle {
+    return _nowPlayingName;
+}
 
+
+//------------------あとでけす----------------------
+- (void) setTestView :(id)view{
+    _testView = view;
+}
 
 
 @end

@@ -10,4 +10,6 @@
 
 @interface TestplayViewController : UIViewController
 
+- (void) setLabelText: (NSString*)text;
+
 @end

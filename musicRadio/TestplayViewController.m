@@ -16,6 +16,8 @@
 @implementation TestplayViewController {
     MRRadio *_appRadio;
     UITextField *_textField;
+    UILabel *_infoLabel;
+    NSString *_searchedArtist;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -39,6 +41,7 @@
     
     
     _appRadio = [[MRRadio alloc] init];
+    [_appRadio setTestView:self];
 }
 
 
@@ -54,7 +57,6 @@
     _textField.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
     [self.view addSubview:_textField];
     
-    
     UIButton *button = [[UIButton alloc] init];
     button.frame = CGRectMake(0, 0, maxW/2, 50);
     button.center = CGPointMake(maxW/2, maxH/3 + 50 + 30);
@@ -62,21 +64,35 @@
     [button setTitle:@"Play Radio!" forState:UIControlStateNormal];
     [button addTarget:self action:@selector(onTapTestButton) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:button];
+    
+    _infoLabel = [[UILabel alloc] init];
+    _infoLabel.frame = CGRectMake(0, 0, maxW-maxW/4, 50);
+    _infoLabel.center = CGPointMake(maxW/2, maxH/3 - 80);
+    [_infoLabel setText:@"Type artist name."];
+    [self.view addSubview:_infoLabel];
+
 }
 
 
 - (void) onTapTestButton {
     
-    [_appRadio resetPlaylist];
-    
-    NSString *keyword = [_textField text];
-    NSArray *artistSearchResult = [_appRadio searchSongWithArtistName:keyword];
-    NSString *playlistArtistName = artistSearchResult[0][@"name"];
-    NSLog(@"playlistArtistName :%@", playlistArtistName);
-    [_appRadio generatePlaylistByArtistName:playlistArtistName];
-
+    if ( ![_searchedArtist isEqualToString:[_textField text]] ){
+        NSString *keyword = [_textField text];
+        _searchedArtist = keyword;
+        NSArray *artistSearchResult = [_appRadio searchSongWithArtistName:keyword];
+        NSString *playlistArtistName = artistSearchResult[0][@"name"];
+        NSLog(@"playlistArtistName :%@", playlistArtistName);
+        [_appRadio generatePlaylistByArtistName:playlistArtistName];
+    }
+    else {
+        [_appRadio test_random_play];
+    }
 }
 
+
+- (void) setLabelText: (NSString*)text {
+    [_infoLabel setText:text];
+}
 
 
 - (void) testPlay {
