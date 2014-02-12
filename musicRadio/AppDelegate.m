@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <AVFoundation/AVFoundation.h>
 
 @implementation AppDelegate
 
@@ -14,8 +15,15 @@
 {
     // Override point for customization after application launch.
 
-    //これなーいあらないかも？
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+    //バッググラウンド再生呪文    
+    NSError *setCategoryErr = nil;
+    NSError *activationErr  = nil;
+    [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: &setCategoryErr];
+    [[AVAudioSession sharedInstance] setActive: YES error: &activationErr];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    UIBackgroundTaskIdentifier newTaskId = UIBackgroundTaskInvalid;
+    newTaskId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:NULL];
+    
     
     return YES;
 }

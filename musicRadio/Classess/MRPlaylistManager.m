@@ -6,16 +6,17 @@
 //  Copyright (c) 2014年 Takuya Okamoto. All rights reserved.
 //
 
-#import "MRPlaylistGenerator.h"
+#import "MRPlaylistManager.h"
 #import "MRLastfmRequest.h"
-#import "MRRadio.h"
 
 #define MAX_PLAYLIST_LENGTH 500
 
-@implementation MRPlaylistGenerator {
+@implementation MRPlaylistManager {
     MRLastfmRequest *_lastfmRequest;
     NSMutableArray *_playList;
+    int _nowIndex;
 }
+@synthesize radio;
 
 
 
@@ -36,7 +37,7 @@
 
 // --------------- public method ------------------
 
--(int) generatePlaylistByArtistName: (NSString*)artistName callback:(id)callback{
+-(int) generatePlaylistByArtistName: (NSString*)artistName{
 
     NSLog(@"generatePlaylistByArtistName");
 
@@ -85,10 +86,12 @@
                 }
             }
             
-            //ここでまだ再生してなかったらもう再生始める。 マルチスレッド処理にする？
+            //ここでまだ再生してなかったらラジオに今あるなかからランダムで渡す　ここあとで変える
             if (!is_playing){
                 is_playing = YES;
-                [callback onCreatedPlaylist];
+                NSDictionary *songInfo = [self getNextTrack];
+                NSString *songKeyword = [NSString stringWithFormat:@"%@ %@", songInfo[@"artist"], songInfo[@"name"]];
+                [self.radio randomSongCanPlay:songKeyword];
             }
         }
         else {
@@ -108,7 +111,16 @@
 
 -(NSDictionary*)getRandomTrack {
     int randIndex = (int)arc4random_uniform( (int)[_playList count] );
-    return [_playList objectAtIndex:randIndex];
+    return _playList[randIndex];
+}
+
+
+-(NSDictionary*)getNextTrack {
+    int randIndex = (int)arc4random_uniform( (int)[_playList count] );
+    //次のトラックをコピーして削除
+    NSDictionary *nextTrackInfo = [_playList[randIndex] copy];
+    [_playList removeObjectAtIndex:randIndex];
+    return nextTrackInfo;
 }
 
 

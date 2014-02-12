@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B02C594C18AB6F8500257BC4 /* MusicPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C594B18AB6F8500257BC4 /* MusicPlayerViewController.m */; };
+		B02C594F18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C594E18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m */; };
+		B02C595618AB8D2F00257BC4 /* MRYoutubeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C595518AB8D2F00257BC4 /* MRYoutubeRequest.m */; };
 		B0AAF2BB18997BB400670924 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BA18997BB400670924 /* Foundation.framework */; };
 		B0AAF2BD18997BB400670924 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BC18997BB400670924 /* CoreGraphics.framework */; };
 		B0AAF2BF18997BB400670924 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BE18997BB400670924 /* UIKit.framework */; };
@@ -21,7 +24,7 @@
 		B0AAF2DF18997BB400670924 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BE18997BB400670924 /* UIKit.framework */; };
 		B0AAF2E718997BB400670924 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2E518997BB400670924 /* InfoPlist.strings */; };
 		B0AAF2E918997BB400670924 /* musicRadioTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2E818997BB400670924 /* musicRadioTests.m */; };
-		B0AAF2F41899809300670924 /* MRPlaylistGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */; };
+		B0AAF2F41899809300670924 /* MRPlaylistManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F31899809300670924 /* MRPlaylistManager.m */; };
 		B0AAF2F718998C4D00670924 /* MRMusicPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */; };
 		B0AAF2FC189A3ABD00670924 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2FB189A3ABD00670924 /* AVFoundation.framework */; };
 		B0AAF349189A7A1600670924 /* MRRadio.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF348189A7A1600670924 /* MRRadio.m */; };
@@ -43,6 +46,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B02A696118A2C3EE009FF1EB /* musicRadio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = musicRadio.entitlements; sourceTree = "<group>"; };
+		B02C594A18AB6F8500257BC4 /* MusicPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicPlayerViewController.h; sourceTree = "<group>"; };
+		B02C594B18AB6F8500257BC4 /* MusicPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicPlayerViewController.m; sourceTree = "<group>"; };
+		B02C594D18AB71F300257BC4 /* XCDYouTubeVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCDYouTubeVideoPlayerViewController.h; sourceTree = "<group>"; };
+		B02C594E18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCDYouTubeVideoPlayerViewController.m; sourceTree = "<group>"; };
+		B02C595418AB8D2F00257BC4 /* MRYoutubeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRYoutubeRequest.h; sourceTree = "<group>"; };
+		B02C595518AB8D2F00257BC4 /* MRYoutubeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRYoutubeRequest.m; sourceTree = "<group>"; };
 		B0AAF2B718997BB400670924 /* musicRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musicRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0AAF2BA18997BB400670924 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B0AAF2BC18997BB400670924 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -61,8 +71,8 @@
 		B0AAF2E418997BB400670924 /* musicRadioTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "musicRadioTests-Info.plist"; sourceTree = "<group>"; };
 		B0AAF2E618997BB400670924 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B0AAF2E818997BB400670924 /* musicRadioTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = musicRadioTests.m; sourceTree = "<group>"; };
-		B0AAF2F21899809300670924 /* MRPlaylistGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRPlaylistGenerator.h; path = Classess/MRPlaylistGenerator.h; sourceTree = "<group>"; };
-		B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRPlaylistGenerator.m; path = Classess/MRPlaylistGenerator.m; sourceTree = "<group>"; };
+		B0AAF2F21899809300670924 /* MRPlaylistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRPlaylistManager.h; path = Classess/MRPlaylistManager.h; sourceTree = "<group>"; };
+		B0AAF2F31899809300670924 /* MRPlaylistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRPlaylistManager.m; path = Classess/MRPlaylistManager.m; sourceTree = "<group>"; };
 		B0AAF2F518998C4D00670924 /* MRMusicPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRMusicPlayer.h; path = Classess/MRMusicPlayer.h; sourceTree = "<group>"; };
 		B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRMusicPlayer.m; path = Classess/MRMusicPlayer.m; sourceTree = "<group>"; };
 		B0AAF2FB189A3ABD00670924 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -105,6 +115,54 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B02C595018AB71FC00257BC4 /* plugins */ = {
+			isa = PBXGroup;
+			children = (
+				B02C594D18AB71F300257BC4 /* XCDYouTubeVideoPlayerViewController.h */,
+				B02C594E18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m */,
+			);
+			name = plugins;
+			sourceTree = "<group>";
+		};
+		B02C595118AB720C00257BC4 /* otherClasses */ = {
+			isa = PBXGroup;
+			children = (
+				B0AAF350189AB74300670924 /* MRLastfmRequest.h */,
+				B0AAF351189AB74300670924 /* MRLastfmRequest.m */,
+				B0AAF353189AB87900670924 /* MRExfmRequest.h */,
+				B0AAF354189AB87900670924 /* MRExfmRequest.m */,
+				B02C595418AB8D2F00257BC4 /* MRYoutubeRequest.h */,
+				B02C595518AB8D2F00257BC4 /* MRYoutubeRequest.m */,
+				B0AAF34D189AB32B00670924 /* MRHttpRequest.h */,
+				B0AAF34E189AB32B00670924 /* MRHttpRequest.m */,
+			);
+			name = otherClasses;
+			sourceTree = "<group>";
+		};
+		B02C595218AB723200257BC4 /* mainClasses */ = {
+			isa = PBXGroup;
+			children = (
+				B0AAF347189A7A1600670924 /* MRRadio.h */,
+				B0AAF348189A7A1600670924 /* MRRadio.m */,
+				B0AAF2F21899809300670924 /* MRPlaylistManager.h */,
+				B0AAF2F31899809300670924 /* MRPlaylistManager.m */,
+				B0AAF34A189A837000670924 /* MRLocalPlaylistManager.h */,
+				B0AAF34B189A837000670924 /* MRLocalPlaylistManager.m */,
+			);
+			name = mainClasses;
+			sourceTree = "<group>";
+		};
+		B02C595318AB72BE00257BC4 /* NoUse */ = {
+			isa = PBXGroup;
+			children = (
+				B0AAF2F518998C4D00670924 /* MRMusicPlayer.h */,
+				B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */,
+				B0AAF356189AE02000670924 /* TestplayViewController.h */,
+				B0AAF357189AE02000670924 /* TestplayViewController.m */,
+			);
+			name = NoUse;
+			sourceTree = "<group>";
+		};
 		B0AAF2AE18997BB400670924 = {
 			isa = PBXGroup;
 			children = (
@@ -139,27 +197,18 @@
 		B0AAF2C018997BB400670924 /* musicRadio */ = {
 			isa = PBXGroup;
 			children = (
-				B0AAF2CC18997BB400670924 /* Main_iPhone.storyboard */,
-				B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */,
 				B0AAF2C918997BB400670924 /* AppDelegate.h */,
 				B0AAF2CA18997BB400670924 /* AppDelegate.m */,
-				B0AAF356189AE02000670924 /* TestplayViewController.h */,
-				B0AAF357189AE02000670924 /* TestplayViewController.m */,
-				B0AAF347189A7A1600670924 /* MRRadio.h */,
-				B0AAF348189A7A1600670924 /* MRRadio.m */,
-				B0AAF2F21899809300670924 /* MRPlaylistGenerator.h */,
-				B0AAF2F31899809300670924 /* MRPlaylistGenerator.m */,
-				B0AAF2F518998C4D00670924 /* MRMusicPlayer.h */,
-				B0AAF2F618998C4D00670924 /* MRMusicPlayer.m */,
-				B0AAF34A189A837000670924 /* MRLocalPlaylistManager.h */,
-				B0AAF34B189A837000670924 /* MRLocalPlaylistManager.m */,
-				B0AAF350189AB74300670924 /* MRLastfmRequest.h */,
-				B0AAF351189AB74300670924 /* MRLastfmRequest.m */,
-				B0AAF353189AB87900670924 /* MRExfmRequest.h */,
-				B0AAF354189AB87900670924 /* MRExfmRequest.m */,
-				B0AAF34D189AB32B00670924 /* MRHttpRequest.h */,
-				B0AAF34E189AB32B00670924 /* MRHttpRequest.m */,
+				B02C595218AB723200257BC4 /* mainClasses */,
+				B02C595118AB720C00257BC4 /* otherClasses */,
+				B02C595018AB71FC00257BC4 /* plugins */,
+				B02A696118A2C3EE009FF1EB /* musicRadio.entitlements */,
+				B0AAF2CC18997BB400670924 /* Main_iPhone.storyboard */,
+				B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */,
+				B02C594A18AB6F8500257BC4 /* MusicPlayerViewController.h */,
+				B02C594B18AB6F8500257BC4 /* MusicPlayerViewController.m */,
 				B0AAF2D518997BB400670924 /* Images.xcassets */,
+				B02C595318AB72BE00257BC4 /* NoUse */,
 				B0AAF2C118997BB400670924 /* Supporting Files */,
 			);
 			path = musicRadio;
@@ -241,6 +290,17 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = "Takuya Okamoto";
 				TargetAttributes = {
+					B0AAF2B618997BB400670924 = {
+						DevelopmentTeam = 6N9U78BNZR;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 0;
+							};
+						};
+					};
 					B0AAF2DA18997BB400670924 = {
 						TestTargetID = B0AAF2B618997BB400670924;
 					};
@@ -292,9 +352,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B0AAF2F41899809300670924 /* MRPlaylistGenerator.m in Sources */,
+				B0AAF2F41899809300670924 /* MRPlaylistManager.m in Sources */,
 				B0AAF34C189A837000670924 /* MRLocalPlaylistManager.m in Sources */,
 				B0AAF34F189AB32B00670924 /* MRHttpRequest.m in Sources */,
+				B02C595618AB8D2F00257BC4 /* MRYoutubeRequest.m in Sources */,
+				B02C594C18AB6F8500257BC4 /* MusicPlayerViewController.m in Sources */,
 				B0AAF2F718998C4D00670924 /* MRMusicPlayer.m in Sources */,
 				B0AAF355189AB87900670924 /* MRExfmRequest.m in Sources */,
 				B0AAF358189AE02000670924 /* TestplayViewController.m in Sources */,
@@ -302,6 +364,7 @@
 				B0AAF352189AB74300670924 /* MRLastfmRequest.m in Sources */,
 				B0AAF349189A7A1600670924 /* MRRadio.m in Sources */,
 				B0AAF2C718997BB400670924 /* main.m in Sources */,
+				B02C594F18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -438,10 +501,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "musicRadio/musicRadio-Prefix.pch";
 				INFOPLIST_FILE = "musicRadio/musicRadio-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -451,10 +517,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "musicRadio/musicRadio-Prefix.pch";
 				INFOPLIST_FILE = "musicRadio/musicRadio-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -520,6 +589,7 @@
 				B0AAF2EE18997BB400670924 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B0AAF2EF18997BB400670924 /* Build configuration list for PBXNativeTarget "musicRadioTests" */ = {
 			isa = XCConfigurationList;
@@ -528,6 +598,7 @@
 				B0AAF2F118997BB400670924 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

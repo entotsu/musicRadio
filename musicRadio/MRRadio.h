@@ -7,10 +7,34 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MRPlaylistManager.h"
+#import "XCDYouTubeVideoPlayerViewController.h"
 
-@interface MRRadio : NSObject
 
 
+
+
+@class MRRadio;
+
+
+@protocol MRRadioDelegate <NSObject>
+- (void) CanStartNextTrack;
+- (void) EnableNextButton;
+@end
+
+
+
+
+
+
+
+
+
+
+
+@interface MRRadio : NSObject <MRPlaylistGeneratorDelegate, XCDYouTubeVideoPlayerViewControllerDelegete>
+
+- (void) fastArtistRandomPlay: (NSString*)artistName;
 
 -(NSArray*) searchSongWithArtistName:(NSString*) keyword;
 
@@ -25,8 +49,8 @@
 -(void) onCreatedPlaylist;
 
 -(int) togglePlayAndPause;
--(int) goNext;
--(int) goPrevious;
+-(void) playNext;
+-(int) playPrevious;
 
 
 -(int) loveCurrentTrack;
@@ -40,5 +64,9 @@
 
 - (int) test_random_play;//test
 - (void) setTestView :(id)view;//test
+
+@property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *youtubePlayer;
+@property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *nextYoutubePlayer;
+@property (nonatomic, unsafe_unretained) UIViewController <MRRadioDelegate> *delegeteViewController;
 
 @end
