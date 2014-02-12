@@ -34,5 +34,6 @@
 
 
 @property (nonatomic,assign) id <MRPlaylistGeneratorDelegate> radio;
+@property BOOL isHavingTrack;
 
 @end

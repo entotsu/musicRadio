@@ -20,8 +20,12 @@
     UIView *_youTubeBox;
     XCDYouTubeVideoPlayerViewController * _nextTrackPlayer;
     UIButton *_nextButton;
+    UILabel *_nowPlayingLabel;
     BOOL _isEnableNextButton;
 }
+@synthesize youtubeBox = _youTubeBox;
+@synthesize nextButton = _nextButton;
+@synthesize nowPlayingLabel = _nowPlayingLabel;
 
 
 
@@ -59,11 +63,7 @@
     [self layoutSubView];
     
     [_appRadio fastArtistRandomPlay:artistName];
-    
-    
-    
 }
-
 
 
 
@@ -79,8 +79,9 @@
     const CGFloat statusBar_H = 20;
     
     CGFloat player_H = 200;
-    CGFloat button_W = 100;
+    CGFloat button_W = 120;
     CGFloat button_H = 60;
+    CGFloat nowLabel_H = 20;
     
     _youTubeBox = [[UIView alloc] init];
     _youTubeBox.frame = CGRectMake(0, statusBar_H, maxW, player_H);
@@ -90,17 +91,32 @@
     _nextButton = [[UIButton alloc] init];
     _nextButton.enabled = NO;
     _nextButton.frame = CGRectMake(0, 0, button_W, button_H);
-    _nextButton.center = CGPointMake(maxW/2, statusBar_H + player_H + button_H);
-    _nextButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+    _nextButton.center = CGPointMake(maxW/2, statusBar_H + player_H + nowLabel_H +button_H);
+    _nextButton.backgroundColor = [[UIColor orangeColor] colorWithAlphaComponent:1];
+    [_nextButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [_nextButton setTitleColor:[UIColor whiteColor] forState:UIControlStateDisabled];
     [_nextButton setTitle:@"PlayNext!" forState:UIControlStateNormal];
+    [_nextButton setTitle:@"Loading..." forState:UIControlStateDisabled];
     [_nextButton addTarget:self action:@selector(onTapNextButton) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_nextButton];
+    
+    _nowPlayingLabel = [[UILabel alloc] init];
+    _nowPlayingLabel.frame = CGRectMake(0, 0, maxW-maxW/6, nowLabel_H);
+    _nowPlayingLabel.center = CGPointMake(maxW/2, statusBar_H + player_H + nowLabel_H);
+    [_nowPlayingLabel setTextColor:[UIColor blackColor]];
+    [_nowPlayingLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.view addSubview:_nowPlayingLabel];
 }
+
+
+
+
+
 
 -(void) onTapNextButton {
     NSLog(@"########### onTapNextButton ###############");
     _nextButton.enabled = NO;
-    [_appRadio playNext];
+    [_appRadio startPlaybackNextVideo];
 }
 
 
@@ -122,35 +138,8 @@
 
 
 
-//--------------- Delegete --------------------------
 
 
--(void) EnableNextButton
-{
-    _isEnableNextButton = YES;
-}
-
-
-//成功delgeteがRadioにいったらそこからこっちにdelegete飛ばしてすり替えて再生する。
-- (void) CanStartNextTrack
-{
-    NSLog(@"MusicPlayer : CanStartNextTrack");
-    if (_appRadio.youtubePlayer) {
-        [_appRadio.youtubePlayer.moviePlayer stop];
-        _appRadio.youtubePlayer = nil;
-    }
-    _appRadio.youtubePlayer = _appRadio.nextYoutubePlayer;
-    NSLog(@"youtubePlayer : %@", _appRadio.youtubePlayer);
-    [_appRadio.youtubePlayer presentInView:_youTubeBox];
-    [_appRadio.youtubePlayer.moviePlayer play];
-    _appRadio.nextYoutubePlayer = nil;
-    
-    //再生された数秒後にタイミングでNextButtonが押せるようになる。
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        sleep(5);
-        if (_isEnableNextButton) _nextButton.enabled = YES;
-    });
-}
 
 
 

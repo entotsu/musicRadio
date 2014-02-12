@@ -17,6 +17,9 @@
     MRLastfmRequest *_lastfmRequest;
     MRExfmRequest *_exfmRequest;
     MRYoutubeRequest *_youTubeRequest;
+    BOOL _didPlayFastTrack;
+    BOOL _isStopPlayer;
+    NSString *_nowPlayingText;
 }
 
 @synthesize youtubePlayer;
@@ -38,6 +41,7 @@
         _youTubeRequest = [[MRYoutubeRequest alloc] init];
         
         [self enableBackGroundPlayback];
+        [self enableAutoPlay];
     }
     return self;
 }
@@ -70,14 +74,15 @@
 //→　実際はないか。 lastFmで検索かけてるはず
 - (void) fastArtistRandomPlay: (NSString*)artistName {
     NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
+    _nowPlayingText = artistName;
     [self prepearYouTubePlayerWithVideoID:randomVideoID];
 }
 
 
--(void) playNext {
+-(void) prepareNextTrack {
     NSDictionary *songInfo = [_playlistManager getNextTrack];
     NSString *songKeyword = [NSString stringWithFormat:@"%@ %@", songInfo[@"artist"], songInfo[@"name"]];
-    [self playYouTubeByKeyword:songKeyword];
+    [self prepareYouTubeByKeyword:songKeyword];
 }
 
 
@@ -87,22 +92,26 @@
 - (void)randomSongCanPlay: (NSString *)songKeyword
 {
     NSLog(@"randomSongCanPlay------------ 【%@】",songKeyword);
-    [self playYouTubeByKeyword:songKeyword];
+    [self prepareYouTubeByKeyword:songKeyword];
 }
 
 
 //YoutubePlayer Delegete
+- (void) onYoutubeLoadingSuccess
+{
+    NSLog(@"[MRRadio prepearYouTubePlayerWithVideoID]　再生準備完了！！！*********");
+    if (!_didPlayFastTrack) {
+        [self startPlaybackNextVideo];
+    }
+    else {
+        delegeteViewController.nextButton.enabled = YES;
+    }
+}
+
 - (void) YouTubeErrorOccred
 {
     NSLog(@"YouTubeErrorOccred");
-    [self playNext];
-}
-
-
-
-- (void) onYoutubeLoadingSuccess
-{
-    [self.delegeteViewController CanStartNextTrack];
+    [self prepareNextTrack];
 }
 
 
@@ -111,39 +120,55 @@
 
 
 
-- (void) playYouTubeByKeyword: (NSString *)songKeyword {
+- (void) prepareYouTubeByKeyword: (NSString *)songKeyword {
     NSString *topVideoID = [_youTubeRequest getTopVideoIDByKeyword:songKeyword];
 
     if (topVideoID) {
+        _nowPlayingText = songKeyword;
         [self prepearYouTubePlayerWithVideoID:topVideoID];
-        //ここ、つまりランダム再生が始まってからボタンが使えるようになる
-        //実際にenableになるのは、再生開始時。
-        [self.delegeteViewController EnableNextButton];
     }
     else {
         [self YouTubeErrorOccred];
     }
 }
-
-
-
 - (void) prepearYouTubePlayerWithVideoID: (NSString*)videoID {
-    NSLog(@"[MRRadio prepearYouTubePlayerWithVideoID]");
     self.nextYoutubePlayer = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
     self.nextYoutubePlayer.delegete = self;
     self.nextYoutubePlayer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     self.nextYoutubePlayer.moviePlayer.allowsAirPlay = YES;
-    //これで再生可能になったタイミングでViewのデリゲートメソッドが呼ばれる。
+    //これで再生可能になったタイミングでonYoutubeLoadingSuccessにて↓のメソッドが呼ばれる。
     //エラーならYouTubeErrorOccredが呼ばれる。
-    
 }
-
+- (void) startPlaybackNextVideo {
+    NSLog(@"MusicPlayer : startPlaybackNextVideo");
+    
+    _isStopPlayer = NO;
+    if(!_didPlayFastTrack) _didPlayFastTrack = YES;
+    
+    if (youtubePlayer) {
+        [youtubePlayer.moviePlayer stop];
+        youtubePlayer = nil;
+    }
+    youtubePlayer = nextYoutubePlayer;
+    NSLog(@"youtubePlayer : %@", youtubePlayer);
+    [youtubePlayer presentInView:delegeteViewController.youtubeBox];
+    [youtubePlayer.moviePlayer play];
+    nextYoutubePlayer = nil;
+    
+    [delegeteViewController.nowPlayingLabel setText:_nowPlayingText];
+    
+    //今のを再生したら次のトラックを準備する
+    if (_didPlayFastTrack && _playlistManager.isHavingTrack) {
+        delegeteViewController.nextButton.enabled = NO;
+        [self prepareNextTrack];
+    }
+}
 
 
 
 // --------------------- BackGround Playback ------------------------
 
--(void) enableBackGroundPlayback {
+- (void) enableBackGroundPlayback {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterBackground) name:UIApplicationWillResignActiveNotification object:nil];
     //    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willTerminate) name:UIApplicationWillTerminateNotification object:nil];
 }
@@ -155,6 +180,29 @@
     [youtubePlayer.moviePlayer play];
 }
 
+//-------------------- Auto play ------------------
+- (void) enableAutoPlay {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishPreload) name:MPMoviePlayerLoadStateDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishPlayback) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
+}
+
+- (void) finishPreload {
+    NSLog(@"--------- finishPreload ---------------");
+}
+
+- (void) finishPlayback {
+    NSLog(@"----- finishPlayback ------");
+    
+    NSTimeInterval remainTime = youtubePlayer.moviePlayer.duration - youtubePlayer.moviePlayer.currentPlaybackTime;
+    NSLog(@"remainTime : %f", remainTime);
+    
+    if (remainTime <= 0) {
+        NSLog(@"VIDEO IS END!!");
+        _isStopPlayer = YES;
+        [self startPlaybackNextVideo];
+    }
+
+}
 
 //
 //

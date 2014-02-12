@@ -18,8 +18,9 @@
 
 
 @protocol MRRadioDelegate <NSObject>
-- (void) CanStartNextTrack;
-- (void) EnableNextButton;
+@property (nonatomic, strong) UIView* youtubeBox;
+@property (nonatomic, strong) UIButton* nextButton;
+@property (nonatomic, strong) UILabel* nowPlayingLabel;
 @end
 
 
@@ -43,13 +44,14 @@
 -(int) generatePlaylistByArtistName:(NSString*)artistName;
 
 -(int) startPlayRadio;
+- (void) startPlaybackNextVideo;
 
 -(int) getCurrentTrack;
 
 -(void) onCreatedPlaylist;
 
 -(int) togglePlayAndPause;
--(void) playNext;
+-(void) prepareNextTrack;
 -(int) playPrevious;
 
 

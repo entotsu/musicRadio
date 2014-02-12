@@ -17,7 +17,7 @@
     int _nowIndex;
 }
 @synthesize radio;
-
+@synthesize isHavingTrack;
 
 
 - (id) init
@@ -78,6 +78,8 @@
                                            @"mbid"   : addTrack[@"mbid"]};
 
                 [_playList addObject:addDict];
+                
+                if (!isHavingTrack) isHavingTrack = YES;
                 
                 //プレイリストがMAX超えたらトラック追加をやめる。
                 if([_playList count] >= MAX_PLAYLIST_LENGTH) {

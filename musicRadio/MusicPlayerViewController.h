@@ -12,4 +12,8 @@
 @interface MusicPlayerViewController : UIViewController <MRRadioDelegate>
 
 
+@property (nonatomic,strong) UIView* youtubeBox;
+@property (nonatomic,strong) UIButton* nextButton;
+@property (nonatomic, strong) UILabel* nowPlayingLabel;
+
 @end
