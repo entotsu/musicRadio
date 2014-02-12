@@ -21,26 +21,13 @@
     XCDYouTubeVideoPlayerViewController * _nextTrackPlayer;
     UIButton *_nextButton;
     UILabel *_nowPlayingLabel;
+    NSString *_artistName;
     BOOL _isEnableNextButton;
 }
 @synthesize youtubeBox = _youTubeBox;
 @synthesize nextButton = _nextButton;
 @synthesize nowPlayingLabel = _nowPlayingLabel;
-
-
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-        //↓なぜかうまくいかない？うごいてない？
-//        _appRadio = [[MRRadio alloc] init];
-//        _appRadio.delegeteViewController = self;
-    }
-    return self;
-}
-
+@synthesize artistName = _artistName;
 
 
 
@@ -54,15 +41,17 @@
     _appRadio = [[MRRadio alloc] init];
     _appRadio.delegeteViewController = self;
     
-    NSString *artistName = @"ELLEGARDEN";
+    //debug
+    if (!_artistName)
+        _artistName = @"ELLEGARDEN";
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        [_appRadio generatePlaylistByArtistName:artistName];
+        [_appRadio generatePlaylistByArtistName:_artistName];
     });
     
     [self layoutSubView];
     
-    [_appRadio fastArtistRandomPlay:artistName];
+    [_appRadio fastArtistRandomPlay:_artistName];
 }
 
 

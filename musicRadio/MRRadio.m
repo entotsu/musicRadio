@@ -82,6 +82,7 @@
 -(void) prepareNextTrack {
     NSDictionary *songInfo = [_playlistManager getNextTrack];
     NSString *songKeyword = [NSString stringWithFormat:@"%@ %@", songInfo[@"artist"], songInfo[@"name"]];
+    _nowPlayingText = [NSString stringWithFormat:@"%@ / %@", songInfo[@"artist"], songInfo[@"name"]];
     [self prepareYouTubeByKeyword:songKeyword];
 }
 
@@ -89,9 +90,11 @@
 //----------------------------------- Delegete ------------------------------
 
 //PlaylystManager Delegete
-- (void)randomSongCanPlay: (NSString *)songKeyword
+- (void)randomSongCanPlay: (NSDictionary *)songInfo
 {
-    NSLog(@"randomSongCanPlay------------ 【%@】",songKeyword);
+    NSLog(@"randomSongCanPlay------------");
+    NSString *songKeyword = [NSString stringWithFormat:@"%@ %@", songInfo[@"artist"], songInfo[@"name"]];
+    _nowPlayingText = [NSString stringWithFormat:@"%@ / %@", songInfo[@"artist"], songInfo[@"name"]];
     [self prepareYouTubeByKeyword:songKeyword];
 }
 
@@ -124,7 +127,6 @@
     NSString *topVideoID = [_youTubeRequest getTopVideoIDByKeyword:songKeyword];
 
     if (topVideoID) {
-        _nowPlayingText = songKeyword;
         [self prepearYouTubePlayerWithVideoID:topVideoID];
     }
     else {
@@ -136,6 +138,7 @@
     self.nextYoutubePlayer.delegete = self;
     self.nextYoutubePlayer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     self.nextYoutubePlayer.moviePlayer.allowsAirPlay = YES;
+
     //これで再生可能になったタイミングでonYoutubeLoadingSuccessにて↓のメソッドが呼ばれる。
     //エラーならYouTubeErrorOccredが呼ばれる。
 }
@@ -174,7 +177,8 @@
 }
 - (void) willEnterBackground {
     NSLog(@"willEnterBackground");
-    [self performSelector:@selector(playplayer) withObject:nil afterDelay:0.001];
+    if(youtubePlayer.moviePlayer.playbackState == MPMoviePlaybackStatePlaying)
+        [self performSelector:@selector(playplayer) withObject:nil afterDelay:0.001];
 }
 - (void) playplayer {
     [youtubePlayer.moviePlayer play];
@@ -201,7 +205,6 @@
         _isStopPlayer = YES;
         [self startPlaybackNextVideo];
     }
-
 }
 
 //

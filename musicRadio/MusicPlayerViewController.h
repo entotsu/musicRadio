@@ -15,5 +15,6 @@
 @property (nonatomic,strong) UIView* youtubeBox;
 @property (nonatomic,strong) UIButton* nextButton;
 @property (nonatomic, strong) UILabel* nowPlayingLabel;
+@property (nonatomic, strong) NSString* artistName;
 
 @end

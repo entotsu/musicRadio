@@ -17,7 +17,7 @@
 
 
 @protocol MRPlaylistGeneratorDelegate <NSObject>
-- (void) randomSongCanPlay:(NSString *)songKeyword;
+- (void) randomSongCanPlay:(NSDictionary *)songInfo;
 @end
 
 

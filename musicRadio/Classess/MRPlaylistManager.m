@@ -9,7 +9,7 @@
 #import "MRPlaylistManager.h"
 #import "MRLastfmRequest.h"
 
-#define MAX_PLAYLIST_LENGTH 500
+#define MAX_PLAYLIST_LENGTH  2000
 
 @implementation MRPlaylistManager {
     MRLastfmRequest *_lastfmRequest;
@@ -92,8 +92,7 @@
             if (!is_playing){
                 is_playing = YES;
                 NSDictionary *songInfo = [self getNextTrack];
-                NSString *songKeyword = [NSString stringWithFormat:@"%@ %@", songInfo[@"artist"], songInfo[@"name"]];
-                [self.radio randomSongCanPlay:songKeyword];
+                [self.radio randomSongCanPlay:songInfo];
             }
         }
         else {
