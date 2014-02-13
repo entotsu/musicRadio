@@ -16,9 +16,11 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
 @implementation MRYoutubeRequest
 
 - (NSDictionary*) searchByKeyword : (NSString *)keyword andLimit:(int)limit {
+    //TODO ここローカライズするときに日本以外の国でJPとカテゴリId外す。
+    //それかそれぞれローカライズする。(大変だけど)
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@",
                      YOUTUBE_API_URL, @"?key=", YOUTUBE_API_KEY,
-                     @"&part=id&type=video&order=relevance&regionCode=JP&videoCategoryId=10",//カテゴリはMusic
+                     @"&part=id&type=video&order=relevance&regionCode=JP&videoCategoryId=10",//国は日本、カテゴリはMusic
                      @"&q=", keyword];
 
     if (limit>0 && limit<=50)
@@ -47,7 +49,7 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
 
 //最初にアーティスト手っ取り早く取ってくるメソッド。制限はどれくらいがいいだろう？
 - (NSString *) getRandomVideoIDByKeyword: (NSString *)keyword {
-    NSDictionary *result = [self searchByKeyword:keyword andLimit:10];//50件は多すぎるか。
+    NSDictionary *result = [self searchByKeyword:keyword andLimit:5];//50件は多すぎるか。
     NSLog(@"YouTube result : %@",result);
     //もし検索結果が０件だったらnilを返す。
     if ([result[@"items"] count] == 0)

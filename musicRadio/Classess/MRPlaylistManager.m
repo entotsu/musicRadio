@@ -74,8 +74,7 @@
     NSLog(@"generatePlaylistByArtistName");
 
     static BOOL is_playing = NO;//ここ注意　プレイリストの一曲目をまだ返してない時のみ。
-    BOOL not_exits_similarTrack = YES;//いやむしろsimilarTrackつかわないほうがアツい！？いやアツい！！
-    //NO;  // ←似てるトラックが見つからなかった時点で諦める。
+    BOOL disableFindingSimilarTrack = YES;//やっぱ最初からsimilarTrackを探さない方針に変更。
     
     NSArray *topTracks;
     if (mbid)
@@ -98,13 +97,13 @@
         
         NSDictionary *track = topTracks[i];
         
-        NSLog(@"toptracks %d: ========================= → %@", i, topTracks[i][@"name"]);
+//        NSLog(@"toptracks %d: ========================= → %@", i, topTracks[i][@"name"]);
         if (isSimilarArtist) {
             [self addTrackToPlaylist:topTracks[i]];
         }
         
         NSArray *similarTracks;
-        if (!not_exits_similarTrack)
+        if (!disableFindingSimilarTrack)
              similarTracks = [_lastfmRequest getSimilarTracksWithMbid:track[@"mbid"]];
         
         //似てるトラックが見つかれば追加。見つからなければ次のアーティストにいく。
@@ -137,8 +136,7 @@
         }
         //似てるアーティストから来た場合は次のトップトラックへ。
         else if (isSimilarArtist) {
-            not_exits_similarTrack = YES;
-            NSLog(@"from similar artist ↓　next top track.");
+            disableFindingSimilarTrack = YES;
         }
     }
     //最初にTopTrack全部追加したあとにまだ再生してなかったらランダムで渡す。
@@ -146,7 +144,7 @@
         is_playing = YES;
         [self.radio randomSongCanPlay:[self getNextTrack]];
     }
-    NSLog(@"playlist is all created.  playlist length: %d",(int)[_playList count]);
+    NSLog(@"generatePlaylistBySimilarTrackWithArtistName is END.   playlist length: %d",(int)[_playList count]);
     return 0;
 }
 
