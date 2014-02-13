@@ -12,5 +12,7 @@
 
 -(NSDictionary*) searchArtistByLastfmWithArtistName: (NSString*)artistName;
 -(NSArray*) getTopTracksWithArtistName: (NSString*)artistName;
+-(NSArray*) getTopTracksWithArtistMbid: (NSString*)mbid;
 -(NSArray*) getSimilarTracksWithMbid: (NSString*)mbid;
+-(NSArray*) getSimilarArtistsWithArtistName: (NSString*)artistName;
 @end

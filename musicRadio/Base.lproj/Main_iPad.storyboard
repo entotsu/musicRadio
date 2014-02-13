@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
-        <!--Music Player View Controller-->
+        <!--Test Search View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="MusicPlayerViewController" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="Test_SearchViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="smu-dj-w7i"/>
                         <viewControllerLayoutGuide type="bottom" id="gWy-Ac-nvk"/>

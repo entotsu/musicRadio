@@ -93,7 +93,7 @@
     _nowPlayingLabel = [[UILabel alloc] init];
     _nowPlayingLabel.frame = CGRectMake(0, 0, maxW-maxW/6, nowLabel_H);
     _nowPlayingLabel.center = CGPointMake(maxW/2, statusBar_H + player_H + nowLabel_H);
-    [_nowPlayingLabel setTextColor:[UIColor blackColor]];
+    [_nowPlayingLabel setTextColor:[UIColor whiteColor]];
     [_nowPlayingLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:_nowPlayingLabel];
 }

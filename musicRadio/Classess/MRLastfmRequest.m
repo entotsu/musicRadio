@@ -58,6 +58,18 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
 }
 
 
+-(NSArray*) getTopTracksWithArtistMbid: (NSString*)mbid {
+    NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@",
+                     LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY, @"&format=json"
+                     @"&method=artist.getTopTracks",
+                     @"&mbid=", mbid];
+    
+    NSDictionary *result = [_httpRequest getJsonWithURLString:url];
+    return result[@"toptracks"][@"track"];
+}
+
+
+
 -(NSArray*) getSimilarTracksWithMbid: (NSString*)mbid {
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@",
                      LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY, @"&format=json"
@@ -73,6 +85,27 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
     
     return result[@"track"];
 }
+
+
+
+
+-(NSArray*) getSimilarArtistsWithArtistName: (NSString*)artistName {
+    NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@",
+                     LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY, @"&format=json"
+                     @"&method=artist.getsimilar",
+                     @"&artist=", artistName];
+    
+    NSDictionary *result = [_httpRequest getJsonWithURLString:url];
+    
+    BOOL is_error = [result.allKeys containsObject:@"error"];
+    if (is_error) {
+        NSLog(@"ERROR!: similar Artist Error : %@", result[@"message"]);
+        return nil;
+    }
+    
+    return result[@"similarartists"][@"artist"];
+}
+
 
 
 

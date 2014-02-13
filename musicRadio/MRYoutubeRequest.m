@@ -43,8 +43,11 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
     return videoID;
 }
 
+
+
+//最初にアーティスト手っ取り早く取ってくるメソッド。制限はどれくらいがいいだろう？
 - (NSString *) getRandomVideoIDByKeyword: (NSString *)keyword {
-    NSDictionary *result = [self searchByKeyword:keyword andLimit:0];//50件は多すぎるか。
+    NSDictionary *result = [self searchByKeyword:keyword andLimit:10];//50件は多すぎるか。
     NSLog(@"YouTube result : %@",result);
     //もし検索結果が０件だったらnilを返す。
     if ([result[@"items"] count] == 0)
@@ -52,7 +55,7 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
     NSArray *videoArray = result[@"items"];
     int randIndex = (int)arc4random_uniform( (int)[videoArray count] );
     NSString *videoID = videoArray[randIndex][@"id"][@"videoId"];
-    NSLog(@"youtube top id: %@", videoID);
+    NSLog(@"youtube random fast VideoID → %@", videoID);
     return videoID;
 }
 @end

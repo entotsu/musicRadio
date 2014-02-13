@@ -61,10 +61,10 @@
 
 -(int) generatePlaylistByArtistName: (NSString*)artistName {
     NSLog(@"MRRadio : generatePlaylistByArtistName");
-    int relustOfGeneretingPlaylist = [_playlistManager generatePlaylistByArtistName:artistName];
+//    int relustOfGeneretingPlaylist = [_playlistManager generatePlaylistBySimilarTrackWithArtistName:artistName orMbid:nil isSimilarArtist:NO];
+//    NSLog(@"result of generaging playlst :%d", relustOfGeneretingPlaylist);
     
-    NSLog(@"result of generaging playlst :%d", relustOfGeneretingPlaylist);
-    
+    [_playlistManager generatePlaylistBySimilarArtistsWithArtistName:artistName];//やっぱ、いきなり似たアーティストで検索！
     return 0;
 }
 
@@ -73,8 +73,8 @@
 //TODO　その時、アーティスト検索して何もでてこなかったらどうする？
 //→　実際はないか。 lastFmで検索かけてるはず
 - (void) fastArtistRandomPlay: (NSString*)artistName {
-    NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
     _nowPlayingText = artistName;
+    NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
     [self prepearYouTubePlayerWithVideoID:randomVideoID];
 }
 
@@ -113,8 +113,15 @@
 
 - (void) YouTubeErrorOccred
 {
-    NSLog(@"YouTubeErrorOccred");
-    [self prepareNextTrack];
+    NSLog(@"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  YouTubeErrorOccred ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    //初回のアーティスト曲再生でエラーした場合は他の動画をチョイスしてみる。
+    if (!_didPlayFastTrack) {
+        NSLog(@"first Artist Movie Error.|||||||||||||||||||||||||||||||||||||");
+        [self fastArtistRandomPlay:_nowPlayingText];
+    }
+    else {
+        [self prepareNextTrack];
+    }
 }
 
 
@@ -133,6 +140,8 @@
         [self YouTubeErrorOccred];
     }
 }
+
+
 - (void) prepearYouTubePlayerWithVideoID: (NSString*)videoID {
     self.nextYoutubePlayer = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
     self.nextYoutubePlayer.delegete = self;
@@ -142,11 +151,14 @@
     //これで再生可能になったタイミングでonYoutubeLoadingSuccessにて↓のメソッドが呼ばれる。
     //エラーならYouTubeErrorOccredが呼ばれる。
 }
+
+
 - (void) startPlaybackNextVideo {
-    NSLog(@"MusicPlayer : startPlaybackNextVideo");
+    NSLog(@"MusicPlayer : startPlaybackNextVideo >>>>>>>>>>>>>>>>>>>>>");
     
     _isStopPlayer = NO;
-    if(!_didPlayFastTrack) _didPlayFastTrack = YES;
+    if(!_didPlayFastTrack)
+        _didPlayFastTrack = YES;
     
     if (youtubePlayer) {
         [youtubePlayer.moviePlayer stop];
@@ -200,70 +212,13 @@
     NSTimeInterval remainTime = youtubePlayer.moviePlayer.duration - youtubePlayer.moviePlayer.currentPlaybackTime;
     NSLog(@"remainTime : %f", remainTime);
     
-    if (remainTime <= 0) {
+    if (_didPlayFastTrack && remainTime <= 0) {
         NSLog(@"VIDEO IS END!!");
         _isStopPlayer = YES;
         [self startPlaybackNextVideo];
     }
 }
 
-//
-//
-//
-//
-////--------------  test ---------------------------
-//- (int) test_random_play {
-//    NSString *playUrlString = [self get_random_play_url];
-//    
-//    NSLog(@"play url!!");
-//    [_musicPlayer playMusicWithURL:playUrlString];
-//    
-//    return 0;
-//}
-//
-//
-//- (NSString*) get_random_play_url {
-//    
-//    NSDictionary *randomTrack = [_playlistGanerator getRandomTrack];
-//    
-//    NSString *songSearhKeyword = [NSString stringWithFormat:@"%@ %@",
-//                                  randomTrack[@"artist"],randomTrack[@"name"]];
-//    
-//    _nowPlayingName = [NSString stringWithFormat:@"%@ / %@",
-//                          randomTrack[@"name"],randomTrack[@"artist"]];
-//    
-//    NSLog(@"-----Song Search : %@",songSearhKeyword);
-//    
-//    NSDictionary *songSearchResult = [_exfmRequest searchSongByExfmWithKeyword:songSearhKeyword];
-//    
-//    NSLog(@"song search results count :%@",songSearchResult[@"results"]);
-//    
-//    if ( [[songSearchResult[@"results"] stringValue] isEqualToString:@"0"] ) {
-//        NSLog(@" song search result is 0!!!!!!!!!!!!!!!!!!!!!!!!!!! ");
-//        return [self get_random_play_url];//再起！！こわ！ｗ
-//    }
-//    else {
-//        NSDictionary *song = songSearchResult[@"songs"][0];
-//        [_testView setLabelText:_nowPlayingName];//test
-//        return song[@"url"];
-//    }
-//}
-//
-//
-//-(int) resetPlaylist {
-//    [_playlistGanerator resetPlaylist];
-//    return 0;
-//}
-//
-//-(NSString*) getNowPlayingTitle {
-//    return _nowPlayingName;
-//}
-//
-//
-////------------------あとでけす----------------------
-//- (void) setTestView :(id)view{
-//    _testView = view;
-//}
-//
+
 
 @end
