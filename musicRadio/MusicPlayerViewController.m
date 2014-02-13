@@ -38,19 +38,20 @@
 {
     [super viewDidLoad];
     NSLog(@"view did load");
-    _appRadio = [[MRRadio alloc] init];
-    _appRadio.delegeteViewController = self;
     
     //debug
     if (!_artistName)
         _artistName = @"ELLEGARDEN";
+    
+    _appRadio = [[MRRadio alloc] init];
+    _appRadio.delegeteViewController = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [_appRadio generatePlaylistByArtistName:_artistName];
     });
     
     [self layoutSubView];
-    
+
     [_appRadio fastArtistRandomPlay:_artistName];
 }
 

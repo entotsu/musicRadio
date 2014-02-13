@@ -16,8 +16,13 @@
 
 - (NSDictionary*) getJsonWithURLString:(NSString*)url {
     //encoding　エンコードしすぎてないか心配ｗ
-    url = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
-                                                                                NULL, (CFStringRef)url, NULL, (CFStringRef)@"!*'();@+$,%#[]", kCFStringEncodingUTF8));
+    
+    NSArray *splitedURL = [url componentsSeparatedByString:@"?"];
+    NSString *urlParamsString = splitedURL[1];
+    //パラメータ部だけエンコード (スラッシュもエンコードするため)
+    urlParamsString = (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
+            NULL, (CFStringRef)urlParamsString, NULL, (CFStringRef)@"!*'();/@+$,%#[]", kCFStringEncodingUTF8));
+    url = [NSString stringWithFormat:@"%@?%@",splitedURL[0],urlParamsString];
     
     NSLog(@"getJSON -> %@", url);
     
