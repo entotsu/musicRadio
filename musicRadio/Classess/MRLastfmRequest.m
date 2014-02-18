@@ -36,12 +36,31 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
 
 
 
--(NSDictionary*) searchArtistByLastfmWithArtistName: (NSString*)artistName {
+-(NSArray*) searchArtistByLastfmWithArtistName: (NSString*)artistName {
+    NSMutableArray *returnArray;
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@",
                      LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY, @"&format=json"
-                     @"&method=artist.search",
+                     @"&method=artist.search&limit=4",
                      @"&artist=", artistName];
-    return [_httpRequest getJsonWithURLString:url];
+
+    NSDictionary *result = [_httpRequest getJsonWithURLString:url];
+    NSDictionary *artistMatches = result[@"results"][@"artistmatches"];
+    NSString *total = result[@"results"][@"opensearch:totalResults"];
+    
+    if ([total isEqual: @"0"]) {
+        NSLog(@" artist search result is 0!");
+        return nil;
+    }
+    else if ([total isEqual:@"1"]) {
+        NSLog(@"one!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        returnArray = [NSMutableArray array];
+        [returnArray addObject:artistMatches[@"artist"]];
+    }
+    else {
+        returnArray = artistMatches[@"artist"];
+    }
+    
+    return (NSArray*)returnArray;
 }
 
 
@@ -106,6 +125,24 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
     return result[@"similarartists"][@"artist"];
 }
 
+
+
+-(NSDictionary*) getArtistInfoWithName: (NSString*)artistName {
+    NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@%@",
+                     LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY,
+                     @"&method=artist.getinfo",
+                     @"&format=json&lang=jp",
+                     @"&artist=", artistName];
+    
+    NSDictionary *result = [_httpRequest getJsonWithURLString:url];
+    
+    BOOL is_error = [result.allKeys containsObject:@"error"];
+    if (is_error) {
+        return NULL;
+    }
+    
+    return result;
+}
 
 
 

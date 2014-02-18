@@ -24,7 +24,7 @@
             NULL, (CFStringRef)urlParamsString, NULL, (CFStringRef)@"!*'();/@+$,%#[]", kCFStringEncodingUTF8));
     url = [NSString stringWithFormat:@"%@?%@",splitedURL[0],urlParamsString];
     
-    NSLog(@"getJSON -> %@", url);
+    NSLog(@"getJSON -> '%@' ... ", url);
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     NSData *json_data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];

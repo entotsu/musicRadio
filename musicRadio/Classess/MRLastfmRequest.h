@@ -10,9 +10,10 @@
 
 @interface MRLastfmRequest : NSObject
 
--(NSDictionary*) searchArtistByLastfmWithArtistName: (NSString*)artistName;
+-(NSArray*) searchArtistByLastfmWithArtistName: (NSString*)artistName;
 -(NSArray*) getTopTracksWithArtistName: (NSString*)artistName;
 -(NSArray*) getTopTracksWithArtistMbid: (NSString*)mbid;
 -(NSArray*) getSimilarTracksWithMbid: (NSString*)mbid;
 -(NSArray*) getSimilarArtistsWithArtistName: (NSString*)artistName;
+-(NSDictionary*) getArtistInfoWithName: (NSString*)artistName;
 @end

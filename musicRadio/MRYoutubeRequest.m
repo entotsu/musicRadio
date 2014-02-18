@@ -32,13 +32,15 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
 
 
 - (NSString *) getTopVideoIDByKeyword: (NSString *)keyword {
-    NSDictionary *result = [self searchByKeyword:keyword andLimit:0];
+    NSDictionary *result = [self searchByKeyword:keyword andLimit:1];
     
-    NSLog(@"getTopVideoIDByKeyword  result: %@",result);
+//    NSLog(@"getTopVideoIDByKeyword  result: %@",result);
     
     //もし検索結果が０件だったらnilを返す。
     if ([result[@"items"] count] == 0)
         return nil;
+    
+    //ここで動画の長さを判定して、もし合わなかったら次の曲にする。→LIMITふやす
     
     NSString *videoID = result[@"items"][0][@"id"][@"videoId"];
     NSLog(@"youtube top id: %@", videoID);
@@ -49,8 +51,8 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
 
 //最初にアーティスト手っ取り早く取ってくるメソッド。制限はどれくらいがいいだろう？
 - (NSString *) getRandomVideoIDByKeyword: (NSString *)keyword {
-    NSDictionary *result = [self searchByKeyword:keyword andLimit:5];//50件は多すぎるか。
-    NSLog(@"YouTube result : %@",result);
+    NSDictionary *result = [self searchByKeyword:keyword andLimit:0];//50件は多すぎるか。
+//    NSLog(@"YouTube result : %@",result);
     //もし検索結果が０件だったらnilを返す。
     if ([result[@"items"] count] == 0)
         return nil;

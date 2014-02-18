@@ -76,6 +76,19 @@
     static BOOL is_playing = NO;//ここ注意　プレイリストの一曲目をまだ返してない時のみ。
     BOOL disableFindingSimilarTrack = YES;//やっぱ最初からsimilarTrackを探さない方針に変更。
     
+    //ここで似てるアーティストが０だと落ちる
+    /*
+     getJSON -> 'http://ws.audioscrobbler.com/2.0/?api_key=3119649624fae2e9531bc4639a08cba8&format=json&method=artist.getTopTracks&mbid=27f0af0e-4d1f-4808-a58b-090e400dcc43' ...
+     2014-02-13 21:40:18.518 musicRadio[19350:3f03] *** Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: 'data parameter is nil'
+     *** First throw call stack:
+     (
+     0   CoreFoundation                      0x0000000101e9f795 __exceptionPreprocess + 165
+     1   libobjc.A.dylib                     0x000000010185c991 objc_exception_throw + 43
+     2   CoreFoundation                      0x0000000101e9f5ad +[NSException raise:format:] + 205
+     3   Foundation                          0x00000001015374a8 +[NSJSONSerialization JSONObjectWithData:options:error:] + 67
+     4   musicRadio                          0x0000000100002a41 -[MRHttpRequest getJsonWithURLString:] + 593
+     5   musicRadio                          0x0000000100006f7b -[MRLastfmRequest getTopTracksWithArtistMbid:] + 203
+     */
     NSArray *topTracks;
     if (mbid)
         topTracks = [_lastfmRequest getTopTracksWithArtistMbid:mbid];

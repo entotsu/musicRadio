@@ -20,6 +20,7 @@
     BOOL _didPlayFastTrack;
     BOOL _isStopPlayer;
     NSString *_nowPlayingText;
+    NSString *_nextArtistName;
 }
 
 @synthesize youtubePlayer;
@@ -53,8 +54,7 @@
 
 -(NSArray*) searchSongWithArtistName:(NSString*) keyword {
     NSLog(@"searchSongWithArtistName   keyword: %@", keyword);
-    NSDictionary *artistSearchResult = [_lastfmRequest searchArtistByLastfmWithArtistName:keyword];
-    return artistSearchResult[@"results"][@"artistmatches"][@"artist"];
+    return [_lastfmRequest searchArtistByLastfmWithArtistName:keyword];
 }
 
 
@@ -83,6 +83,7 @@
     NSDictionary *songInfo = [_playlistManager getNextTrack];
     NSString *songKeyword = [NSString stringWithFormat:@"%@ %@", songInfo[@"artist"], songInfo[@"name"]];
     _nowPlayingText = [NSString stringWithFormat:@"%@ / %@", songInfo[@"artist"], songInfo[@"name"]];
+    _nextArtistName = songInfo[@"artist"];
     [self prepareYouTubeByKeyword:songKeyword];
 }
 
@@ -172,11 +173,15 @@
     
     [delegeteViewController.nowPlayingLabel setText:_nowPlayingText];
     
+    delegeteViewController.artistName = _nextArtistName;
+    [delegeteViewController didPlayMusic];
+    
     //今のを再生したら次のトラックを準備する
     if (_didPlayFastTrack && _playlistManager.isHavingTrack) {
         delegeteViewController.nextButton.enabled = NO;
         [self prepareNextTrack];
     }
+
 }
 
 
