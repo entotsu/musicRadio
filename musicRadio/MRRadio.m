@@ -50,42 +50,52 @@
 
 
 
-//------------------ public methods -----------------------------------
 
+
+
+
+
+
+
+
+
+
+//------------------ public methods -----------------------------------
 -(NSArray*) searchSongWithArtistName:(NSString*) keyword {
     NSLog(@"searchSongWithArtistName   keyword: %@", keyword);
     return [_lastfmRequest searchArtistByLastfmWithArtistName:keyword];
 }
 
 
-
--(int) generatePlaylistByArtistName: (NSString*)artistName {
-    NSLog(@"MRRadio : generatePlaylistByArtistName");
-//    int relustOfGeneretingPlaylist = [_playlistManager generatePlaylistBySimilarTrackWithArtistName:artistName orMbid:nil isSimilarArtist:NO];
-//    NSLog(@"result of generaging playlst :%d", relustOfGeneretingPlaylist);
-    
-    [_playlistManager generatePlaylistBySimilarArtistsWithArtistName:artistName];//やっぱ、いきなり似たアーティストで検索！
-    return 0;
-}
-
-
-//最初に手早くそのアーティストの曲を探して再生する。
-//TODO　その時、アーティスト検索して何もでてこなかったらどうする？
-//→　実際はないか。 lastFmで検索かけてるはず
 - (void) fastArtistRandomPlay: (NSString*)artistName {
     _nowPlayingText = artistName;
     NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
+    _nextArtistName = artistName;
     [self prepearYouTubePlayerWithVideoID:randomVideoID];
 }
 
 
+-(void) generatePlaylistByArtistName: (NSString*)artistName {
+    NSLog(@"MRRadio : generatePlaylistByArtistName");
+    [_playlistManager generatePlaylistBySimilarArtistsWithArtistName:artistName];
+}
+
+
+
 -(void) prepareNextTrack {
     NSDictionary *songInfo = [_playlistManager getNextTrack];
-    NSString *songKeyword = [NSString stringWithFormat:@"%@ %@", songInfo[@"artist"], songInfo[@"name"]];
-    _nowPlayingText = [NSString stringWithFormat:@"%@ / %@", songInfo[@"artist"], songInfo[@"name"]];
-    _nextArtistName = songInfo[@"artist"];
-    [self prepareYouTubeByKeyword:songKeyword];
+    [self prepareYouTubeWithSongInfo:songInfo];
 }
+
+
+
+
+
+
+
+
+
+
 
 
 //----------------------------------- Delegete ------------------------------
@@ -94,16 +104,15 @@
 - (void)randomSongCanPlay: (NSDictionary *)songInfo
 {
     NSLog(@"randomSongCanPlay------------");
-    NSString *songKeyword = [NSString stringWithFormat:@"%@ %@", songInfo[@"artist"], songInfo[@"name"]];
-    _nowPlayingText = [NSString stringWithFormat:@"%@ / %@", songInfo[@"artist"], songInfo[@"name"]];
-    [self prepareYouTubeByKeyword:songKeyword];
+    [self prepareYouTubeWithSongInfo:songInfo];
 }
+
 
 
 //YoutubePlayer Delegete
 - (void) onYoutubeLoadingSuccess
 {
-    NSLog(@"[MRRadio prepearYouTubePlayerWithVideoID]　再生準備完了！！！*********");
+    NSLog(@"onYoutubeLoadingSuccess　再生準備完了！！！◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆");
     if (!_didPlayFastTrack) {
         [self startPlaybackNextVideo];
     }
@@ -112,12 +121,14 @@
     }
 }
 
+
+
 - (void) YouTubeErrorOccred
 {
     NSLog(@"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  YouTubeErrorOccred ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-    //初回のアーティスト曲再生でエラーした場合は他の動画をチョイスしてみる。
     if (!_didPlayFastTrack) {
-        NSLog(@"first Artist Movie Error.|||||||||||||||||||||||||||||||||||||");
+        //初回のアーティスト曲再生でエラーした場合は他の動画をチョイスしてみる。
+        NSLog(@"first Artist Movie Error.");
         [self fastArtistRandomPlay:_nowPlayingText];
     }
     else {
@@ -127,19 +138,65 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // ------------------- private method ----------------------------------------------
 
 
 
-- (void) prepareYouTubeByKeyword: (NSString *)songKeyword {
-    NSString *topVideoID = [_youTubeRequest getTopVideoIDByKeyword:songKeyword];
+- (void) prepareYouTubeWithSongInfo: (NSDictionary *)songInfo {
 
-    if (topVideoID) {
-        [self prepearYouTubePlayerWithVideoID:topVideoID];
-    }
-    else {
-        [self YouTubeErrorOccred];
-    }
+    NSString *artistName = songInfo[@"artist"];
+    NSString *trackName = songInfo[@"name"];
+    
+    _nextArtistName = artistName;
+    _nowPlayingText = [NSString stringWithFormat:@"%@ - %@", artistName, trackName];
+    
+    NSString *searchKeyword = [NSString stringWithFormat:@"%@ %@", artistName, trackName];
+    NSDictionary *topVideo = [_youTubeRequest getTopVideoByKeyword:searchKeyword];
+
+    NSString *videoTitle = topVideo[@"snippet"][@"title"];
+    NSString *topVideoID = topVideo[@"id"][@"videoId"];
+    
+    NSLog(@"□□□□□□□□ search word :【%@】　□□□□□□□□□□",searchKeyword);
+    NSLog(@"■■■■■■■■ video title :【%@】　■■■■■■■■■■",videoTitle);
+    
+    
+    if (!topVideo)
+        return [self YouTubeErrorOccred];
+
+    //ここでその動画のタイトルをチェックする。
+    //①アーティスト名とトラック名が入っている
+    if ([videoTitle rangeOfString:trackName options:NSCaseInsensitiveSearch].location == NSNotFound)
+        return [self YouTubeErrorOccred];
+    if ([videoTitle rangeOfString:artistName options:NSCaseInsensitiveSearch].location == NSNotFound)
+        return [self YouTubeErrorOccred];
+    //②カラオケ　歌ってみた (弾いてみた) が入っていない
+    if ([videoTitle rangeOfString:@"歌ってみた" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        return [self YouTubeErrorOccred];
+    if ([videoTitle rangeOfString:@"うたってみた" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        return [self YouTubeErrorOccred];
+    if ([videoTitle rangeOfString:@"カラオケ" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        return [self YouTubeErrorOccred];
+    if ([videoTitle rangeOfString:@"カバー" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        return [self YouTubeErrorOccred];
+    if ([videoTitle rangeOfString:@"コピー" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        return [self YouTubeErrorOccred];
+    if ([videoTitle rangeOfString:@"cover" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        return [self YouTubeErrorOccred];
+    if ([videoTitle rangeOfString:@"ピッチ" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        return [self YouTubeErrorOccred];
+    
+    return [self prepearYouTubePlayerWithVideoID:topVideoID];
 }
 
 
@@ -148,7 +205,7 @@
     self.nextYoutubePlayer.delegete = self;
     self.nextYoutubePlayer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     self.nextYoutubePlayer.moviePlayer.allowsAirPlay = YES;
-
+    
     //これで再生可能になったタイミングでonYoutubeLoadingSuccessにて↓のメソッドが呼ばれる。
     //エラーならYouTubeErrorOccredが呼ばれる。
 }
@@ -172,7 +229,6 @@
     nextYoutubePlayer = nil;
     
     [delegeteViewController.nowPlayingLabel setText:_nowPlayingText];
-    
     delegeteViewController.artistName = _nextArtistName;
     [delegeteViewController didPlayMusic];
     
@@ -183,6 +239,14 @@
     }
 
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -201,7 +265,10 @@
     [youtubePlayer.moviePlayer play];
 }
 
-//-------------------- Auto play ------------------
+
+
+
+//-------------------- Auto play ----- 自動で次の曲にいく処理 ------------------
 - (void) enableAutoPlay {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishPreload) name:MPMoviePlayerLoadStateDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishPlayback) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];

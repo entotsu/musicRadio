@@ -8,5 +8,5 @@
 
 #import <UIKit/UIKit.h>
 
-@interface Test_SearchViewController : UIViewController <UITextFieldDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface Test_SearchViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate>
 @end

@@ -12,6 +12,6 @@
 @interface MRYoutubeRequest :MRHttpRequest
 
 - (NSDictionary*) searchByKeyword: (NSString *)keyword;
-- (NSString *) getTopVideoIDByKeyword: (NSString *)keyword;
+- (NSDictionary *) getTopVideoByKeyword: (NSString *)keyword;
 - (NSString *) getRandomVideoIDByKeyword: (NSString *)keyword;
 @end

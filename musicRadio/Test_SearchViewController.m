@@ -24,6 +24,7 @@
     UILabel *_infoLabel;
     UITableView *_tableView;
     UIActivityIndicatorView *_indicator;
+    UISearchBar *_searchBar;
     
     NSString *_searchedArtist;
     MRLastfmRequest *_lastfmRequest;
@@ -57,48 +58,104 @@
 
 - (void) initView {
     
-    float statusBar_H = 20;
+    float statusBar_andNav_H = 20+44;
     float maxW = self.view.frame.size.width;
     float maxH = self.view.frame.size.height;
     
     float textField_H = 40;
     float indicator_WH = textField_H;
     
-    _textField = [[UITextField alloc] init];
-    _textField.frame = CGRectMake(0, statusBar_H, maxW, textField_H);
-    _textField.borderStyle = UITextBorderStyleNone;
-    _textField.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
-    _textField.delegate = self;
-    [self.view addSubview:_textField];
+    
+    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blurBG4"]];
+    backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
+    [self.view addSubview:backgroundImage];
+//    
+//    _textField = [[UITextField alloc] init];
+//    _textField.frame = CGRectMake(0, statusBar_H, maxW, textField_H);
+//    _textField.borderStyle = UITextBorderStyleNone;
+//    _textField.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
+//    _textField.delegate = self;
+//    [self.view addSubview:_textField];
+    
+    _searchBar = [[UISearchBar alloc] init];
+    _searchBar.frame = CGRectMake(0, statusBar_andNav_H, maxW, textField_H);
+    _searchBar.delegate = self;
+    _searchBar.showsCancelButton = YES;
+//    _searchBar.prompt = @"タイトル";
+    _searchBar.placeholder = @"アーティストを検索";
+    _searchBar.keyboardType = UIKeyboardTypeDefault;
+    _searchBar.barStyle = UIBarStyleDefault;
+    [self.view addSubview:_searchBar];
+    
     
     
     _tableView = [[UITableView alloc] init];
-    _tableView.frame = CGRectMake(0, statusBar_H + textField_H, maxW, maxH-statusBar_H-textField_H);
+    _tableView.frame = CGRectMake(0, statusBar_andNav_H + textField_H, maxW, maxH-statusBar_andNav_H-textField_H);
     _tableView.delegate = self;
     _tableView.dataSource = self;
+    _tableView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_tableView];
-    
-    
-    _indicator = [[UIActivityIndicatorView alloc]init];
-    _indicator.frame = CGRectMake(maxW-indicator_WH, statusBar_H, indicator_WH, indicator_WH);
-    _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
-    [self.view addSubview:_indicator];
+//    
+//    
+//    _indicator = [[UIActivityIndicatorView alloc]init];
+//    _indicator.frame = CGRectMake(maxW-indicator_WH, statusBar_H, indicator_WH, indicator_WH);
+//    _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+//    [self.view addSubview:_indicator];
 }
 
 
 
+//
+//- (void) displayArists {
+//    //もし検索中だったら検索しない。
+//    if (!_isReloading) {
+//        [_indicator startAnimating];
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//            _isReloading = YES;
+//            sleep(0.4);
+//            [_indicator startAnimating];
+//            NSString *artistName = _textField.text;
+//            _searchedWord = [artistName copy];
+//            //テーブルの更新
+//            [self searchAndReloadTable:artistName];
+//        });
+//    }
+//}
+//
+//
+//
+//
+//- (void) checkSearchedWord_OLD {
+//    if (![_textField.text isEqualToString:_searchedWord]) {
+//        NSLog(@"RESEARCH*********");
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//            sleep(1);
+//            [self displayArists];
+//        });
+//    }
+//}
+//
+//- (void) searchAndReloadTable_OLD:(NSString*)artistName {
+//    _tableViewSource = [_lastfmRequest searchArtistByLastfmWithArtistName:artistName];
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        if (_indicator.isAnimating) [_indicator stopAnimating];
+//        [_tableView reloadData];
+//        //テーブル更新後に以前検索したワードと一致してなかったら検索する。
+//        [self checkSearchedWord];
+//    });
+//}
 
-- (void) displayArists {
+
+
+
+
+- (void) displayArists: (NSString*) artistName {
     //もし検索中だったら検索しない。
     if (!_isReloading) {
-        [_indicator startAnimating];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
             _isReloading = YES;
-            sleep(0.4);
-            [_indicator startAnimating];
-            NSString *artistName = _textField.text;
-            _searchedWord = [artistName copy];
-            //テーブルの更新
+            _searchedWord = _searchBar.text;
             [self searchAndReloadTable:artistName];
         });
     }
@@ -108,35 +165,47 @@
     _tableViewSource = [_lastfmRequest searchArtistByLastfmWithArtistName:artistName];
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (_indicator.isAnimating) [_indicator stopAnimating];
         [_tableView reloadData];
         //テーブル更新後に以前検索したワードと一致してなかったら検索する。
         [self checkSearchedWord];
     });
 }
-
 - (void) checkSearchedWord {
-    if (![_textField.text isEqualToString:_searchedWord]) {
+    if (![_searchBar.text isEqualToString:_searchedWord]) {
         NSLog(@"RESEARCH*********");
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            sleep(1);
-            [self displayArists];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            [self displayArists: _searchBar.text];
         });
     }
 }
 
 
-// ------------ <UITextFieldDelegate> -------------
 
-- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+// ------------ <UISearchBarDelegate> -------------
+-(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)searchText
 {
-    NSLog(@"shouldChangeCharactersInRange string: %@",string);
-    
-    [self displayArists];
-    
-    return YES;
+    NSLog(@"searchbar text did change");
+    [self displayArists:searchText];
 }
 
+
+
+
+
+
+
+
+// ------------ <UITextFieldDelegate> -------------
+//
+//- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+//{
+//    NSLog(@"shouldChangeCharactersInRange string: %@",string);
+//    
+//    [self displayArists];
+//    
+//    return YES;
+//}
+//
 
 
 
@@ -168,9 +237,11 @@
     
     static NSString *CellIdentifier = @"ArtistCell";//再利用のID。これで量産される。
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         //ここにセルのカスタマイズをかく
+        cell.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2];
     }
     
     
@@ -190,7 +261,7 @@
     
     
     //画像URLからUIImageを生成 //ここひとつのスレッドにするべきだな。
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         if ([artistImageURL isEqualToString:@""]) {
             NSLog(@"image is nothing!");
         }else {
@@ -235,7 +306,8 @@
     if (![artistName isEqualToString:@""]) {
         MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
         musicView.artistName = artistName;
-        [self presentViewController:musicView animated:YES completion:nil];
+//        [self presentViewController:musicView animated:YES completion:nil];
+        [self.navigationController pushViewController:musicView animated:YES];
     }
 }
 

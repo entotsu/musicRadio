@@ -42,7 +42,7 @@
 
 -(int) playArtistTopMusicRandomly:(NSString*) artistName;
 
--(int) generatePlaylistByArtistName:(NSString*)artistName;
+-(void) generatePlaylistByArtistName:(NSString*)artistName;
 
 -(int) startPlayRadio;
 - (void) startPlaybackNextVideo;

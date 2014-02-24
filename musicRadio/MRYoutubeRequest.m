@@ -15,12 +15,16 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
 
 @implementation MRYoutubeRequest
 
+
+
+
+
 - (NSDictionary*) searchByKeyword : (NSString *)keyword andLimit:(int)limit {
     //TODO ここローカライズするときに日本以外の国でJPとカテゴリId外す。
     //それかそれぞれローカライズする。(大変だけど)
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@",
                      YOUTUBE_API_URL, @"?key=", YOUTUBE_API_KEY,
-                     @"&part=id&type=video&order=relevance&regionCode=JP&videoCategoryId=10",//国は日本、カテゴリはMusic
+                     @"&part=snippet&type=video&order=relevance&regionCode=JP&videoCategoryId=10",//国は日本、カテゴリはMusic
                      @"&q=", keyword];
 
     if (limit>0 && limit<=50)
@@ -31,7 +35,12 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
 }
 
 
-- (NSString *) getTopVideoIDByKeyword: (NSString *)keyword {
+
+
+
+
+
+- (NSDictionary *) getTopVideoByKeyword: (NSString *)keyword {
     NSDictionary *result = [self searchByKeyword:keyword andLimit:1];
     
 //    NSLog(@"getTopVideoIDByKeyword  result: %@",result);
@@ -40,12 +49,15 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
     if ([result[@"items"] count] == 0)
         return nil;
     
-    //ここで動画の長さを判定して、もし合わなかったら次の曲にする。→LIMITふやす
+    //  TODO  ここで動画の長さを判定して、もし合わなかったら次の曲にする。→LIMITふやす
     
-    NSString *videoID = result[@"items"][0][@"id"][@"videoId"];
-    NSLog(@"youtube top id: %@", videoID);
-    return videoID;
+    NSDictionary *topVideo = result[@"items"][0];
+    return topVideo;
 }
+
+
+
+
 
 
 
