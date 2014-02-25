@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UILabel* nowPlayingLabel;
 @property (nonatomic, strong) NSString* artistName;
 - (void) didPlayMusic;
+- (void) displayLyric:(NSString*)lyric;
 @end
 
 

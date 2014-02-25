@@ -10,6 +10,7 @@
 		B02C594C18AB6F8500257BC4 /* MusicPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C594B18AB6F8500257BC4 /* MusicPlayerViewController.m */; };
 		B02C594F18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C594E18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m */; };
 		B02C595618AB8D2F00257BC4 /* MRYoutubeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C595518AB8D2F00257BC4 /* MRYoutubeRequest.m */; };
+		B067D4E018BB53D5001E046D /* MRLyricFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = B067D4DF18BB53D5001E046D /* MRLyricFetcher.m */; };
 		B0865B9218B30D12007E9B3A /* artist.png in Resources */ = {isa = PBXBuildFile; fileRef = B0865B9118B30D12007E9B3A /* artist.png */; };
 		B0865B9418B33CFD007E9B3A /* nextButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B0865B9318B33CFD007E9B3A /* nextButton@2x.png */; };
 		B0865B9618B33D30007E9B3A /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = B0865B9518B33D30007E9B3A /* empty.png */; };
@@ -63,6 +64,8 @@
 		B02C594E18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCDYouTubeVideoPlayerViewController.m; sourceTree = "<group>"; };
 		B02C595418AB8D2F00257BC4 /* MRYoutubeRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRYoutubeRequest.h; sourceTree = "<group>"; };
 		B02C595518AB8D2F00257BC4 /* MRYoutubeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRYoutubeRequest.m; sourceTree = "<group>"; };
+		B067D4DE18BB53D5001E046D /* MRLyricFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRLyricFetcher.h; sourceTree = "<group>"; };
+		B067D4DF18BB53D5001E046D /* MRLyricFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRLyricFetcher.m; sourceTree = "<group>"; };
 		B0865B9118B30D12007E9B3A /* artist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = artist.png; sourceTree = "<group>"; };
 		B0865B9318B33CFD007E9B3A /* nextButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nextButton@2x.png"; sourceTree = "<group>"; };
 		B0865B9518B33D30007E9B3A /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
@@ -151,6 +154,8 @@
 				B0AAF351189AB74300670924 /* MRLastfmRequest.m */,
 				B0AAF353189AB87900670924 /* MRExfmRequest.h */,
 				B0AAF354189AB87900670924 /* MRExfmRequest.m */,
+				B067D4DE18BB53D5001E046D /* MRLyricFetcher.h */,
+				B067D4DF18BB53D5001E046D /* MRLyricFetcher.m */,
 				B02C595418AB8D2F00257BC4 /* MRYoutubeRequest.h */,
 				B02C595518AB8D2F00257BC4 /* MRYoutubeRequest.m */,
 				B0AAF34D189AB32B00670924 /* MRHttpRequest.h */,
@@ -410,6 +415,7 @@
 			files = (
 				B0AAF2F41899809300670924 /* MRPlaylistManager.m in Sources */,
 				B0AAF34F189AB32B00670924 /* MRHttpRequest.m in Sources */,
+				B067D4E018BB53D5001E046D /* MRLyricFetcher.m in Sources */,
 				B02C595618AB8D2F00257BC4 /* MRYoutubeRequest.m in Sources */,
 				B02C594C18AB6F8500257BC4 /* MusicPlayerViewController.m in Sources */,
 				B0AAF2F718998C4D00670924 /* MRMusicPlayer.m in Sources */,

@@ -10,6 +10,7 @@
 #import "MRRadio.h"
 #import "MRLastfmRequest.h"
 
+
 @interface MusicPlayerViewController ()
 @end
 
@@ -23,6 +24,7 @@
     UILabel *_nowPlayingLabel;
     UIScrollView *_artistInfoScrollView;
     UILabel *_bioLabel;
+    UILabel *_lyricLabel;
     NSString *_artistName;
     BOOL _isEnableNextButton;
 }
@@ -32,8 +34,7 @@
 @synthesize artistName = _artistName;
 
 
-
-
+static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでした。";
 
 
 - (void)viewDidLoad
@@ -78,15 +79,16 @@
     CGFloat infoView_H = maxH - statusBar_and_nav_H - nowLabel_H - player_H - button_H - button_Margin*2;
     CGFloat bioLabel_Margin = 20;
     
-    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blurBG4"]];
+    UIImageView *backgroundImage = [[UIImageView alloc] init];//initWithImage:[UIImage imageNamed:@"blurBG4"]];
     backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
+    backgroundImage.backgroundColor = [UIColor colorWithRed:0.465117 green:0.792544 blue:1.0 alpha:1.0];
     [self.view addSubview:backgroundImage];
     
     _nowPlayingLabel = [[UILabel alloc] init];
     _nowPlayingLabel.frame = CGRectMake(0, 0, maxW, nowLabel_H);
     _nowPlayingLabel.center = CGPointMake(maxW/2, statusBar_and_nav_H + nowLabel_H/2);
-    _nowPlayingLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
-    [_nowPlayingLabel setTextColor:[[UIColor whiteColor] colorWithAlphaComponent:0.8]];
+    _nowPlayingLabel.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3];
+    [_nowPlayingLabel setTextColor:[[UIColor blackColor] colorWithAlphaComponent:0.8]];
     [_nowPlayingLabel setFont:[UIFont fontWithName:@"Helvetica Neue Bold" size:32.0f]];
     [_nowPlayingLabel setTextAlignment:NSTextAlignmentCenter];
     [self.view addSubview:_nowPlayingLabel];
@@ -102,6 +104,21 @@
     _artistInfoScrollView.contentSize = CGSizeMake(maxW, 500);//あとでどうにかする
     [self.view addSubview:_artistInfoScrollView];
     
+    
+    _lyricLabel = [[UILabel alloc] init];
+    _lyricLabel.frame = CGRectMake(bioLabel_Margin, 0, maxW-bioLabel_Margin, 5000);
+    [_lyricLabel setTextColor:[[UIColor blackColor] colorWithAlphaComponent:0.8]];
+    [_lyricLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:14.0f]];
+    [_lyricLabel setTextAlignment:NSTextAlignmentNatural];
+    _lyricLabel.numberOfLines = 0;
+    _lyricLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    _lyricLabel.adjustsFontSizeToFitWidth = YES;
+    [_artistInfoScrollView addSubview:_lyricLabel];
+    _lyricLabel.hidden = YES; //最初はプロフ
+    //タッチイベントの追加
+    _lyricLabel.userInteractionEnabled = YES;
+    [_lyricLabel addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapLyricLabel)]];
+    
     _bioLabel = [[UILabel alloc] init];
     _bioLabel.frame = CGRectMake(bioLabel_Margin, 0, maxW-bioLabel_Margin, 5000);
     [_bioLabel setTextColor:[[UIColor blackColor] colorWithAlphaComponent:0.8]];
@@ -111,6 +128,9 @@
     _bioLabel.lineBreakMode = NSLineBreakByCharWrapping;
     _bioLabel.adjustsFontSizeToFitWidth = YES;
     [_artistInfoScrollView addSubview:_bioLabel];
+    //タッチイベントの追加
+    _bioLabel.userInteractionEnabled = YES;
+    [_bioLabel addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapBioLabel)]];
     
     _nextButton = [[UIButton alloc] init];
     _nextButton.enabled = NO;
@@ -127,6 +147,13 @@
 }
 
 
+
+
+
+
+
+
+
 - (void) getArtistInfoWithName {
     MRLastfmRequest *lastfmReqest = [[MRLastfmRequest alloc] init];
     NSDictionary *artistInfo = [lastfmReqest getArtistInfoWithName:_artistName];
@@ -135,8 +162,10 @@
 }
 
 
+
+
+
 - (void) displayArtistInfoWithName: (NSString*)bioString {
-    CGFloat bioLabel_Margin = 20;
     bioString = [bioString stringByReplacingOccurrencesOfString:@"                " withString:@""];
     NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"<a href=(.+)>"
                                               options:0
@@ -145,30 +174,36 @@
                                      options:0
                                        range:NSMakeRange(0,bioString.length)
                                 withTemplate:@""];
-
     NSLog(@"%@",bioString);
-    
-//    float lineHeight = 1.5f;
-//    NSMutableParagraphStyle *paragrahStyle = [[NSMutableParagraphStyle alloc] init];
-//    paragrahStyle.minimumLineHeight = lineHeight;
-//    paragrahStyle.maximumLineHeight = lineHeight;
-//    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:bioString];
-//    [attributedText addAttribute:NSParagraphStyleAttributeName
-//                           value:paragrahStyle
-//                           range:NSMakeRange(0, attributedText.length)];
-//    
-    
-    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:bioString];
-    [attributedText addAttribute:NSKernAttributeName value:[NSNumber numberWithFloat:1.2f] range:NSMakeRange(0, attributedText.length)];
-    [_bioLabel setAttributedText:attributedText];
-    
-//    [_bioLabel setText:bioString];
-    
-    CGSize size = [_bioLabel.text sizeWithFont:_bioLabel.font constrainedToSize:CGSizeMake(self.view.frame.size.width- bioLabel_Margin, 5000) lineBreakMode:_bioLabel.lineBreakMode];
-    
-    _bioLabel.frame = CGRectMake(bioLabel_Margin,0, size.width-bioLabel_Margin, size.height);
-    _artistInfoScrollView.contentSize = size;
+    [self setText:bioString toLabel:_bioLabel];
 }
+
+
+
+- (void) setText:(NSString*)text toLabel:(UILabel*)label {
+    
+    [label setText:@""];
+    
+    //行間を調整したいけど行間じゃなくて文字間になってるなう。
+    NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
+    [attributedText addAttribute:NSKernAttributeName value:[NSNumber numberWithFloat:1.2f] range:NSMakeRange(0, attributedText.length)];
+    [label setAttributedText:attributedText];
+    
+    [self adjustSizeOfLabel:label withText:text];
+
+}
+
+- (void) adjustSizeOfLabel:(UILabel*)label withText:(NSString*)text {
+    const CGFloat margin = 40;
+    //ラベルとスクロールViewの大きさ調節
+    CGSize size2 = CGSizeMake(self.view.frame.size.width- margin, 5000);
+    CGSize size = [label.text sizeWithFont:label.font constrainedToSize:size2 lineBreakMode:label.lineBreakMode];
+    label.frame = CGRectMake(margin, margin/2, size.width-margin, size.height);
+    _artistInfoScrollView.contentSize = CGSizeMake(size.width, size.height + margin*2);
+
+}
+
+
 
 
 
@@ -178,9 +213,35 @@
     [_appRadio startPlaybackNextVideo];
 }
 
+- (void) onTapLyricLabel {
+    [self showBio];
+}
+
+- (void) onTapBioLabel {
+    [self showLyric];
+}
 
 
 
+- (void) showBio {
+    if (_bioLabel.hidden) {
+        _lyricLabel.hidden = YES;
+        _bioLabel.hidden = NO;
+        [self adjustSizeOfLabel:_bioLabel withText:_bioLabel.text];
+    }
+}
+
+- (void) showLyric {
+    if (_lyricLabel.hidden) {
+        if (_lyricLabel.text){
+            _bioLabel.hidden = YES;
+            _lyricLabel.hidden = NO;
+            [self adjustSizeOfLabel:_lyricLabel withText:_lyricLabel.text];
+        } else {
+            [self showBio];
+        }
+    }
+}
 
 
 
@@ -200,16 +261,21 @@
 - (void) didPlayMusic{
     NSLog(@"didPlayMusic ^^^^^^^^^^^^^^^^^^^^^^^^   artistname:%@", _artistName);
     
-    [_bioLabel setText:@""];
-    
     //音楽再生開始後、アーティスト情報を取得して表示。
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        [self getArtistInfoWithName];
-//    });
-
+    [self getArtistInfoWithName];
 }
 
 
+- (void) displayLyric:(NSString*)lyric {
+    if (!lyric) {
+        lyric = LYRIC_NOTFOUND;
+        [self showBio];
+    }
+    [self setText:lyric toLabel:_lyricLabel];
+    if (!([lyric isEqualToString:LYRIC_NOTFOUND])) {
+        [self showLyric];
+    }
+}
 
 
 

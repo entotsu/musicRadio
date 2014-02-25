@@ -11,6 +11,7 @@
 #import "MRLastfmRequest.h"
 #import "MRExfmRequest.h"
 #import "MRYoutubeRequest.h"
+#import "MRLyricFetcher.h"
 
 @implementation MRRadio {
     MRPlaylistManager *_playlistManager;
@@ -20,7 +21,13 @@
     BOOL _didPlayFastTrack;
     BOOL _isStopPlayer;
     NSString *_nowPlayingText;
+    
     NSString *_nextArtistName;
+    NSString *_nextTrackName;
+    
+    MRLyricFetcher *_lyricFetcher;
+    NSString *_nextLyricString;
+    NSString *_lyricString;
 }
 
 @synthesize youtubePlayer;
@@ -40,6 +47,7 @@
         _lastfmRequest = [[MRLastfmRequest alloc] init];
         _exfmRequest = [[MRExfmRequest alloc] init];
         _youTubeRequest = [[MRYoutubeRequest alloc] init];
+        _lyricFetcher = [[MRLyricFetcher alloc] init];
         
         [self enableBackGroundPlayback];
         [self enableAutoPlay];
@@ -61,12 +69,15 @@
 
 
 //------------------ public methods -----------------------------------
+
+// 検索 (つかってない)
 -(NSArray*) searchSongWithArtistName:(NSString*) keyword {
     NSLog(@"searchSongWithArtistName   keyword: %@", keyword);
     return [_lastfmRequest searchArtistByLastfmWithArtistName:keyword];
 }
 
 
+// 初回の再生
 - (void) fastArtistRandomPlay: (NSString*)artistName {
     _nowPlayingText = artistName;
     NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
@@ -74,14 +85,14 @@
     [self prepearYouTubePlayerWithVideoID:randomVideoID];
 }
 
-
+// プレイリスト作成
 -(void) generatePlaylistByArtistName: (NSString*)artistName {
     NSLog(@"MRRadio : generatePlaylistByArtistName");
     [_playlistManager generatePlaylistBySimilarArtistsWithArtistName:artistName];
 }
 
 
-
+// 次の曲の準備
 -(void) prepareNextTrack {
     NSDictionary *songInfo = [_playlistManager getNextTrack];
     [self prepareYouTubeWithSongInfo:songInfo];
@@ -118,6 +129,11 @@
     }
     else {
         delegeteViewController.nextButton.enabled = YES;
+        
+        //歌詞を取得
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            _nextLyricString = [_lyricFetcher getLyricWithTitle:_nextTrackName andArtist:_nextArtistName];
+        });
     }
 }
 
@@ -157,8 +173,9 @@
 
     NSString *artistName = songInfo[@"artist"];
     NSString *trackName = songInfo[@"name"];
-    
+
     _nextArtistName = artistName;
+    _nextTrackName = trackName;
     _nowPlayingText = [NSString stringWithFormat:@"%@ - %@", artistName, trackName];
     
     NSString *searchKeyword = [NSString stringWithFormat:@"%@ %@", artistName, trackName];
@@ -195,6 +212,8 @@
         return [self YouTubeErrorOccred];
     if ([videoTitle rangeOfString:@"ピッチ" options:NSCaseInsensitiveSearch].location != NSNotFound)
         return [self YouTubeErrorOccred];
+    if ([videoTitle rangeOfString:@"弾いてみた" options:NSCaseInsensitiveSearch].location != NSNotFound)
+        return [self YouTubeErrorOccred];
     
     return [self prepearYouTubePlayerWithVideoID:topVideoID];
 }
@@ -205,7 +224,6 @@
     self.nextYoutubePlayer.delegete = self;
     self.nextYoutubePlayer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
     self.nextYoutubePlayer.moviePlayer.allowsAirPlay = YES;
-    
     //これで再生可能になったタイミングでonYoutubeLoadingSuccessにて↓のメソッドが呼ばれる。
     //エラーならYouTubeErrorOccredが呼ばれる。
 }
@@ -215,8 +233,6 @@
     NSLog(@"MusicPlayer : startPlaybackNextVideo >>>>>>>>>>>>>>>>>>>>>");
     
     _isStopPlayer = NO;
-    if(!_didPlayFastTrack)
-        _didPlayFastTrack = YES;
     
     if (youtubePlayer) {
         [youtubePlayer.moviePlayer stop];
@@ -228,9 +244,18 @@
     [youtubePlayer.moviePlayer play];
     nextYoutubePlayer = nil;
     
+    //view側のnowPlayingTextとアーティスト名の更新
     [delegeteViewController.nowPlayingLabel setText:_nowPlayingText];
     delegeteViewController.artistName = _nextArtistName;
+    
+    //これでbioの更新が行われる  //あとでリファクタリングする
     [delegeteViewController didPlayMusic];
+    
+    //(最初以外は) 歌詞のセット
+    if(_didPlayFastTrack) [delegeteViewController displayLyric:_nextLyricString];
+    
+    //最初のプレイの場合はフラグを立てる。
+    if(!_didPlayFastTrack) _didPlayFastTrack = YES;
     
     //今のを再生したら次のトラックを準備する
     if (_didPlayFastTrack && _playlistManager.isHavingTrack) {

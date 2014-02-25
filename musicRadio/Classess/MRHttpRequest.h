@@ -11,5 +11,6 @@
 @interface MRHttpRequest : NSObject
 
 - (NSDictionary*) getJsonWithURLString:(NSString*)url;
+- (NSString *)sendGetRequest:(NSString *)url;
 
 @end

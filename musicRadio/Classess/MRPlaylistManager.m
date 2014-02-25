@@ -39,18 +39,24 @@
 
 - (void) generatePlaylistBySimilarArtistsWithArtistName: (NSString*)artistName {
     NSLog(@"[MRPlaylistManager generatePlaylistBySimilarArtistsWithArtistName]");
-    NSArray *similarArtists = [_lastfmRequest getSimilarArtistsWithArtistName:artistName];
-    int length = (int)[similarArtists count];
-    int i;
+    NSMutableArray *similarArtists = [NSMutableArray arrayWithArray:[_lastfmRequest getSimilarArtistsWithArtistName:artistName]];
+
+//    int i;
     
-    for (i=0; i<length; i++) {
-        NSLog(@"+++++++++++++++++++ similar Artist 【%@】",similarArtists[i][@"name"]);
-        NSString *similarArtistMbid = similarArtists[i][@"mbid"];
-        if ([similarArtistMbid isEqualToString:@""] || similarArtistMbid == nil) {
-            [self generatePlaylistBySimilarTrackWithArtistName:similarArtists[i][@"name"] orMbid:nil isSimilarArtist:YES];
+//    for (i=0; i<(int)[similarArtists count]; i++) {
+    while (0 <= (int)[similarArtists count]) {
+        //次のアーティストをランダムで取得
+        int randIndex = (int)arc4random_uniform( (int)[similarArtists count] );
+        NSDictionary *artist = [similarArtists[randIndex] copy];
+        [similarArtists removeObjectAtIndex:randIndex];
+        
+        NSLog(@"+++++++++++++++++++ similar Artist 【%@】",artist[@"name"]);
+        NSString *mbid = artist[@"mbid"];
+        if ([mbid isEqualToString:@""] || mbid == nil) {
+            [self generatePlaylistBySimilarTrackWithArtistName:artist[@"name"] orMbid:nil isSimilarArtist:YES];
         }
         else {
-            [self generatePlaylistBySimilarTrackWithArtistName:nil orMbid:similarArtistMbid isSimilarArtist:YES];
+            [self generatePlaylistBySimilarTrackWithArtistName:nil orMbid:mbid isSimilarArtist:YES];
         }
         if([_playList count] >= MAX_PLAYLIST_LENGTH) break;
     }

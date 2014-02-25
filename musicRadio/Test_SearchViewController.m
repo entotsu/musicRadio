@@ -66,8 +66,9 @@
     float indicator_WH = textField_H;
     
     
-    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"blurBG4"]];
+    UIImageView *backgroundImage = [[UIImageView alloc] init];//WithImage:[UIImage imageNamed:@"blurBG4"]];
     backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
+    backgroundImage.backgroundColor = [UIColor colorWithRed:0.465117 green:0.792544 blue:1.0 alpha:1.0];
     [self.view addSubview:backgroundImage];
 //    
 //    _textField = [[UITextField alloc] init];
@@ -286,9 +287,9 @@
 
 -(CGFloat)tableView:(UITableView*)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.row == 0){
+    if(indexPath.row == 0) {
         return 60.0;  // １番目のセクションの行の高さを30にする
-    }else{
+    } else {
         return 60.0;  // それ以外の行の高さを50にする
     }
 }
