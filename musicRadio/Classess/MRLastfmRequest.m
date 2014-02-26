@@ -44,12 +44,17 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
                      @"&artist=", artistName];
 
     NSDictionary *result = [_httpRequest getJsonWithURLString:url];
+    
+    if (result == nil) {
+        return nil;
+    }
+    
     NSDictionary *artistMatches = result[@"results"][@"artistmatches"];
     NSString *total = result[@"results"][@"opensearch:totalResults"];
     
     if ([total isEqual: @"0"]) {
         NSLog(@" artist search result is 0!");
-        return nil;
+        return [NSArray new];
     }
     else if ([total isEqual:@"1"]) {
         NSLog(@"one!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");

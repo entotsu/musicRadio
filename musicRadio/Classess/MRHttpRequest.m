@@ -28,15 +28,24 @@
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     NSData *json_data = [NSURLConnection sendSynchronousRequest:request returningResponse:nil error:nil];
-    NSError *error = nil;
-    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:json_data options:kNilOptions error:&error];
     
-    if( error ) {
-        NSLog(@"http get json EROOR!");
-        NSLog(@"%@",error);
+    if (json_data) {
+        NSError *error = nil;
+        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:json_data options:kNilOptions error:&error];
+        
+        if( error ) {
+            NSLog(@"http get json EROOR!");
+            NSLog(@"%@",error);
+        }
+        return json;
+    }
+    else {
+        NSLog(@"####################### request response is nil!! #############################");
+        return nil;
     }
     
-    return json;
+    
+    
 }
 
 
