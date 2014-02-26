@@ -28,6 +28,8 @@
     MRLyricFetcher *_lyricFetcher;
     NSString *_nextLyricString;
     NSString *_lyricString;
+    
+    NSString *_nextArtistBio;
 }
 
 @synthesize youtubePlayer;
@@ -70,11 +72,6 @@
 
 //------------------ public methods -----------------------------------
 
-// 検索 (つかってない)
--(NSArray*) searchSongWithArtistName:(NSString*) keyword {
-    NSLog(@"searchSongWithArtistName   keyword: %@", keyword);
-    return [_lastfmRequest searchArtistByLastfmWithArtistName:keyword];
-}
 
 
 // 初回の再生
@@ -133,6 +130,9 @@
         //歌詞を取得
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             _nextLyricString = [_lyricFetcher getLyricWithTitle:_nextTrackName andArtist:_nextArtistName];
+        });
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            _nextArtistBio = [self getArtistBioWithName:_nextArtistName];
         });
     }
 }
@@ -246,10 +246,9 @@
     
     //view側のnowPlayingTextとアーティスト名の更新
     [delegeteViewController.nowPlayingLabel setText:_nowPlayingText];
-    delegeteViewController.artistName = _nextArtistName;
     
     //これでbioの更新が行われる  //あとでリファクタリングする
-    [delegeteViewController didPlayMusic];
+    if(_didPlayFastTrack) [delegeteViewController displayBio:_nextArtistBio];
     
     //(最初以外は) 歌詞のセット
     if(_didPlayFastTrack) [delegeteViewController displayLyric:_nextLyricString];
@@ -268,6 +267,22 @@
 
 
 
+
+
+- (NSString*) getArtistBioWithName:(NSString*)artistName {
+    NSDictionary *artistInfo = [_lastfmRequest getArtistInfoWithName:artistName];
+    NSString *bioString = artistInfo[@"artist"][@"bio"][@"summary"];
+
+    bioString = [bioString stringByReplacingOccurrencesOfString:@"                " withString:@""];
+    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"<a href=(.+)>"
+                                                                            options:0
+                                                                              error:nil];
+    bioString = [regexp stringByReplacingMatchesInString:bioString
+                                                 options:0
+                                                   range:NSMakeRange(0,bioString.length)
+                                            withTemplate:@""];
+    return bioString;
+}
 
 
 

@@ -25,13 +25,13 @@
     UIScrollView *_artistInfoScrollView;
     UILabel *_bioLabel;
     UILabel *_lyricLabel;
-    NSString *_artistName;
+    NSString *_seedArtist;
     BOOL _isEnableNextButton;
 }
 @synthesize youtubeBox = _youTubeBox;
 @synthesize nextButton = _nextButton;
 @synthesize nowPlayingLabel = _nowPlayingLabel;
-@synthesize artistName = _artistName;
+@synthesize seedArtist = _seedArtist;
 
 
 static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでした。";
@@ -45,17 +45,17 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     [self layoutSubView];
     
     //debug
-    if (!_artistName)
-        _artistName = @"ellegarden";
+    if (!_seedArtist)
+        _seedArtist = @"ellegarden";
     
     _appRadio = [[MRRadio alloc] init];
     _appRadio.delegeteViewController = self;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        [_appRadio generatePlaylistByArtistName:_artistName];
+        [_appRadio generatePlaylistByArtistName:_seedArtist];
     });
     
-    [_appRadio fastArtistRandomPlay:_artistName];
+    [_appRadio fastArtistRandomPlay:_seedArtist];
 }
 
 
@@ -151,35 +151,6 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
 
 
 
-
-
-
-- (void) getArtistInfoWithName {
-    MRLastfmRequest *lastfmReqest = [[MRLastfmRequest alloc] init];
-    NSDictionary *artistInfo = [lastfmReqest getArtistInfoWithName:_artistName];
-    NSString *bioSummary = artistInfo[@"artist"][@"bio"][@"summary"];
-    [self displayArtistInfoWithName:bioSummary];
-}
-
-
-
-
-
-- (void) displayArtistInfoWithName: (NSString*)bioString {
-    bioString = [bioString stringByReplacingOccurrencesOfString:@"                " withString:@""];
-    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"<a href=(.+)>"
-                                              options:0
-                                                error:nil];
-    bioString = [regexp stringByReplacingMatchesInString:bioString
-                                     options:0
-                                       range:NSMakeRange(0,bioString.length)
-                                withTemplate:@""];
-    NSLog(@"%@",bioString);
-    [self setText:bioString toLabel:_bioLabel];
-}
-
-
-
 - (void) setText:(NSString*)text toLabel:(UILabel*)label {
     
     [label setText:@""];
@@ -202,6 +173,13 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     _artistInfoScrollView.contentSize = CGSizeMake(size.width, size.height + margin*2);
 
 }
+
+
+
+
+
+
+
 
 
 
@@ -258,13 +236,6 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
 
 
 // ----------------- <MRRadioDelegete> -------------------------
-- (void) didPlayMusic{
-    NSLog(@"didPlayMusic ^^^^^^^^^^^^^^^^^^^^^^^^   artistname:%@", _artistName);
-    
-    //音楽再生開始後、アーティスト情報を取得して表示。
-    [self getArtistInfoWithName];
-}
-
 
 - (void) displayLyric:(NSString*)lyric {
     if (!lyric) {
@@ -276,6 +247,11 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
         [self showLyric];
     }
 }
+
+- (void) displayBio:(NSString*)bio {
+    [self setText:bio toLabel:_bioLabel];
+}
+
 
 
 

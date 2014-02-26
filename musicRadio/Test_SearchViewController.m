@@ -42,6 +42,10 @@
     [self initView];
 
     _lastfmRequest = [[MRLastfmRequest alloc] init];
+    
+    UIApplication *application = [UIApplication sharedApplication];
+    application.networkActivityIndicatorVisible = YES;
+
 }
 
 
@@ -70,13 +74,6 @@
     backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
     backgroundImage.backgroundColor = [UIColor colorWithRed:0.465117 green:0.792544 blue:1.0 alpha:1.0];
     [self.view addSubview:backgroundImage];
-//    
-//    _textField = [[UITextField alloc] init];
-//    _textField.frame = CGRectMake(0, statusBar_H, maxW, textField_H);
-//    _textField.borderStyle = UITextBorderStyleNone;
-//    _textField.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.8];
-//    _textField.delegate = self;
-//    [self.view addSubview:_textField];
     
     _searchBar = [[UISearchBar alloc] init];
     _searchBar.frame = CGRectMake(0, statusBar_andNav_H, maxW, textField_H);
@@ -96,8 +93,7 @@
     _tableView.dataSource = self;
     _tableView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_tableView];
-//    
-//    
+
 //    _indicator = [[UIActivityIndicatorView alloc]init];
 //    _indicator.frame = CGRectMake(maxW-indicator_WH, statusBar_H, indicator_WH, indicator_WH);
 //    _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
@@ -105,47 +101,6 @@
 }
 
 
-
-//
-//- (void) displayArists {
-//    //もし検索中だったら検索しない。
-//    if (!_isReloading) {
-//        [_indicator startAnimating];
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-//            _isReloading = YES;
-//            sleep(0.4);
-//            [_indicator startAnimating];
-//            NSString *artistName = _textField.text;
-//            _searchedWord = [artistName copy];
-//            //テーブルの更新
-//            [self searchAndReloadTable:artistName];
-//        });
-//    }
-//}
-//
-//
-//
-//
-//- (void) checkSearchedWord_OLD {
-//    if (![_textField.text isEqualToString:_searchedWord]) {
-//        NSLog(@"RESEARCH*********");
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-//            sleep(1);
-//            [self displayArists];
-//        });
-//    }
-//}
-//
-//- (void) searchAndReloadTable_OLD:(NSString*)artistName {
-//    _tableViewSource = [_lastfmRequest searchArtistByLastfmWithArtistName:artistName];
-//    
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        if (_indicator.isAnimating) [_indicator stopAnimating];
-//        [_tableView reloadData];
-//        //テーブル更新後に以前検索したワードと一致してなかったら検索する。
-//        [self checkSearchedWord];
-//    });
-//}
 
 
 
@@ -162,15 +117,25 @@
     }
 }
 
+
 - (void) searchAndReloadTable:(NSString*)artistName {
     _tableViewSource = [_lastfmRequest searchArtistByLastfmWithArtistName:artistName];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_tableView reloadData];
-        //テーブル更新後に以前検索したワードと一致してなかったら検索する。
-        [self checkSearchedWord];
-    });
+    if (_tableViewSource) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_tableView reloadData];
+            //テーブル更新後に以前検索したワードと一致してなかったら検索する。
+            [self checkSearchedWord];
+        });
+    } else {
+        NSLog(@"network error"); //Tweetbot みたいなアラートを表示する
+        _isReloading = NO;
+
+    }
+    
 }
+
+
 - (void) checkSearchedWord {
     if (![_searchBar.text isEqualToString:_searchedWord]) {
         NSLog(@"RESEARCH*********");
@@ -190,23 +155,6 @@
 }
 
 
-
-
-
-
-
-
-// ------------ <UITextFieldDelegate> -------------
-//
-//- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
-//{
-//    NSLog(@"shouldChangeCharactersInRange string: %@",string);
-//    
-//    [self displayArists];
-//    
-//    return YES;
-//}
-//
 
 
 
@@ -257,9 +205,8 @@
         artistImageURL = artist[@"image"][0][@"#text"];
     }
     cell.textLabel.text = artistName;
-
-    cell.imageView.image = [UIImage imageNamed:@"empty34"];
     
+    cell.imageView.image = [UIImage imageNamed:@"empty34"];
     
     //画像URLからUIImageを生成 //ここひとつのスレッドにするべきだな。
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
@@ -306,8 +253,7 @@
     //空じゃなければ
     if (![artistName isEqualToString:@""]) {
         MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
-        musicView.artistName = artistName;
-//        [self presentViewController:musicView animated:YES completion:nil];
+        [musicView setSeedArtist:artistName];
         [self.navigationController pushViewController:musicView animated:YES];
     }
 }
