@@ -25,7 +25,9 @@
 @end
 
 
-
+@protocol MRRadioStartViewDelegate <NSObject>
+- (void) canStartFirstTrack;
+@end
 
 
 
@@ -71,5 +73,6 @@
 @property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *youtubePlayer;
 @property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *nextYoutubePlayer;
 @property (nonatomic, unsafe_unretained) UIViewController <MRRadioDelegate> *delegeteViewController;
+@property (nonatomic, unsafe_unretained) UIViewController <MRRadioStartViewDelegate> *delegeteStartViewController;
 
 @end

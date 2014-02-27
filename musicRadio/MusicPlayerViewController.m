@@ -9,6 +9,8 @@
 #import "MusicPlayerViewController.h"
 #import "MRRadio.h"
 #import "MRLastfmRequest.h"
+#import "FXBlurView.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 @interface MusicPlayerViewController ()
@@ -32,6 +34,7 @@
 @synthesize nextButton = _nextButton;
 @synthesize nowPlayingLabel = _nowPlayingLabel;
 @synthesize seedArtist = _seedArtist;
+@synthesize appRadio = _appRadio;
 
 
 static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでした。";
@@ -45,17 +48,24 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     [self layoutSubView];
     
     //debug
-    if (!_seedArtist)
-        _seedArtist = @"ellegarden";
-    
-    _appRadio = [[MRRadio alloc] init];
-    _appRadio.delegeteViewController = self;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        [_appRadio generatePlaylistByArtistName:_seedArtist];
-    });
-    
-    [_appRadio fastArtistRandomPlay:_seedArtist];
+    if (!_seedArtist) _seedArtist = @"ellegarden";
+
+    //本来はここが動く
+    if (_appRadio) {
+        _appRadio.delegeteViewController = self;
+        [self onTapNextButton];
+    }
+    //debug
+    else {
+        _appRadio = [[MRRadio alloc] init];
+        _appRadio.delegeteViewController = self;
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            [_appRadio generatePlaylistByArtistName:_seedArtist];
+        });
+        
+        [_appRadio fastArtistRandomPlay:_seedArtist];
+    }
 }
 
 
@@ -78,31 +88,42 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     CGFloat nowLabel_H = 40;
     CGFloat infoView_H = maxH - statusBar_and_nav_H - nowLabel_H - player_H - button_H - button_Margin*2;
     CGFloat bioLabel_Margin = 20;
+    CGFloat blurRadius = 10;
     
-    UIImageView *backgroundImage = [[UIImageView alloc] init];//initWithImage:[UIImage imageNamed:@"blurBG4"]];
+    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CRSTL_BG"]];
     backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
     backgroundImage.backgroundColor = [UIColor colorWithRed:0.465117 green:0.792544 blue:1.0 alpha:1.0];
     [self.view addSubview:backgroundImage];
     
+    CGRect nowPlayingViewFrame = CGRectMake(0, 0, maxW, nowLabel_H);
+    FXBlurView *nowPlayingBlurView = [[FXBlurView alloc] init];
+    nowPlayingBlurView.frame = nowPlayingViewFrame;
+    nowPlayingBlurView.center = CGPointMake(maxW/2, statusBar_and_nav_H + nowLabel_H/2);
+    nowPlayingBlurView.blurRadius = blurRadius;
+    [self.view addSubview:nowPlayingBlurView];
     _nowPlayingLabel = [[UILabel alloc] init];
-    _nowPlayingLabel.frame = CGRectMake(0, 0, maxW, nowLabel_H);
-    _nowPlayingLabel.center = CGPointMake(maxW/2, statusBar_and_nav_H + nowLabel_H/2);
-    _nowPlayingLabel.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.3];
-    [_nowPlayingLabel setTextColor:[[UIColor blackColor] colorWithAlphaComponent:0.8]];
+    _nowPlayingLabel.frame = nowPlayingViewFrame;
+    _nowPlayingLabel.backgroundColor = [UIColor clearColor];
+    [_nowPlayingLabel setTextColor:[UIColor blackColor]];
     [_nowPlayingLabel setFont:[UIFont fontWithName:@"Helvetica Neue Bold" size:32.0f]];
     [_nowPlayingLabel setTextAlignment:NSTextAlignmentCenter];
-    [self.view addSubview:_nowPlayingLabel];
+    [nowPlayingBlurView addSubview:_nowPlayingLabel];
     
     _youTubeBox = [[UIView alloc] init];
     _youTubeBox.frame = CGRectMake(0, statusBar_and_nav_H + nowLabel_H, maxW, player_H);
     _youTubeBox.backgroundColor = [UIColor blackColor];
     [self.view addSubview:_youTubeBox];
     
+    
+    FXBlurView *scrollBlurBG = [[FXBlurView alloc] init];
+    scrollBlurBG.frame = CGRectMake(0, statusBar_and_nav_H+nowLabel_H+player_H, maxW, infoView_H);;
+    scrollBlurBG.blurRadius = blurRadius;
+    [self.view addSubview:scrollBlurBG];
     _artistInfoScrollView = [[UIScrollView alloc] init];
-    _artistInfoScrollView.frame = CGRectMake(0, statusBar_and_nav_H+nowLabel_H+player_H, maxW, infoView_H);
+    _artistInfoScrollView.frame = CGRectMake(0,0, maxW, infoView_H);
     _artistInfoScrollView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2];
     _artistInfoScrollView.contentSize = CGSizeMake(maxW, 500);//あとでどうにかする
-    [self.view addSubview:_artistInfoScrollView];
+    [scrollBlurBG addSubview:_artistInfoScrollView];
     
     
     _lyricLabel = [[UILabel alloc] init];
@@ -132,17 +153,22 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     _bioLabel.userInteractionEnabled = YES;
     [_bioLabel addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapBioLabel)]];
     
+    
+    FXBlurView *buttonSheetBlurView = [[FXBlurView alloc] init];
+    buttonSheetBlurView.frame = CGRectMake(0, maxH - button_H - button_Margin*2, maxW, button_H+button_Margin*2);
+    buttonSheetBlurView.blurRadius = blurRadius;
+    [self.view addSubview:buttonSheetBlurView];
     _nextButton = [[UIButton alloc] init];
     _nextButton.enabled = NO;
-    _nextButton.frame = CGRectMake(maxW - button_W - button_Margin, maxH - button_H - button_Margin, button_W, button_H);
+    _nextButton.frame = CGRectMake(maxW - button_W - button_Margin, button_Margin, button_W, button_H);
     [_nextButton setBackgroundImage:[UIImage imageNamed:@"nextButton"] forState:UIControlStateNormal];
     [_nextButton addTarget:self action:@selector(onTapNextButton) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:_nextButton];
+    [buttonSheetBlurView addSubview:_nextButton];
     
     UIButton *_heartButton = [[UIButton alloc] init];
-    _heartButton.frame = CGRectMake(button_Margin, maxH - button_H - button_Margin, button_W, button_H);
+    _heartButton.frame = CGRectMake(button_Margin, button_Margin, button_W, button_H);
     [_heartButton setBackgroundImage:[UIImage imageNamed:@"heart_80"] forState:UIControlStateNormal];
-    [self.view addSubview:_heartButton];
+    [buttonSheetBlurView addSubview:_heartButton];
     
 }
 
@@ -167,7 +193,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
 - (void) adjustSizeOfLabel:(UILabel*)label withText:(NSString*)text {
     const CGFloat margin = 40;
     //ラベルとスクロールViewの大きさ調節
-    CGSize size2 = CGSizeMake(self.view.frame.size.width- margin, 5000);
+    CGSize size2 = CGSizeMake(self.view.frame.size.width-margin, 5000);
     CGSize size = [label.text sizeWithFont:label.font constrainedToSize:size2 lineBreakMode:label.lineBreakMode];
     label.frame = CGRectMake(margin, margin/2, size.width-margin, size.height);
     _artistInfoScrollView.contentSize = CGSizeMake(size.width, size.height + margin*2);
@@ -249,6 +275,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
 }
 
 - (void) displayBio:(NSString*)bio {
+    if (!bio) bio = @"アーティスト情報が見つかりませんでした。";
     [self setText:bio toLabel:_bioLabel];
 }
 

@@ -7,10 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B017668118BECEDF0090E47C /* music59.png in Resources */ = {isa = PBXBuildFile; fileRef = B017668018BECEDF0090E47C /* music59.png */; };
+		B017668318BED0390090E47C /* music400@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B017668218BED0390090E47C /* music400@2x.png */; };
+		B017668518BED0840090E47C /* music2_400@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B017668418BED0840090E47C /* music2_400@2x.png */; };
 		B02C594C18AB6F8500257BC4 /* MusicPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C594B18AB6F8500257BC4 /* MusicPlayerViewController.m */; };
 		B02C594F18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C594E18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m */; };
 		B02C595618AB8D2F00257BC4 /* MRYoutubeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = B02C595518AB8D2F00257BC4 /* MRYoutubeRequest.m */; };
 		B067D4E018BB53D5001E046D /* MRLyricFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = B067D4DF18BB53D5001E046D /* MRLyricFetcher.m */; };
+		B067D52F18BDD872001E046D /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = B067D52E18BDD872001E046D /* FXBlurView.m */; };
+		B067D53218BDD8BA001E046D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B067D53118BDD8BA001E046D /* QuartzCore.framework */; };
+		B067D53A18BDDCCB001E046D /* CRSTL_BG@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B067D53918BDDCCB001E046D /* CRSTL_BG@2x.png */; };
+		B067D53D18BDEF93001E046D /* FirstNavigationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B067D53C18BDEF93001E046D /* FirstNavigationViewController.m */; };
+		B067D54018BE2157001E046D /* StartingRadioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B067D53F18BE2157001E046D /* StartingRadioViewController.m */; };
+		B067D54218BE25D3001E046D /* test_image_androp.png in Resources */ = {isa = PBXBuildFile; fileRef = B067D54118BE25D3001E046D /* test_image_androp.png */; };
 		B0865B9218B30D12007E9B3A /* artist.png in Resources */ = {isa = PBXBuildFile; fileRef = B0865B9118B30D12007E9B3A /* artist.png */; };
 		B0865B9418B33CFD007E9B3A /* nextButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B0865B9318B33CFD007E9B3A /* nextButton@2x.png */; };
 		B0865B9618B33D30007E9B3A /* empty.png in Resources */ = {isa = PBXBuildFile; fileRef = B0865B9518B33D30007E9B3A /* empty.png */; };
@@ -55,6 +64,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B017668018BECEDF0090E47C /* music59.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = music59.png; sourceTree = "<group>"; };
+		B017668218BED0390090E47C /* music400@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music400@2x.png"; sourceTree = "<group>"; };
+		B017668418BED0840090E47C /* music2_400@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music2_400@2x.png"; sourceTree = "<group>"; };
 		B02A696118A2C3EE009FF1EB /* musicRadio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = musicRadio.entitlements; sourceTree = "<group>"; };
 		B02C594A18AB6F8500257BC4 /* MusicPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicPlayerViewController.h; sourceTree = "<group>"; };
 		B02C594B18AB6F8500257BC4 /* MusicPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicPlayerViewController.m; sourceTree = "<group>"; };
@@ -64,6 +76,15 @@
 		B02C595518AB8D2F00257BC4 /* MRYoutubeRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRYoutubeRequest.m; sourceTree = "<group>"; };
 		B067D4DE18BB53D5001E046D /* MRLyricFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRLyricFetcher.h; sourceTree = "<group>"; };
 		B067D4DF18BB53D5001E046D /* MRLyricFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRLyricFetcher.m; sourceTree = "<group>"; };
+		B067D52D18BDD872001E046D /* FXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBlurView.h; sourceTree = "<group>"; };
+		B067D52E18BDD872001E046D /* FXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXBlurView.m; sourceTree = "<group>"; };
+		B067D53118BDD8BA001E046D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B067D53918BDDCCB001E046D /* CRSTL_BG@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CRSTL_BG@2x.png"; sourceTree = "<group>"; };
+		B067D53B18BDEF93001E046D /* FirstNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstNavigationViewController.h; sourceTree = "<group>"; };
+		B067D53C18BDEF93001E046D /* FirstNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstNavigationViewController.m; sourceTree = "<group>"; };
+		B067D53E18BE2157001E046D /* StartingRadioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartingRadioViewController.h; sourceTree = "<group>"; };
+		B067D53F18BE2157001E046D /* StartingRadioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartingRadioViewController.m; sourceTree = "<group>"; };
+		B067D54118BE25D3001E046D /* test_image_androp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_androp.png; sourceTree = "<group>"; };
 		B0865B9118B30D12007E9B3A /* artist.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = artist.png; sourceTree = "<group>"; };
 		B0865B9318B33CFD007E9B3A /* nextButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nextButton@2x.png"; sourceTree = "<group>"; };
 		B0865B9518B33D30007E9B3A /* empty.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = empty.png; sourceTree = "<group>"; };
@@ -112,6 +133,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B067D53218BDD8BA001E046D /* QuartzCore.framework in Frameworks */,
 				B0AAF2FC189A3ABD00670924 /* AVFoundation.framework in Frameworks */,
 				B0AAF2BD18997BB400670924 /* CoreGraphics.framework in Frameworks */,
 				B0AAF2BF18997BB400670924 /* UIKit.framework in Frameworks */,
@@ -135,6 +157,7 @@
 		B02C595018AB71FC00257BC4 /* plugins */ = {
 			isa = PBXGroup;
 			children = (
+				B067D53018BDD87A001E046D /* FXBlurView */,
 				B02C594D18AB71F300257BC4 /* XCDYouTubeVideoPlayerViewController.h */,
 				B02C594E18AB71F400257BC4 /* XCDYouTubeVideoPlayerViewController.m */,
 			);
@@ -169,9 +192,23 @@
 			name = mainClasses;
 			sourceTree = "<group>";
 		};
+		B067D53018BDD87A001E046D /* FXBlurView */ = {
+			isa = PBXGroup;
+			children = (
+				B067D52D18BDD872001E046D /* FXBlurView.h */,
+				B067D52E18BDD872001E046D /* FXBlurView.m */,
+			);
+			name = FXBlurView;
+			sourceTree = "<group>";
+		};
 		B0865B9018B30CF4007E9B3A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B017668218BED0390090E47C /* music400@2x.png */,
+				B017668418BED0840090E47C /* music2_400@2x.png */,
+				B017668018BECEDF0090E47C /* music59.png */,
+				B067D54118BE25D3001E046D /* test_image_androp.png */,
+				B067D53918BDDCCB001E046D /* CRSTL_BG@2x.png */,
 				B0865B9318B33CFD007E9B3A /* nextButton@2x.png */,
 				B0865B9118B30D12007E9B3A /* artist.png */,
 				B0865BA318B39706007E9B3A /* blurBG3@2x.png */,
@@ -208,6 +245,7 @@
 		B0AAF2B918997BB400670924 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B067D53118BDD8BA001E046D /* QuartzCore.framework */,
 				B0AAF2FB189A3ABD00670924 /* AVFoundation.framework */,
 				B0AAF2BA18997BB400670924 /* Foundation.framework */,
 				B0AAF2BC18997BB400670924 /* CoreGraphics.framework */,
@@ -270,8 +308,12 @@
 			children = (
 				B02C594A18AB6F8500257BC4 /* MusicPlayerViewController.h */,
 				B02C594B18AB6F8500257BC4 /* MusicPlayerViewController.m */,
+				B067D53E18BE2157001E046D /* StartingRadioViewController.h */,
+				B067D53F18BE2157001E046D /* StartingRadioViewController.m */,
 				B0F3ACB218AC288700021126 /* Test_SearchViewController.h */,
 				B0F3ACB318AC288700021126 /* Test_SearchViewController.m */,
+				B067D53B18BDEF93001E046D /* FirstNavigationViewController.h */,
+				B067D53C18BDEF93001E046D /* FirstNavigationViewController.m */,
 			);
 			name = viewClasses;
 			sourceTree = "<group>";
@@ -368,13 +410,18 @@
 				B0AAF2D118997BB400670924 /* Main_iPad.storyboard in Resources */,
 				B0AAF2D618997BB400670924 /* Images.xcassets in Resources */,
 				B0865BA018B34ABF007E9B3A /* heart_80@2x.png in Resources */,
+				B017668518BED0840090E47C /* music2_400@2x.png in Resources */,
 				B0865BA618B39E1F007E9B3A /* blurBG4@2x.png in Resources */,
 				B0865B9418B33CFD007E9B3A /* nextButton@2x.png in Resources */,
+				B017668118BECEDF0090E47C /* music59.png in Resources */,
 				B0865B9618B33D30007E9B3A /* empty.png in Resources */,
 				B0865BA418B39706007E9B3A /* blurBG3@2x.png in Resources */,
 				B0865B9A18B33F78007E9B3A /* empty34.png in Resources */,
+				B017668318BED0390090E47C /* music400@2x.png in Resources */,
 				B0865B9818B33F15007E9B3A /* empty80.png in Resources */,
+				B067D53A18BDDCCB001E046D /* CRSTL_BG@2x.png in Resources */,
 				B0AAF2CE18997BB400670924 /* Main_iPhone.storyboard in Resources */,
+				B067D54218BE25D3001E046D /* test_image_androp.png in Resources */,
 				B0AAF2C518997BB400670924 /* InfoPlist.strings in Resources */,
 				B0865BA218B39269007E9B3A /* blurBG2@2x.png in Resources */,
 			);
@@ -398,10 +445,13 @@
 				B0AAF2F41899809300670924 /* MRPlaylistManager.m in Sources */,
 				B0AAF34F189AB32B00670924 /* MRHttpRequest.m in Sources */,
 				B067D4E018BB53D5001E046D /* MRLyricFetcher.m in Sources */,
+				B067D53D18BDEF93001E046D /* FirstNavigationViewController.m in Sources */,
+				B067D52F18BDD872001E046D /* FXBlurView.m in Sources */,
 				B02C595618AB8D2F00257BC4 /* MRYoutubeRequest.m in Sources */,
 				B02C594C18AB6F8500257BC4 /* MusicPlayerViewController.m in Sources */,
 				B0F3ACB418AC288700021126 /* Test_SearchViewController.m in Sources */,
 				B0AAF355189AB87900670924 /* MRExfmRequest.m in Sources */,
+				B067D54018BE2157001E046D /* StartingRadioViewController.m in Sources */,
 				B0AAF2CB18997BB400670924 /* AppDelegate.m in Sources */,
 				B0AAF352189AB74300670924 /* MRLastfmRequest.m in Sources */,
 				B0AAF349189A7A1600670924 /* MRRadio.m in Sources */,

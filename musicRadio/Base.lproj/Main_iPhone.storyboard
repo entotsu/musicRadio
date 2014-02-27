@@ -5,7 +5,26 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
-        <!--Test Search View Controller - Artist Radio-->
+        <!--Starting Radio View Controller-->
+        <scene sceneID="E7L-7F-6wZ">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dXE-fw-MbF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="Sb1-xq-uo3" customClass="StartingRadioViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="vMg-fw-VRL"/>
+                        <viewControllerLayoutGuide type="bottom" id="saN-V8-ZRJ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="cc7-Kr-Z2Z">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="blx-Hn-uCp"/>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="781" y="-13"/>
+        </scene>
+        <!--Test Search View Controller - Dygg-->
         <scene sceneID="yVK-u4-Z9W">
             <objects>
                 <viewController id="9pI-mt-XFg" customClass="Test_SearchViewController" sceneMemberID="viewController">
@@ -18,10 +37,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Artist Radio" id="A0F-oY-s19"/>
-                    <connections>
-                        <segue destination="EjO-Ce-qs4" kind="push" identifier="Search_to_Music" id="iPf-6A-8c0"/>
-                    </connections>
+                    <navigationItem key="navigationItem" title="Dygg" id="A0F-oY-s19"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V3a-6c-qef" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -30,6 +46,7 @@
         <!--Music Player View Controller - Radio-->
         <scene sceneID="riW-ag-nKd">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mh3-KS-ObB" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController id="EjO-Ce-qs4" customClass="MusicPlayerViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Fuq-Dr-tOa"/>
@@ -42,25 +59,24 @@
                     </view>
                     <navigationItem key="navigationItem" title="Radio" id="PpH-3t-ofk"/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mh3-KS-ObB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="769" y="-7"/>
+            <point key="canvasLocation" x="1217" y="-13"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--First Navigation View Controller-->
         <scene sceneID="STy-Ft-dh1">
             <objects>
-                <navigationController definesPresentationContext="YES" id="YsT-ba-9a1" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="YsT-ba-9a1" customClass="FirstNavigationViewController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="OYM-jR-gB0">
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="barTintColor" red="0.16352188031079207" green="0.62371718999489856" blue="1" alpha="0.71999999999999997" colorSpace="calibratedRGB"/>
+                        <color key="tintColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="9pI-mt-XFg" kind="relationship" relationship="rootViewController" id="To7-1b-jnY"/>
+                        <segue destination="9pI-mt-XFg" kind="relationship" relationship="rootViewController" id="Prg-Pw-kGC"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xhe-76-dFu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-196" y="-13"/>
+            <point key="canvasLocation" x="-248" y="-13"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

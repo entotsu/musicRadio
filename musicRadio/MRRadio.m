@@ -76,6 +76,7 @@
 
 // 初回の再生
 - (void) fastArtistRandomPlay: (NSString*)artistName {
+    _didPlayFastTrack = NO;
     _nowPlayingText = artistName;
     NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
     _nextArtistName = artistName;
@@ -108,7 +109,9 @@
 
 //----------------------------------- Delegete ------------------------------
 
-//PlaylystManager Delegete
+#pragma mark PlaylystManager Delegete
+
+//プレイリスト作成後に最初の一曲目を手早く渡してもらうデリゲートメソッド
 - (void)randomSongCanPlay: (NSDictionary *)songInfo
 {
     NSLog(@"randomSongCanPlay------------");
@@ -117,15 +120,25 @@
 
 
 
-//YoutubePlayer Delegete
+#pragma mark YoutubePlayer Delegete
 - (void) onYoutubeLoadingSuccess
 {
     NSLog(@"onYoutubeLoadingSuccess　再生準備完了！！！◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆");
+    // 最初のプレイの時
     if (!_didPlayFastTrack) {
         [self startPlaybackNextVideo];
     }
     else {
-        delegeteViewController.nextButton.enabled = YES;
+        //スタートボタンを有効にする処理
+        //TODO: できればプレイヤーを表示する時にdelegeteをはずしたほうがいいかも
+        if (self.delegeteStartViewController) {
+            [self.delegeteStartViewController canStartFirstTrack];
+        }
+        //ネクストボタンを有効にする
+        if (delegeteViewController) {
+            delegeteViewController.nextButton.enabled = YES;
+        }
+        //ここで動画preloadしたいけど無理っぽい。動画再生前にpreloadして再生？next_next_playerまで用意して・・
         
         //歌詞を取得
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
@@ -136,7 +149,6 @@
         });
     }
 }
-
 
 
 - (void) YouTubeErrorOccred
@@ -230,7 +242,7 @@
 
 
 - (void) startPlaybackNextVideo {
-    NSLog(@"MusicPlayer : startPlaybackNextVideo >>>>>>>>>>>>>>>>>>>>>");
+    NSLog(@"MusicPlayer : startPlaybackNextVideo >>>>>>>>>>>>>>>>>>>>> not 1st?:%d",_didPlayFastTrack);
     
     _isStopPlayer = NO;
     
@@ -239,8 +251,10 @@
         youtubePlayer = nil;
     }
     youtubePlayer = nextYoutubePlayer;
-    NSLog(@"youtubePlayer : %@", youtubePlayer);
-    [youtubePlayer presentInView:delegeteViewController.youtubeBox];
+    
+    //(最初以外)
+    if(_didPlayFastTrack) [youtubePlayer presentInView:delegeteViewController.youtubeBox];
+    
     [youtubePlayer.moviePlayer play];
     nextYoutubePlayer = nil;
     
@@ -268,11 +282,13 @@
 
 
 
-
+//FIXME: 正規表現をよくする。
 - (NSString*) getArtistBioWithName:(NSString*)artistName {
     NSDictionary *artistInfo = [_lastfmRequest getArtistInfoWithName:artistName];
     NSString *bioString = artistInfo[@"artist"][@"bio"][@"summary"];
 
+    NSLog(@"bio: %@",bioString);
+    
     bioString = [bioString stringByReplacingOccurrencesOfString:@"                " withString:@""];
     NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"<a href=(.+)>"
                                                                             options:0
@@ -281,6 +297,9 @@
                                                  options:0
                                                    range:NSMakeRange(0,bioString.length)
                                             withTemplate:@""];
+    NSLog(@"-----------------------------");
+    NSLog(@"bio2: %@",bioString);
+    
     return bioString;
 }
 
@@ -318,6 +337,8 @@
     NSLog(@"--------- finishPreload ---------------");
 }
 
+//FIXME: StartViewで再生してるときにこれくると落ちる。
+//→ _didFirstPlayFinishみたいなの必要かも。で、それだったらもっかいrandomPlayする。
 - (void) finishPlayback {
     NSLog(@"----- finishPlayback ------");
     

@@ -7,8 +7,10 @@
 //
 
 #import "Test_SearchViewController.h"
-#import "MusicPlayerViewController.h"
+#import "StartingRadioViewController.h"
 #import "MRLastfmRequest.h"
+#import "FXBlurView.h"
+#import <QuartzCore/QuartzCore.h>
 
 
 @interface Test_SearchViewController ()
@@ -40,7 +42,7 @@
 {
     [super viewDidLoad];
     [self initView];
-
+    
     _lastfmRequest = [[MRLastfmRequest alloc] init];
     
     UIApplication *application = [UIApplication sharedApplication];
@@ -70,7 +72,7 @@
     float indicator_WH = textField_H;
     
     
-    UIImageView *backgroundImage = [[UIImageView alloc] init];//WithImage:[UIImage imageNamed:@"blurBG4"]];
+    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CRSTL_BG"]];
     backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
     backgroundImage.backgroundColor = [UIColor colorWithRed:0.465117 green:0.792544 blue:1.0 alpha:1.0];
     [self.view addSubview:backgroundImage];
@@ -83,6 +85,9 @@
     _searchBar.placeholder = @"アーティストを検索";
     _searchBar.keyboardType = UIKeyboardTypeDefault;
     _searchBar.barStyle = UIBarStyleDefault;
+    _searchBar.tintColor = [UIColor blackColor];
+    [[[_searchBar subviews] objectAtIndex:0] setAlpha:0.87];
+    _tableView.tableHeaderView = _searchBar;
     [self.view addSubview:_searchBar];
     
     
@@ -98,6 +103,9 @@
 //    _indicator.frame = CGRectMake(maxW-indicator_WH, statusBar_H, indicator_WH, indicator_WH);
 //    _indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
 //    [self.view addSubview:_indicator];
+    
+    //きいてない
+    self.navigationController.navigationBar.barTintColor = [UIColor colorWithRed:1.0 green:0.0 blue:0.0 alpha:0.1];
 }
 
 
@@ -119,6 +127,13 @@
 
 
 - (void) searchAndReloadTable:(NSString*)artistName {
+    
+    //数秒たったら再検索OKにする
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        sleep(1);
+        _isReloading = NO;
+    });
+    
     _tableViewSource = [_lastfmRequest searchArtistByLastfmWithArtistName:artistName];
     
     if (_tableViewSource) {
@@ -190,7 +205,18 @@
     if(cell == nil){
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         //ここにセルのカスタマイズをかく
-        cell.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2];
+        cell.backgroundColor = [UIColor clearColor];
+
+//        FXBlurView *cellBlurBG = [[FXBlurView alloc] init];
+//        cellBlurBG.frame = CGRectMake(0, 0, cell.frame.size.width, cell.frame.size.height);
+//        cellBlurBG.blurRadius = 10;
+//        cellBlurBG.backgroundColor = [UIColor clearColor];
+//        cell.backgroundView = cellBlurBG;
+
+        UIToolbar *translucentView = [[UIToolbar alloc] initWithFrame:CGRectZero];
+        translucentView.tintColor = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.1];
+        translucentView.alpha = 0.8f;
+        cell.backgroundView = translucentView;
     }
     
     
@@ -214,9 +240,9 @@
             NSLog(@"image is nothing!");
         }else {
             NSLog(@"image URL : %@",artistImageURL);
-            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:artistImageURL]];
-            UIImage *artistImage = [UIImage imageWithData:imgData];
-            cell.imageView.image = artistImage;
+//            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:artistImageURL]];
+//            UIImage *artistImage = [UIImage imageWithData:imgData];
+//            cell.imageView.image = artistImage;
         }
     });
      
@@ -252,9 +278,11 @@
     NSLog(@"artist Name is :%@",artistName);
     //空じゃなければ
     if (![artistName isEqualToString:@""]) {
-        MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
-        [musicView setSeedArtist:artistName];
-        [self.navigationController pushViewController:musicView animated:YES];
+        StartingRadioViewController *startView = [[StartingRadioViewController alloc] initWithArtistName:artistName];
+        [self.navigationController pushViewController:startView animated:YES];
+//        MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
+//        [musicView setSeedArtist:artistName];
+//        [self.navigationController pushViewController:musicView animated:YES];
     }
 }
 
