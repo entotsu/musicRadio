@@ -59,22 +59,21 @@
     NSLog(@"StartingRadioViewController did load");
 
     [self layoutSubView];
-    [self startTurningDisk];
     
     //debug
     if (!_artistName) _artistName = @"androp";
     
     [self setArtistWithName:_artistName];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         _appRadio = [[MRRadio alloc] init];
         _appRadio.delegeteStartViewController = self;
         [_appRadio fastArtistRandomPlay:_artistName];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            [_appRadio generatePlaylistByArtistName:_artistName];
+//            [_appRadio generatePlaylistByArtistName:_artistName];
         });
-    });
+//    });
 }
 
 
@@ -87,6 +86,14 @@
 }
 
 # pragma mark MRRadioStartViewDelegate
+//ディスクのアーティストのトラックが再生されたとき
+- (void) didSuccessPlayArtistFirstTrack {
+    NSLog(@"didSuccessPlayArtistFirstTrack");
+    [self startTurningDisk];
+//    [_appRadio generatePlaylistByArtistName:_artistName];
+}
+
+
 //プレイリストの最初のトラックの再生準備が完了した時。
 - (void) canStartFirstTrack {
     NSLog(@"canStartFirstTrack");
@@ -254,7 +261,7 @@
 # pragma mark events
 - (void) onTapStartButton {
     NSLog(@"on tap start button");
-    
+    _startButton.enabled = NO;
     MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
     [musicView setSeedArtist:_artistName];
     [musicView setAppRadio:_appRadio];

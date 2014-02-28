@@ -33,6 +33,8 @@
     NSArray *_tableViewSource;
     BOOL _isReloading;
     NSString *_searchedWord;
+    
+    BOOL _isNotFirstType;
 }
 
 
@@ -128,10 +130,11 @@
 
 - (void) searchAndReloadTable:(NSString*)artistName {
     
-    //数秒たったら再検索OKにする
+    //数秒たったら再検索OKにして検索ワードをチェックする
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-        sleep(1);
+        sleep(2);
         _isReloading = NO;
+        [self checkSearchedWord];
     });
     
     _tableViewSource = [_lastfmRequest searchArtistByLastfmWithArtistName:artistName];
@@ -166,7 +169,18 @@
 -(void)searchBar:(UISearchBar*)searchBar textDidChange:(NSString*)searchText
 {
     NSLog(@"searchbar text did change");
-    [self displayArists:searchText];
+    if (_isNotFirstType) {
+        [self displayArists:searchText];
+    }
+    //最初の数秒は検索しない
+    else {
+        _isReloading = YES;
+        _isNotFirstType = YES;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            sleep(1.5);
+            _isReloading = NO;
+        });
+    }
 }
 
 
@@ -263,7 +277,7 @@
     if(indexPath.row == 0) {
         return 60.0;  // １番目のセクションの行の高さを30にする
     } else {
-        return 60.0;  // それ以外の行の高さを50にする
+        return 40.0;  // それ以外の行の高さを50にする
     }
 }
 

@@ -26,6 +26,7 @@
 
 
 @protocol MRRadioStartViewDelegate <NSObject>
+- (void) didSuccessPlayArtistFirstTrack;
 - (void) canStartFirstTrack;
 @end
 

@@ -267,9 +267,6 @@
     //(最初以外は) 歌詞のセット
     if(_didPlayFastTrack) [delegeteViewController displayLyric:_nextLyricString];
     
-    //最初のプレイの場合はフラグを立てる。
-    if(!_didPlayFastTrack) _didPlayFastTrack = YES;
-    
     //今のを再生したら次のトラックを準備する
     if (_didPlayFastTrack && _playlistManager.isHavingTrack) {
         delegeteViewController.nextButton.enabled = NO;
@@ -335,6 +332,11 @@
 
 - (void) finishPreload {
     NSLog(@"--------- finishPreload ---------------");
+    //最初のプレイの場合はフラグを立てる。
+    if(!_didPlayFastTrack){
+        _didPlayFastTrack = YES;
+        [self.delegeteStartViewController didSuccessPlayArtistFirstTrack];
+    }
 }
 
 //FIXME: StartViewで再生してるときにこれくると落ちる。

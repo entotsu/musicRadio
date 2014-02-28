@@ -157,6 +157,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     FXBlurView *buttonSheetBlurView = [[FXBlurView alloc] init];
     buttonSheetBlurView.frame = CGRectMake(0, maxH - button_H - button_Margin*2, maxW, button_H+button_Margin*2);
     buttonSheetBlurView.blurRadius = blurRadius;
+    buttonSheetBlurView.tintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
     [self.view addSubview:buttonSheetBlurView];
     _nextButton = [[UIButton alloc] init];
     _nextButton.enabled = NO;
