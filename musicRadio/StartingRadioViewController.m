@@ -65,15 +65,15 @@
     
     [self setArtistWithName:_artistName];
     
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
         _appRadio = [[MRRadio alloc] init];
         _appRadio.delegeteStartViewController = self;
         [_appRadio fastArtistRandomPlay:_artistName];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-//            [_appRadio generatePlaylistByArtistName:_artistName];
+            [_appRadio generatePlaylistByArtistName:_artistName];
         });
-//    });
+    });
 }
 
 

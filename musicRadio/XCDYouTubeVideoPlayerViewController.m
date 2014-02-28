@@ -272,7 +272,14 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 		{
 			NSURL *streamURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@&signature=%@", urlString, signature]];
 			streamURLs[@([stream[@"itag"] integerValue])] = streamURL;
+        }
+        //edit : https://github.com/0xced/XCDYouTubeVideoPlayerViewController/issues/19
+        else if (urlString && [AVURLAsset isPlayableExtendedMIMEType:type])
+        {
+            NSURL *streamURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", urlString]];
+            streamURLs[@([stream[@"itag"] integerValue])] = streamURL;
 		}
+        //end
 	}
 	
 	for (NSNumber *videoQuality in self.preferredVideoQualities)
