@@ -160,6 +160,7 @@
         [self fastArtistRandomPlay:_nowPlayingText];
     }
     else {
+        NSLog(@"Next Movie Error.");
         [self prepareNextTrack];
     }
 }

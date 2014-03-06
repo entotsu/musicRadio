@@ -35,6 +35,8 @@
     NSString *_searchedWord;
     
     BOOL _isNotFirstType;
+    
+    UIApplication *_application;
 }
 
 
@@ -47,9 +49,7 @@
     
     _lastfmRequest = [[MRLastfmRequest alloc] init];
     
-    UIApplication *application = [UIApplication sharedApplication];
-    application.networkActivityIndicatorVisible = YES;
-
+    _application = [UIApplication sharedApplication];
 }
 
 
@@ -137,7 +137,9 @@
         [self checkSearchedWord];
     });
     
+    _application.networkActivityIndicatorVisible = YES;
     _tableViewSource = [_lastfmRequest searchArtistByLastfmWithArtistName:artistName];
+    _application.networkActivityIndicatorVisible = NO;
     
     if (_tableViewSource) {
         dispatch_async(dispatch_get_main_queue(), ^{
