@@ -8,21 +8,32 @@
 
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
-#import "FirstNavigationViewController.h"
+#import "Test_SearchViewController.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-
     
     
     // 起動時に最初のViewControllerを表示する
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    FirstNavigationViewController *firstNavigationController = [[FirstNavigationViewController alloc] init];
-    self.window.rootViewController = firstNavigationController;
-    [self.window makeKeyAndVisible];
+    CGRect windowFrame = [[UIScreen mainScreen] bounds];
+    self.window = [[UIWindow alloc] init];
+    self.window.frame =windowFrame;
+    
+    Test_SearchViewController *firstSearchView = [[Test_SearchViewController alloc] init];
+    firstSearchView.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil selectedImage:nil];
+    
+    UITabBarController *firstTabController = [[UITabBarController alloc] init];
+    NSArray *viewControllerArray = [NSArray arrayWithObjects:firstSearchView, nil];
+    [firstTabController setViewControllers:viewControllerArray];
+    firstTabController.selectedIndex = 0;
+
+//    self.window.rootViewController = firstTabController;
+    [self.window addSubview:firstTabController.view];
+    
+    [self.window makeKeyAndVisible];//なにこれ？windowを一番前に持ってくる？
     
     
     //バッググラウンド再生を許可する設定
