@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
+#import "FirstNavigationViewController.h"
 
 @implementation AppDelegate
 
@@ -15,7 +16,16 @@
 {
     // Override point for customization after application launch.
 
-    //バッググラウンド再生呪文    
+    
+    
+    // 起動時に最初のViewControllerを表示する
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    FirstNavigationViewController *firstNavigationController = [[FirstNavigationViewController alloc] init];
+    self.window.rootViewController = firstNavigationController;
+    [self.window makeKeyAndVisible];
+    
+    
+    //バッググラウンド再生を許可する設定
     NSError *setCategoryErr = nil;
     NSError *activationErr  = nil;
     [[AVAudioSession sharedInstance] setCategory: AVAudioSessionCategoryPlayback error: &setCategoryErr];

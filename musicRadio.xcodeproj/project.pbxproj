@@ -36,8 +36,6 @@
 		B0AAF2C518997BB400670924 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2C318997BB400670924 /* InfoPlist.strings */; };
 		B0AAF2C718997BB400670924 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2C618997BB400670924 /* main.m */; };
 		B0AAF2CB18997BB400670924 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B0AAF2CA18997BB400670924 /* AppDelegate.m */; };
-		B0AAF2CE18997BB400670924 /* Main_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2CC18997BB400670924 /* Main_iPhone.storyboard */; };
-		B0AAF2D118997BB400670924 /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */; };
 		B0AAF2D618997BB400670924 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B0AAF2D518997BB400670924 /* Images.xcassets */; };
 		B0AAF2DD18997BB400670924 /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2DC18997BB400670924 /* XCTest.framework */; };
 		B0AAF2DE18997BB400670924 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BA18997BB400670924 /* Foundation.framework */; };
@@ -105,8 +103,6 @@
 		B0AAF2C818997BB400670924 /* musicRadio-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "musicRadio-Prefix.pch"; sourceTree = "<group>"; };
 		B0AAF2C918997BB400670924 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		B0AAF2CA18997BB400670924 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		B0AAF2CD18997BB400670924 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPhone.storyboard; sourceTree = "<group>"; };
-		B0AAF2D018997BB400670924 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		B0AAF2D518997BB400670924 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		B0AAF2DB18997BB400670924 /* musicRadioTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = musicRadioTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0AAF2DC18997BB400670924 /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
@@ -266,8 +262,6 @@
 				B0865B9018B30CF4007E9B3A /* Images */,
 				B02C595018AB71FC00257BC4 /* plugins */,
 				B02A696118A2C3EE009FF1EB /* musicRadio.entitlements */,
-				B0AAF2CC18997BB400670924 /* Main_iPhone.storyboard */,
-				B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */,
 				B0AAF2D518997BB400670924 /* Images.xcassets */,
 				B0AAF2C118997BB400670924 /* Supporting Files */,
 			);
@@ -407,7 +401,6 @@
 			files = (
 				B0865B9C18B34566007E9B3A /* blurBG@2x.png in Resources */,
 				B0865B9218B30D12007E9B3A /* artist.png in Resources */,
-				B0AAF2D118997BB400670924 /* Main_iPad.storyboard in Resources */,
 				B0AAF2D618997BB400670924 /* Images.xcassets in Resources */,
 				B0865BA018B34ABF007E9B3A /* heart_80@2x.png in Resources */,
 				B017668518BED0840090E47C /* music2_400@2x.png in Resources */,
@@ -420,7 +413,6 @@
 				B017668318BED0390090E47C /* music400@2x.png in Resources */,
 				B0865B9818B33F15007E9B3A /* empty80.png in Resources */,
 				B067D53A18BDDCCB001E046D /* CRSTL_BG@2x.png in Resources */,
-				B0AAF2CE18997BB400670924 /* Main_iPhone.storyboard in Resources */,
 				B067D54218BE25D3001E046D /* test_image_androp.png in Resources */,
 				B0AAF2C518997BB400670924 /* InfoPlist.strings in Resources */,
 				B0865BA218B39269007E9B3A /* blurBG2@2x.png in Resources */,
@@ -485,22 +477,6 @@
 				B0AAF2C418997BB400670924 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		B0AAF2CC18997BB400670924 /* Main_iPhone.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B0AAF2CD18997BB400670924 /* Base */,
-			);
-			name = Main_iPhone.storyboard;
-			sourceTree = "<group>";
-		};
-		B0AAF2CF18997BB400670924 /* Main_iPad.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				B0AAF2D018997BB400670924 /* Base */,
-			);
-			name = Main_iPad.storyboard;
 			sourceTree = "<group>";
 		};
 		B0AAF2E518997BB400670924 /* InfoPlist.strings */ = {
