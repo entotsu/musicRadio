@@ -50,6 +50,7 @@
 		B0D768CB18C8E2C2001EEE8D /* Test_SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D768C718C8E2C2001EEE8D /* Test_SearchViewController.m */; };
 		B0D768D018C8E302001EEE8D /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D768CD18C8E302001EEE8D /* FXBlurView.m */; };
 		B0D768D118C8E302001EEE8D /* XCDYouTubeVideoPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D768CF18C8E302001EEE8D /* XCDYouTubeVideoPlayerViewController.m */; };
+		B0D768DA18C8FA0D001EEE8D /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D768D918C8FA0D001EEE8D /* SearchViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +125,8 @@
 		B0D768CD18C8E302001EEE8D /* FXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXBlurView.m; sourceTree = "<group>"; };
 		B0D768CE18C8E302001EEE8D /* XCDYouTubeVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCDYouTubeVideoPlayerViewController.h; sourceTree = "<group>"; };
 		B0D768CF18C8E302001EEE8D /* XCDYouTubeVideoPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XCDYouTubeVideoPlayerViewController.m; sourceTree = "<group>"; };
+		B0D768D818C8FA0D001EEE8D /* SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SearchViewController.h; sourceTree = "<group>"; };
+		B0D768D918C8FA0D001EEE8D /* SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SearchViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -257,6 +260,7 @@
 				B0F3ACAE18AC245800021126 /* viewClasses */,
 				B02C595218AB723200257BC4 /* mainClasses */,
 				B02C595118AB720C00257BC4 /* otherClasses */,
+				B0D768DB18C8FDDB001EEE8D /* originalViews */,
 				B0865B9018B30CF4007E9B3A /* Images */,
 				B02C595018AB71FC00257BC4 /* plugins */,
 				B02A696118A2C3EE009FF1EB /* musicRadio.entitlements */,
@@ -295,17 +299,27 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		B0D768DB18C8FDDB001EEE8D /* originalViews */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = originalViews;
+			path = OriginalViews;
+			sourceTree = "<group>";
+		};
 		B0F3ACAE18AC245800021126 /* viewClasses */ = {
 			isa = PBXGroup;
 			children = (
 				B0D768C018C8E2C2001EEE8D /* FirstNavigationViewController.h */,
 				B0D768C118C8E2C2001EEE8D /* FirstNavigationViewController.m */,
-				B0D768C218C8E2C2001EEE8D /* MusicPlayerViewController.h */,
-				B0D768C318C8E2C2001EEE8D /* MusicPlayerViewController.m */,
-				B0D768C418C8E2C2001EEE8D /* StartingRadioViewController.h */,
-				B0D768C518C8E2C2001EEE8D /* StartingRadioViewController.m */,
 				B0D768C618C8E2C2001EEE8D /* Test_SearchViewController.h */,
 				B0D768C718C8E2C2001EEE8D /* Test_SearchViewController.m */,
+				B0D768D818C8FA0D001EEE8D /* SearchViewController.h */,
+				B0D768D918C8FA0D001EEE8D /* SearchViewController.m */,
+				B0D768C418C8E2C2001EEE8D /* StartingRadioViewController.h */,
+				B0D768C518C8E2C2001EEE8D /* StartingRadioViewController.m */,
+				B0D768C218C8E2C2001EEE8D /* MusicPlayerViewController.h */,
+				B0D768C318C8E2C2001EEE8D /* MusicPlayerViewController.m */,
 			);
 			name = viewClasses;
 			path = ViewControllers;
@@ -440,6 +454,7 @@
 				B0D7687F18C8E20C001EEE8D /* MRYoutubeRequest.m in Sources */,
 				B0D7687B18C8E20C001EEE8D /* MRExfmRequest.m in Sources */,
 				B0D768D118C8E302001EEE8D /* XCDYouTubeVideoPlayerViewController.m in Sources */,
+				B0D768DA18C8FA0D001EEE8D /* SearchViewController.m in Sources */,
 				B0D7687C18C8E20C001EEE8D /* MRHttpRequest.m in Sources */,
 				B0D7686F18C8E1FD001EEE8D /* MRPlaylistManager.m in Sources */,
 				B0D768CB18C8E2C2001EEE8D /* Test_SearchViewController.m in Sources */,

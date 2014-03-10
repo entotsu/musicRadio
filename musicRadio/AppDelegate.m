@@ -8,7 +8,7 @@
 
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
-#import "Test_SearchViewController.h"
+#import "SearchViewController.h"
 
 @implementation AppDelegate
 
@@ -18,23 +18,17 @@
     
     
     // 起動時に最初のViewControllerを表示する
-    CGRect windowFrame = [[UIScreen mainScreen] bounds];
-    self.window = [[UIWindow alloc] init];
-    self.window.frame =windowFrame;
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    Test_SearchViewController *firstSearchView = [[Test_SearchViewController alloc] init];
+    SearchViewController *firstSearchView = [[SearchViewController alloc] init];
     firstSearchView.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil selectedImage:nil];
     
     UITabBarController *firstTabController = [[UITabBarController alloc] init];
     NSArray *viewControllerArray = [NSArray arrayWithObjects:firstSearchView, nil];
     [firstTabController setViewControllers:viewControllerArray];
     firstTabController.selectedIndex = 0;
-
-//    self.window.rootViewController = firstTabController;
-    [self.window addSubview:firstTabController.view];
-    
+    self.window.rootViewController = firstTabController;
     [self.window makeKeyAndVisible];//なにこれ？windowを一番前に持ってくる？
-    
     
     //バッググラウンド再生を許可する設定
     NSError *setCategoryErr = nil;

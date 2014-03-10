@@ -29,10 +29,10 @@
     UISearchBar *_searchBar;
     
     NSString *_searchedArtist;
+    NSString *_searchedWord;
     MRLastfmRequest *_lastfmRequest;
     NSArray *_tableViewSource;
     BOOL _isReloading;
-    NSString *_searchedWord;
     
     BOOL _isNotFirstType;
     
@@ -91,8 +91,6 @@
     [[[_searchBar subviews] objectAtIndex:0] setAlpha:0.87];
     _tableView.tableHeaderView = _searchBar;
     [self.view addSubview:_searchBar];
-    
-    
     
     _tableView = [[UITableView alloc] init];
     _tableView.frame = CGRectMake(0, statusBar_andNav_H + textField_H, maxW, maxH-statusBar_andNav_H-textField_H);

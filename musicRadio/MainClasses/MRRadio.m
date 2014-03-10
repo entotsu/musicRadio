@@ -201,9 +201,7 @@
     NSLog(@"■■■■■■■■ video title :【%@】　■■■■■■■■■■",videoTitle);
     
     
-    if (!topVideo)
-        return [self YouTubeErrorOccred];
-
+    if (!topVideo) return [self YouTubeErrorOccred];
     //ここでその動画のタイトルをチェックする。
     //①アーティスト名とトラック名が入っている
     if ([videoTitle rangeOfString:trackName options:NSCaseInsensitiveSearch].location == NSNotFound)
@@ -253,8 +251,8 @@
     }
     youtubePlayer = nextYoutubePlayer;
     
-    //(最初以外)
-    if(_didPlayFastTrack) [youtubePlayer presentInView:delegeteViewController.youtubeBox];
+
+    [youtubePlayer presentInView:delegeteViewController.youtubeBox];
     
     [youtubePlayer.moviePlayer play];
     nextYoutubePlayer = nil;

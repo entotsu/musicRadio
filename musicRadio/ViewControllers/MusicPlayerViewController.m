@@ -50,21 +50,23 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     //debug
     if (!_seedArtist) _seedArtist = @"ellegarden";
 
-    //本来はここが動く
+    //StartViewありのばあいは　ここが動く
     if (_appRadio) {
         _appRadio.delegeteViewController = self;
         [self onTapNextButton];
     }
-    //debug
-    else {
+    else {    //startViewなし
         _appRadio = [[MRRadio alloc] init];
         _appRadio.delegeteViewController = self;
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [_appRadio generatePlaylistByArtistName:_seedArtist];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                [_appRadio generatePlaylistByArtistName:_seedArtist];
+            });
+            [_appRadio fastArtistRandomPlay:_seedArtist];
         });
+
         
-        [_appRadio fastArtistRandomPlay:_seedArtist];
     }
 }
 
