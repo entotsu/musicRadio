@@ -20,6 +20,7 @@
     MRYoutubeRequest *_youTubeRequest;
     BOOL _didPlayFastTrack;
     BOOL _isStopPlayer;
+    BOOL _didGetFirstSimilarSongInfo;
     NSString *_nowPlayingText;
     
     NSString *_nextArtistName;
@@ -115,6 +116,7 @@
 - (void)randomSongCanPlay: (NSDictionary *)songInfo
 {
     NSLog(@"randomSongCanPlay------------");
+    _didGetFirstSimilarSongInfo = YES;
     [self prepareYouTubeWithSongInfo:songInfo];
 }
 
@@ -125,7 +127,7 @@
 {
     NSLog(@"onYoutubeLoadingSuccess　再生準備完了！！！◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆");
     // 最初のプレイの時
-    if (!_didPlayFastTrack) {
+    if (!_didPlayFastTrack) { //さいしょのプレイでsimilarが再生されると次の曲が用意されない
         [self startPlaybackNextVideo];
     }
     else {
@@ -200,7 +202,7 @@
     NSLog(@"□□□□□□□□ search word :【%@】　□□□□□□□□□□",searchKeyword);
     NSLog(@"■■■■■■■■ video title :【%@】　■■■■■■■■■■",videoTitle);
     
-    
+    //動画のバリデーション------------------------------------
     if (!topVideo) return [self YouTubeErrorOccred];
     //ここでその動画のタイトルをチェックする。
     //①アーティスト名とトラック名が入っている
@@ -251,7 +253,7 @@
     }
     youtubePlayer = nextYoutubePlayer;
     
-
+    youtubePlayer.moviePlayer.controlStyle = MPMovieControlStyleNone;
     [youtubePlayer presentInView:delegeteViewController.youtubeBox];
     
     [youtubePlayer.moviePlayer play];
@@ -266,8 +268,8 @@
     //(最初以外は) 歌詞のセット
     if(_didPlayFastTrack) [delegeteViewController displayLyric:_nextLyricString];
     
-    //今のを再生したら次のトラックを準備する
-    if (_didPlayFastTrack && _playlistManager.isHavingTrack) {
+    //今のを再生したら次のトラックを準備する   最初のトラックの時は行われないが特例で、最初にSimilarTrackが流れてしまった場合のみ次の曲の準備に入る
+    if ((_didPlayFastTrack && _playlistManager.isHavingTrack) || ((!_didPlayFastTrack)&&_didGetFirstSimilarSongInfo)) {
         delegeteViewController.nextButton.enabled = NO;
         [self prepareNextTrack];
     }
@@ -285,16 +287,18 @@
 
     NSLog(@"bio: %@",bioString);
     
-    bioString = [bioString stringByReplacingOccurrencesOfString:@"                " withString:@""];
-    NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"<a href=(.+)>"
-                                                                            options:0
-                                                                              error:nil];
-    bioString = [regexp stringByReplacingMatchesInString:bioString
-                                                 options:0
-                                                   range:NSMakeRange(0,bioString.length)
-                                            withTemplate:@""];
-    NSLog(@"-----------------------------");
-    NSLog(@"bio2: %@",bioString);
+    if (bioString) {
+        bioString = [bioString stringByReplacingOccurrencesOfString:@"                " withString:@""];
+        NSRegularExpression *regexp = [NSRegularExpression regularExpressionWithPattern:@"<a href=(.+)>"
+                                                                                options:0
+                                                                                  error:nil];
+        bioString = [regexp stringByReplacingMatchesInString:bioString
+                                                     options:0
+                                                       range:NSMakeRange(0,bioString.length)
+                                                withTemplate:@""];
+        NSLog(@"-----------------------------");
+        NSLog(@"bio2: %@",bioString);
+    }
     
     return bioString;
 }

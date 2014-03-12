@@ -24,6 +24,7 @@
     NSString *_searchedArtist;
     NSString *_searchedWord;
 }
+@synthesize musicPlayerView;
 
 
 - (void)viewDidLoad
@@ -137,10 +138,17 @@
     NSString *artistName = nameLabel.text;
     
     if (![artistName isEqualToString:@""]) {
-        MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
-        [musicView setSeedArtist:artistName];
-        musicView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:musicView animated:YES completion:nil];
+        self.musicPlayerView = [[MusicPlayerViewController alloc] init];
+        [self.musicPlayerView setSeedArtist:artistName];
+        self.musicPlayerView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentViewController:self.musicPlayerView animated:YES completion:nil];
+    }
+}
+
+- (void) onTapBackButton {
+    NSLog(@"on tap back button");
+    if (self.musicPlayerView) {
+        [self presentViewController:self.musicPlayerView animated:YES completion:nil];
     }
 }
 
@@ -152,6 +160,7 @@
 - (void) layoutSubViews {
     float maxW = self.view.frame.size.width;
     float maxH = self.view.frame.size.height;
+    const CGFloat statusBar_and_nav_H = 20+44;
 
     // ※ MはMarginの略
     float textField_H = 40;
@@ -164,25 +173,29 @@
     FXBlurView *blurBG = [[FXBlurView alloc] initWithFrame:backgroundImage.frame];
     [self.view addSubview:blurBG];
 
-    //やっぱUITextFieldでいこう
-//    UISearchBar *_searchBar = [[UISearchBar alloc] init];
-//    _searchBar.frame = CGRectMake(0, 0, maxW-textField_M * 2, textField_H);
-//    _searchBar.center = CGPointMake(maxW/2, maxH/2);
-//
-//    _searchBar.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0];
-//    _searchBar.searchBarStyle = UISearchBarStyleMinimal;
-//    _searchBar.placeholder = @"Search Artist";
-//    _searchBar.keyboardType = UIKeyboardTypeDefault;
-//    
-//    [_searchBar setSearchFieldBackgroundImage:[UIImage imageNamed:@"empty80"] forState:UIControlStateNormal];
-//
-//    [[UILabel appearanceWhenContainedIn:[UISearchBar class], nil] setTextColor:[[UIColor blackColor] colorWithAlphaComponent:0.5]];
-//    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setFont:[UIFont fontWithName:@"Helvetica" size:16]];
-//    //あとでオリジナルのアイコン作って色変える
-//    [_searchBar setImage:[UIImage imageNamed:@"empty"] forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
-////    [_searchBar setImage:[UIImage imageNamed:@"nextButton"] forSearchBarIcon:UISearchBarIconClear state:UIControlStateNormal];
-//    [self.view addSubview:_searchBar];
+    UIToolbar *navigationBar = [[UIToolbar alloc] init];
+    navigationBar.frame = CGRectMake(0, 0, maxW, statusBar_and_nav_H);
+    navigationBar.barStyle = UIBarStyleBlack;
+    //    navigationBar.barTintColor = [[UIColor clearColor] colorWithAlphaComponent:0.01];
+    [self.view addSubview:navigationBar];
+    UILabel *navigationBarLabel = [[UILabel alloc] init];
+    navigationBarLabel.frame = CGRectMake(0, 0, maxW-100, statusBar_and_nav_H);
+    navigationBarLabel.center = CGPointMake(maxW/2, statusBar_and_nav_H/2);
+    [navigationBarLabel setTextColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
+    [navigationBarLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:18.0f]];
+    [navigationBarLabel setTextAlignment:NSTextAlignmentCenter];
+    navigationBarLabel.adjustsFontSizeToFitWidth = YES;
+    navigationBarLabel.adjustsLetterSpacingToFitWidth = YES;
+    [self setKernedText:@"artist walk" toUILabel:navigationBarLabel];
+    [navigationBar addSubview:navigationBarLabel];
+    UIButton *backButton = [[UIButton alloc] init];
+    backButton.frame = CGRectMake(0, 0, 40, 40);
+    backButton.center = CGPointMake(maxW - statusBar_and_nav_H/2, statusBar_and_nav_H/2);
+    backButton.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
+    [backButton addTarget:self action:@selector(onTapBackButton) forControlEvents:UIControlEventTouchUpInside];
+    [navigationBar addSubview:backButton];
 
+    
     _searchBar = [[UITextField alloc] init];
     _searchBar.frame = CGRectMake(0, 0, maxW-textField_M * 2, textField_H);
     _searchBar.center = CGPointMake(maxW/2, maxH/2);
@@ -204,10 +217,10 @@
     float result1_size = 70;
     float result2_size = result1_size/1.25;
     //リザルトの数で座標を計算でだすようにする。
-    UIView *resultView1 = [self makeResultViewWithSize:result1_size andCenter:CGPointMake(90, 180) isMain:YES];
-    UIView *resultView2 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(80, 70) isMain:NO];
-    UIView *resultView3 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(190, 95) isMain:NO];
-    UIView *resultView4 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(250, 190) isMain:NO];
+    UIView *resultView1 = [self makeResultViewWithSize:result1_size andCenter:CGPointMake(130, 195) isMain:YES];
+    UIView *resultView2 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(55, 110) isMain:NO];
+    UIView *resultView3 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(220, 110) isMain:NO];
+    UIView *resultView4 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(250, 215) isMain:NO];
     [self.view addSubview:resultView1];
     [self.view addSubview:resultView2];
     [self.view addSubview:resultView3];
@@ -227,11 +240,11 @@
     else
         result1_label_H = result1_size/2.5;
     
-    float result1_label_W = result1_size*1.5;
+    float result1_label_W = result1_size*1.75;
     
     float result1_fontSize;
     if (isMain)
-        result1_fontSize = 18.0;
+        result1_fontSize = 16.0;
     else
         result1_fontSize = 12;
     
@@ -257,6 +270,7 @@
     _titleLabel1.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:result1_fontSize];
     _titleLabel1.textAlignment = NSTextAlignmentCenter;
     _titleLabel1.adjustsFontSizeToFitWidth = YES;
+    _titleLabel1.adjustsLetterSpacingToFitWidth = YES;
     [self setKernedText:@"androp" toUILabel:_titleLabel1];
     [resultView1 addSubview:_titleLabel1];
     

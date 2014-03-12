@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B039790D18CE335C001F0D6A /* ShadowStyleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B039790C18CE335C001F0D6A /* ShadowStyleLabel.m */; };
+		B039791018CE39F6001F0D6A /* next40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B039790E18CE39F6001F0D6A /* next40@2x.png */; };
+		B039791118CE39F6001F0D6A /* heart40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B039790F18CE39F6001F0D6A /* heart40@2x.png */; };
 		B067D53218BDD8BA001E046D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B067D53118BDD8BA001E046D /* QuartzCore.framework */; };
 		B0AAF2BB18997BB400670924 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BA18997BB400670924 /* Foundation.framework */; };
 		B0AAF2BD18997BB400670924 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BC18997BB400670924 /* CoreGraphics.framework */; };
@@ -65,6 +68,10 @@
 
 /* Begin PBXFileReference section */
 		B02A696118A2C3EE009FF1EB /* musicRadio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = musicRadio.entitlements; sourceTree = "<group>"; };
+		B039790B18CE335C001F0D6A /* ShadowStyleLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowStyleLabel.h; sourceTree = SOURCE_ROOT; };
+		B039790C18CE335C001F0D6A /* ShadowStyleLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowStyleLabel.m; sourceTree = SOURCE_ROOT; };
+		B039790E18CE39F6001F0D6A /* next40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "next40@2x.png"; sourceTree = "<group>"; };
+		B039790F18CE39F6001F0D6A /* heart40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart40@2x.png"; sourceTree = "<group>"; };
 		B067D53118BDD8BA001E046D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B0AAF2B718997BB400670924 /* musicRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musicRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0AAF2BA18997BB400670924 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -113,14 +120,14 @@
 		B0D768AD18C8E293001EEE8D /* music400@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "music400@2x.png"; sourceTree = "<group>"; };
 		B0D768AE18C8E293001EEE8D /* nextButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "nextButton@2x.png"; sourceTree = "<group>"; };
 		B0D768AF18C8E293001EEE8D /* test_image_androp.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_image_androp.png; sourceTree = "<group>"; };
-		B0D768C018C8E2C2001EEE8D /* FirstNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FirstNavigationViewController.h; sourceTree = "<group>"; };
-		B0D768C118C8E2C2001EEE8D /* FirstNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FirstNavigationViewController.m; sourceTree = "<group>"; };
+		B0D768C018C8E2C2001EEE8D /* FirstNavigationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FirstNavigationViewController.h; path = ViewControllers/FirstNavigationViewController.h; sourceTree = "<group>"; };
+		B0D768C118C8E2C2001EEE8D /* FirstNavigationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FirstNavigationViewController.m; path = ViewControllers/FirstNavigationViewController.m; sourceTree = "<group>"; };
 		B0D768C218C8E2C2001EEE8D /* MusicPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MusicPlayerViewController.h; sourceTree = "<group>"; };
 		B0D768C318C8E2C2001EEE8D /* MusicPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MusicPlayerViewController.m; sourceTree = "<group>"; };
-		B0D768C418C8E2C2001EEE8D /* StartingRadioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartingRadioViewController.h; sourceTree = "<group>"; };
-		B0D768C518C8E2C2001EEE8D /* StartingRadioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartingRadioViewController.m; sourceTree = "<group>"; };
-		B0D768C618C8E2C2001EEE8D /* Test_SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test_SearchViewController.h; sourceTree = "<group>"; };
-		B0D768C718C8E2C2001EEE8D /* Test_SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test_SearchViewController.m; sourceTree = "<group>"; };
+		B0D768C418C8E2C2001EEE8D /* StartingRadioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StartingRadioViewController.h; path = ViewControllers/StartingRadioViewController.h; sourceTree = "<group>"; };
+		B0D768C518C8E2C2001EEE8D /* StartingRadioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StartingRadioViewController.m; path = ViewControllers/StartingRadioViewController.m; sourceTree = "<group>"; };
+		B0D768C618C8E2C2001EEE8D /* Test_SearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Test_SearchViewController.h; path = ViewControllers/Test_SearchViewController.h; sourceTree = "<group>"; };
+		B0D768C718C8E2C2001EEE8D /* Test_SearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Test_SearchViewController.m; path = ViewControllers/Test_SearchViewController.m; sourceTree = "<group>"; };
 		B0D768CC18C8E302001EEE8D /* FXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBlurView.h; sourceTree = "<group>"; };
 		B0D768CD18C8E302001EEE8D /* FXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXBlurView.m; sourceTree = "<group>"; };
 		B0D768CE18C8E302001EEE8D /* XCDYouTubeVideoPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XCDYouTubeVideoPlayerViewController.h; sourceTree = "<group>"; };
@@ -155,6 +162,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B00B09DA18CF794D0088E6B6 /* noUse */ = {
+			isa = PBXGroup;
+			children = (
+				B0D768C018C8E2C2001EEE8D /* FirstNavigationViewController.h */,
+				B0D768C118C8E2C2001EEE8D /* FirstNavigationViewController.m */,
+				B0D768C618C8E2C2001EEE8D /* Test_SearchViewController.h */,
+				B0D768C718C8E2C2001EEE8D /* Test_SearchViewController.m */,
+				B0D768C418C8E2C2001EEE8D /* StartingRadioViewController.h */,
+				B0D768C518C8E2C2001EEE8D /* StartingRadioViewController.m */,
+			);
+			name = noUse;
+			sourceTree = "<group>";
+		};
 		B02C595018AB71FC00257BC4 /* plugins */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +235,8 @@
 				B0D768AC18C8E293001EEE8D /* music59.png */,
 				B0D768AD18C8E293001EEE8D /* music400@2x.png */,
 				B0D768AE18C8E293001EEE8D /* nextButton@2x.png */,
+				B039790E18CE39F6001F0D6A /* next40@2x.png */,
+				B039790F18CE39F6001F0D6A /* heart40@2x.png */,
 				B0D768AF18C8E293001EEE8D /* test_image_androp.png */,
 			);
 			path = Images;
@@ -266,6 +288,7 @@
 				B02A696118A2C3EE009FF1EB /* musicRadio.entitlements */,
 				B0AAF2D518997BB400670924 /* Images.xcassets */,
 				B0AAF2C118997BB400670924 /* Supporting Files */,
+				B00B09DA18CF794D0088E6B6 /* noUse */,
 			);
 			path = musicRadio;
 			sourceTree = "<group>";
@@ -302,6 +325,8 @@
 		B0D768DB18C8FDDB001EEE8D /* originalViews */ = {
 			isa = PBXGroup;
 			children = (
+				B039790B18CE335C001F0D6A /* ShadowStyleLabel.h */,
+				B039790C18CE335C001F0D6A /* ShadowStyleLabel.m */,
 			);
 			name = originalViews;
 			path = OriginalViews;
@@ -310,14 +335,8 @@
 		B0F3ACAE18AC245800021126 /* viewClasses */ = {
 			isa = PBXGroup;
 			children = (
-				B0D768C018C8E2C2001EEE8D /* FirstNavigationViewController.h */,
-				B0D768C118C8E2C2001EEE8D /* FirstNavigationViewController.m */,
-				B0D768C618C8E2C2001EEE8D /* Test_SearchViewController.h */,
-				B0D768C718C8E2C2001EEE8D /* Test_SearchViewController.m */,
 				B0D768D818C8FA0D001EEE8D /* SearchViewController.h */,
 				B0D768D918C8FA0D001EEE8D /* SearchViewController.m */,
-				B0D768C418C8E2C2001EEE8D /* StartingRadioViewController.h */,
-				B0D768C518C8E2C2001EEE8D /* StartingRadioViewController.m */,
 				B0D768C218C8E2C2001EEE8D /* MusicPlayerViewController.h */,
 				B0D768C318C8E2C2001EEE8D /* MusicPlayerViewController.m */,
 			);
@@ -415,6 +434,7 @@
 				B0D768B118C8E293001EEE8D /* blurBG@2x.png in Resources */,
 				B0D768BD18C8E293001EEE8D /* music400@2x.png in Resources */,
 				B0D768B818C8E293001EEE8D /* empty80.png in Resources */,
+				B039791118CE39F6001F0D6A /* heart40@2x.png in Resources */,
 				B0AAF2D618997BB400670924 /* Images.xcassets in Resources */,
 				B0D768B918C8E293001EEE8D /* heart_80@2x.png in Resources */,
 				B0D768B718C8E293001EEE8D /* empty34.png in Resources */,
@@ -430,6 +450,7 @@
 				B0D768B318C8E293001EEE8D /* blurBG3@2x.png in Resources */,
 				B0D768B418C8E293001EEE8D /* blurBG4@2x.png in Resources */,
 				B0D768B018C8E293001EEE8D /* artist.png in Resources */,
+				B039791018CE39F6001F0D6A /* next40@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +476,7 @@
 				B0D7687B18C8E20C001EEE8D /* MRExfmRequest.m in Sources */,
 				B0D768D118C8E302001EEE8D /* XCDYouTubeVideoPlayerViewController.m in Sources */,
 				B0D768DA18C8FA0D001EEE8D /* SearchViewController.m in Sources */,
+				B039790D18CE335C001F0D6A /* ShadowStyleLabel.m in Sources */,
 				B0D7687C18C8E20C001EEE8D /* MRHttpRequest.m in Sources */,
 				B0D7686F18C8E1FD001EEE8D /* MRPlaylistManager.m in Sources */,
 				B0D768CB18C8E2C2001EEE8D /* Test_SearchViewController.m in Sources */,

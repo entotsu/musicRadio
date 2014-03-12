@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MusicPlayerViewController.h"
 
 @interface SearchViewController : UIViewController <UITextFieldDelegate>
+
+@property (nonatomic, strong) MusicPlayerViewController* musicPlayerView;
 
 @end

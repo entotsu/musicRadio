@@ -9,6 +9,7 @@
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
 #import "SearchViewController.h"
+//#import "MusicPlayerViewController.h" //dev
 
 @implementation AppDelegate
 
@@ -28,6 +29,11 @@
     [firstTabController setViewControllers:viewControllerArray];
     firstTabController.selectedIndex = 0;
     self.window.rootViewController = firstTabController;
+
+//    MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
+//    self.window.rootViewController = musicView;
+    
+    
     [self.window makeKeyAndVisible];//なにこれ？windowを一番前に持ってくる？
     
     //バッググラウンド再生を許可する設定
