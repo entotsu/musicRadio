@@ -11,6 +11,10 @@
 		B039791018CE39F6001F0D6A /* next40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B039790E18CE39F6001F0D6A /* next40@2x.png */; };
 		B039791118CE39F6001F0D6A /* heart40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B039790F18CE39F6001F0D6A /* heart40@2x.png */; };
 		B067D53218BDD8BA001E046D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B067D53118BDD8BA001E046D /* QuartzCore.framework */; };
+		B073B03A18D9A5BB006CC3A4 /* next@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B073B03718D9A5BB006CC3A4 /* next@2x.png */; };
+		B073B03B18D9A5BB006CC3A4 /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B073B03818D9A5BB006CC3A4 /* play@2x.png */; };
+		B073B03C18D9A5BB006CC3A4 /* pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B073B03918D9A5BB006CC3A4 /* pause@2x.png */; };
+		B073B03E18D9A64E006CC3A4 /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B073B03D18D9A64E006CC3A4 /* heart@2x.png */; };
 		B0AAF2BB18997BB400670924 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BA18997BB400670924 /* Foundation.framework */; };
 		B0AAF2BD18997BB400670924 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BC18997BB400670924 /* CoreGraphics.framework */; };
 		B0AAF2BF18997BB400670924 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BE18997BB400670924 /* UIKit.framework */; };
@@ -73,6 +77,10 @@
 		B039790E18CE39F6001F0D6A /* next40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "next40@2x.png"; sourceTree = "<group>"; };
 		B039790F18CE39F6001F0D6A /* heart40@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart40@2x.png"; sourceTree = "<group>"; };
 		B067D53118BDD8BA001E046D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		B073B03718D9A5BB006CC3A4 /* next@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "next@2x.png"; sourceTree = "<group>"; };
+		B073B03818D9A5BB006CC3A4 /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
+		B073B03918D9A5BB006CC3A4 /* pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause@2x.png"; sourceTree = "<group>"; };
+		B073B03D18D9A64E006CC3A4 /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart@2x.png"; sourceTree = "<group>"; };
 		B0AAF2B718997BB400670924 /* musicRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musicRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0AAF2BA18997BB400670924 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B0AAF2BC18997BB400670924 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -208,10 +216,10 @@
 		B02C595218AB723200257BC4 /* mainClasses */ = {
 			isa = PBXGroup;
 			children = (
-				B0D7686B18C8E1FD001EEE8D /* MRPlaylistManager.h */,
-				B0D7686C18C8E1FD001EEE8D /* MRPlaylistManager.m */,
 				B0D7686D18C8E1FD001EEE8D /* MRRadio.h */,
 				B0D7686E18C8E1FD001EEE8D /* MRRadio.m */,
+				B0D7686B18C8E1FD001EEE8D /* MRPlaylistManager.h */,
+				B0D7686C18C8E1FD001EEE8D /* MRPlaylistManager.m */,
 			);
 			name = mainClasses;
 			path = MainClasses;
@@ -238,6 +246,10 @@
 				B039790E18CE39F6001F0D6A /* next40@2x.png */,
 				B039790F18CE39F6001F0D6A /* heart40@2x.png */,
 				B0D768AF18C8E293001EEE8D /* test_image_androp.png */,
+				B073B03D18D9A64E006CC3A4 /* heart@2x.png */,
+				B073B03718D9A5BB006CC3A4 /* next@2x.png */,
+				B073B03818D9A5BB006CC3A4 /* play@2x.png */,
+				B073B03918D9A5BB006CC3A4 /* pause@2x.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -433,11 +445,14 @@
 			files = (
 				B0D768B118C8E293001EEE8D /* blurBG@2x.png in Resources */,
 				B0D768BD18C8E293001EEE8D /* music400@2x.png in Resources */,
+				B073B03A18D9A5BB006CC3A4 /* next@2x.png in Resources */,
 				B0D768B818C8E293001EEE8D /* empty80.png in Resources */,
 				B039791118CE39F6001F0D6A /* heart40@2x.png in Resources */,
+				B073B03C18D9A5BB006CC3A4 /* pause@2x.png in Resources */,
 				B0AAF2D618997BB400670924 /* Images.xcassets in Resources */,
 				B0D768B918C8E293001EEE8D /* heart_80@2x.png in Resources */,
 				B0D768B718C8E293001EEE8D /* empty34.png in Resources */,
+				B073B03B18D9A5BB006CC3A4 /* play@2x.png in Resources */,
 				B0D768B218C8E293001EEE8D /* blurBG2@2x.png in Resources */,
 				B0D768BE18C8E293001EEE8D /* nextButton@2x.png in Resources */,
 				B0D768BA18C8E293001EEE8D /* heart80@2x.png in Resources */,
@@ -449,6 +464,7 @@
 				B0D768BB18C8E293001EEE8D /* music2_400@2x.png in Resources */,
 				B0D768B318C8E293001EEE8D /* blurBG3@2x.png in Resources */,
 				B0D768B418C8E293001EEE8D /* blurBG4@2x.png in Resources */,
+				B073B03E18D9A64E006CC3A4 /* heart@2x.png in Resources */,
 				B0D768B018C8E293001EEE8D /* artist.png in Resources */,
 				B039791018CE39F6001F0D6A /* next40@2x.png in Resources */,
 			);

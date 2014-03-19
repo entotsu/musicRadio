@@ -58,7 +58,11 @@
     return self;
 }
 
-
+- (void) dealloc {
+    NSLog(@"dealloc MRRadio ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+    _playlistManager.radio = nil;
+    _playlistManager = nil;
+}
 
 
 
@@ -96,10 +100,6 @@
     NSDictionary *songInfo = [_playlistManager getNextTrack];
     [self prepareYouTubeWithSongInfo:songInfo];
 }
-
-
-
-
 
 
 
@@ -340,6 +340,13 @@
         _didPlayFastTrack = YES;
         [self.delegeteStartViewController didSuccessPlayArtistFirstTrack];
     }
+    
+    
+    if(youtubePlayer.moviePlayer.playbackState == MPMoviePlaybackStatePlaying) {
+        NSLog(@"再生開始！？");
+        //ポーズボタンを有効化する
+        delegeteViewController.pauseButton.enabled = YES;
+    }
 }
 
 //FIXME: StartViewで再生してるときにこれくると落ちる。
@@ -353,6 +360,8 @@
     if (_didPlayFastTrack && remainTime <= 0) {
         NSLog(@"VIDEO IS END!!");
         _isStopPlayer = YES;
+        //ポーズボタンを無効化する
+        delegeteViewController.pauseButton.enabled = NO;
         [self startPlaybackNextVideo];
     }
 }

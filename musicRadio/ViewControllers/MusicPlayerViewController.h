@@ -18,5 +18,6 @@
 @property (nonatomic, strong) UILabel* nowPlayingLabel;
 @property (nonatomic, strong) NSString* seedArtist;
 @property (nonatomic, strong) MRRadio* appRadio;
+@property (nonatomic, strong) UIButton* pauseButton;
 
 @end

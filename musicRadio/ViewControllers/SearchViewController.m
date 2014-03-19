@@ -31,9 +31,7 @@
 {
     [super viewDidLoad];
     [self layoutSubViews];
-    
     _lastfmRequest = [[MRLastfmRequest alloc] init];
-    
     _application = [UIApplication sharedApplication];
 }
 
@@ -107,7 +105,6 @@
             else {  //もし結果に問題がなければ表示
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self refreshArtistResultViewsWithArray:resultArtists index:0];
-                    NSLog(@"result: %@",resultArtists);
                     //更新後に以前検索したワードと一致してなかったら検索する。
                     [self checkSearchedWordAndRedoSearch];
                 });
@@ -138,6 +135,8 @@
     NSString *artistName = nameLabel.text;
     
     if (![artistName isEqualToString:@""]) {
+        self.musicPlayerView.appRadio = nil;
+        self.musicPlayerView = nil;
         self.musicPlayerView = [[MusicPlayerViewController alloc] init];
         [self.musicPlayerView setSeedArtist:artistName];
         self.musicPlayerView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;

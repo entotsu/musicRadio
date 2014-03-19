@@ -19,6 +19,7 @@
 @protocol MRRadioDelegate <NSObject>
 @property (nonatomic, strong) UIView* youtubeBox;
 @property (nonatomic, strong) UIButton* nextButton;
+@property (nonatomic, strong) UIButton* pauseButton;
 @property (nonatomic, strong) UILabel* nowPlayingLabel;
 - (void) displayLyric:(NSString*)lyric;
 - (void) displayBio:(NSString*)bio;

@@ -29,15 +29,26 @@
     UILabel *_lyricLabel;
     NSString *_seedArtist;
     BOOL _isEnableNextButton;
+    UIButton *_pauseButton;
+    UIButton *_playButton;
 }
 @synthesize youtubeBox = _youTubeBox;
 @synthesize nextButton = _nextButton;
 @synthesize nowPlayingLabel = _nowPlayingLabel;
 @synthesize seedArtist = _seedArtist;
 @synthesize appRadio = _appRadio;
+@synthesize pauseButton = _pauseButton;
 
 
 static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでした。";
+
+
+- (void) dealloc {
+    NSLog(@"dealloc MusicPlayerViewwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+    _appRadio = nil;
+    _youTubeBox = nil;
+}
+
 
 
 - (void)viewDidLoad
@@ -75,6 +86,11 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
         // iOS 7未満
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     }
+    
+    
+    //ボタン表示してすぐに無効化すると表示されないのでここで無効化しておく。
+    _pauseButton.enabled = NO;
+    _nextButton.enabled = NO;
 }
 
 
@@ -99,7 +115,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     CGFloat player_H = 160;
     CGFloat player_W_full = maxW*10;
     
-    CGFloat button_W = 50;
+    CGFloat button_W = 40;
     CGFloat button_H = button_W;
     CGFloat button_Margin = button_W/2;
     CGFloat nowLabel_H = 40;
@@ -107,10 +123,10 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     CGFloat bioLabel_Margin = 20;
     CGFloat blurRadius = 10;
     
-    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CRSTL_BG"]];
-    backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
-    backgroundImage.backgroundColor = [UIColor colorWithRed:0.465117 green:0.792544 blue:1.0 alpha:1.0];
-    [self.view addSubview:backgroundImage];
+//    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CRSTL_BG"]];
+//    backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
+//    backgroundImage.backgroundColor = [UIColor colorWithRed:0.465117 green:0.792544 blue:1.0 alpha:1.0];
+//    [self.view addSubview:backgroundImage];
     
     
     _youTubeBox = [[UIView alloc] init];
@@ -210,21 +226,36 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     [self.view addSubview:buttonSheetBlurView];
 //    [_youTubeBox addSubview:buttonSheetBlurView];
 //    [_youTubeBox insertSubview:buttonSheetBlurView atIndex:9999];
+
     _nextButton = [[UIButton alloc] init];
-    _nextButton.enabled = NO;
+//    _nextButton.enabled = NO;//ここで無効化するとボタンがでない
     _nextButton.frame = CGRectMake(maxW - button_W - button_Margin, button_Margin, button_W, button_H);
-    [_nextButton setBackgroundImage:[UIImage imageNamed:@"next40"] forState:UIControlStateNormal];
+    [_nextButton setBackgroundImage:[UIImage imageNamed:@"next"] forState:UIControlStateNormal];
     [_nextButton addTarget:self action:@selector(onTapNextButton) forControlEvents:UIControlEventTouchUpInside];
     [buttonSheetBlurView addSubview:_nextButton];
     
     UIButton *_heartButton = [[UIButton alloc] init];
     _heartButton.frame = CGRectMake(button_Margin, button_Margin, button_W, button_H);
-    [_heartButton setBackgroundImage:[UIImage imageNamed:@"heart40"] forState:UIControlStateNormal];
+    [_heartButton setBackgroundImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
     [buttonSheetBlurView addSubview:_heartButton];
     
+    _pauseButton = [[UIButton alloc] init];
+//    _pauseButton.enabled = NO;//ここで無効化するとボタンがでない
+    _pauseButton.frame = CGRectMake(0, 0, button_W, button_H);
+    _pauseButton.center = CGPointMake(buttonSheetBlurView.frame.size.width/2, buttonSheetBlurView.frame.size.height/2);
+    [_pauseButton setBackgroundImage:[UIImage imageNamed:@"pause"] forState:UIControlStateNormal];
+    [_pauseButton addTarget:self action:@selector(onTapPauseButton) forControlEvents:UIControlEventTouchUpInside];
+    [buttonSheetBlurView addSubview:_pauseButton];
+    
+    _playButton = [[UIButton alloc] init];
+    _playButton.hidden = YES;
+    _playButton.frame = CGRectMake(0, 0, button_W, button_H);
+    _playButton.center = CGPointMake(buttonSheetBlurView.frame.size.width/2, buttonSheetBlurView.frame.size.height/2);
+    [_playButton setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    [_playButton addTarget:self action:@selector(onTapPlayButton) forControlEvents:UIControlEventTouchUpInside];
+    [buttonSheetBlurView addSubview:_playButton];
+    
 }
-
-
 
 
 //カーニングしたテキストをラベルに設定する
@@ -274,9 +305,25 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+
+- (void) onTapPlayButton {
+    NSLog(@"on tap play button");
+    _playButton.hidden = YES;
+    _pauseButton.hidden = NO;
+    [_appRadio.youtubePlayer.moviePlayer play];
+}
+
+- (void) onTapPauseButton {
+    NSLog(@"on tap pause button");
+    _pauseButton.hidden = YES;
+    _playButton.hidden = NO;
+    [_appRadio.youtubePlayer.moviePlayer pause];
+}
+
 -(void) onTapNextButton {
     NSLog(@"########### onTapNextButton ###############");
     _nextButton.enabled = NO;
+    _pauseButton.enabled = NO;
     [_appRadio startPlaybackNextVideo];
 }
 
