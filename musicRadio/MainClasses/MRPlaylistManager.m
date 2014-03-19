@@ -14,6 +14,7 @@
 @implementation MRPlaylistManager {
     MRLastfmRequest *_lastfmRequest;
     NSMutableArray *_playList;
+    NSArray *_similarArtists;
     int _nowIndex;
 }
 @synthesize radio;
@@ -185,6 +186,10 @@
     
     if (!isHavingTrack) isHavingTrack = YES;
 }
+
+
+
+
 
 
 

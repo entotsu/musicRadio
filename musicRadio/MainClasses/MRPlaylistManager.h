@@ -34,6 +34,7 @@
 -(int) resetPlaylist;
 
 
+
 @property (nonatomic, weak) id <MRPlaylistGeneratorDelegate> radio;
 @property BOOL isHavingTrack;
 

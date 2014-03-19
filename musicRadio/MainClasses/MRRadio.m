@@ -6,21 +6,22 @@
 //  Copyright (c) 2014年 Takuya Okamoto. All rights reserved.
 //
 
+//TODO: PlaylistManagerの連携を全て外す。
+
 #import "MRRadio.h"
-#import "MRPlaylistManager.h"
 #import "MRLastfmRequest.h"
 #import "MRExfmRequest.h"
 #import "MRYoutubeRequest.h"
 #import "MRLyricFetcher.h"
 
 @implementation MRRadio {
-    MRPlaylistManager *_playlistManager;
     MRLastfmRequest *_lastfmRequest;
     MRExfmRequest *_exfmRequest;
     MRYoutubeRequest *_youTubeRequest;
     BOOL _didPlayFastTrack;
     BOOL _isStopPlayer;
     BOOL _didGetFirstSimilarSongInfo;
+    BOOL _isFinishToGetNextTrack;
     NSString *_nowPlayingText;
     
     NSString *_nextArtistName;
@@ -31,6 +32,8 @@
     NSString *_lyricString;
     
     NSString *_nextArtistBio;
+    
+    NSArray *_similarArtists;
 }
 
 @synthesize youtubePlayer;
@@ -45,8 +48,6 @@
     self = [super init];
     
     if (self != nil) {
-        _playlistManager = [[MRPlaylistManager alloc] init];
-        _playlistManager.radio = self;
         _lastfmRequest = [[MRLastfmRequest alloc] init];
         _exfmRequest = [[MRExfmRequest alloc] init];
         _youTubeRequest = [[MRYoutubeRequest alloc] init];
@@ -60,8 +61,6 @@
 
 - (void) dealloc {
     NSLog(@"dealloc MRRadio ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
-    _playlistManager.radio = nil;
-    _playlistManager = nil;
 }
 
 
@@ -91,14 +90,18 @@
 // プレイリスト作成
 -(void) generatePlaylistByArtistName: (NSString*)artistName {
     NSLog(@"MRRadio : generatePlaylistByArtistName");
-    [_playlistManager generatePlaylistBySimilarArtistsWithArtistName:artistName];
+//    [_playlistManager generatePlaylistBySimilarArtistsWithArtistName:artistName];
+    [self setArtistForPrepare:artistName];
 }
 
 
 // 次の曲の準備
 -(void) prepareNextTrack {
-    NSDictionary *songInfo = [_playlistManager getNextTrack];
-    [self prepareYouTubeWithSongInfo:songInfo];
+    NSLog(@"★★★★★★★★★★★★★★★★★ 次の曲を準備します ★★★★★★★★★★★★★★★★★");
+    if(!_isFinishToGetNextTrack) {
+        NSDictionary *songInfo = [self searchAndGetNextTrack];
+        [self prepareYouTubeWithSongInfo:songInfo];
+    }
 }
 
 
@@ -113,7 +116,7 @@
 #pragma mark PlaylystManager Delegete
 
 //プレイリスト作成後に最初の一曲目を手早く渡してもらうデリゲートメソッド
-- (void)randomSongCanPlay: (NSDictionary *)songInfo
+- (void)randomSongCanPlay: (NSDictionary *)songInfo //今は呼ばれない
 {
     NSLog(@"randomSongCanPlay------------");
     _didGetFirstSimilarSongInfo = YES;
@@ -130,7 +133,8 @@
     if (!_didPlayFastTrack) { //さいしょのプレイでsimilarが再生されると次の曲が用意されない
         [self startPlaybackNextVideo];
     }
-    else {
+    else if(!_isFinishToGetNextTrack) {//ここが何故か２回呼ばれるから仕方なくフラグで分ける。
+        _isFinishToGetNextTrack = YES;
         //スタートボタンを有効にする処理
         //TODO: できればプレイヤーを表示する時にdelegeteをはずしたほうがいいかも
         if (self.delegeteStartViewController) {
@@ -189,6 +193,11 @@
     NSString *artistName = songInfo[@"artist"];
     NSString *trackName = songInfo[@"name"];
 
+    if ((!artistName) || (!trackName)) {
+        NSLog(@"EROOR: アーティスト名またはトラック名がnull");
+        return [self YouTubeErrorOccred];
+    }
+    
     _nextArtistName = artistName;
     _nextTrackName = trackName;
     _nowPlayingText = [NSString stringWithFormat:@"%@ - %@", artistName, trackName];
@@ -247,6 +256,8 @@
     
     _isStopPlayer = NO;
     
+    _isFinishToGetNextTrack = NO;
+    
     if (youtubePlayer) {
         [youtubePlayer.moviePlayer stop];
         youtubePlayer = nil;
@@ -268,11 +279,18 @@
     //(最初以外は) 歌詞のセット
     if(_didPlayFastTrack) [delegeteViewController displayLyric:_nextLyricString];
     
+    
     //今のを再生したら次のトラックを準備する   最初のトラックの時は行われないが特例で、最初にSimilarTrackが流れてしまった場合のみ次の曲の準備に入る
-    if ((_didPlayFastTrack && _playlistManager.isHavingTrack) || ((!_didPlayFastTrack)&&_didGetFirstSimilarSongInfo)) {
-        delegeteViewController.nextButton.enabled = NO;
-        [self prepareNextTrack];
+//    if ((_didPlayFastTrack && _playlistManager.isHavingTrack) || ((!_didPlayFastTrack)&&_didGetFirstSimilarSongInfo)) {
+    //↓プレイリストマネージャーを切ったのでこっちに改変
+    if (!_didPlayFastTrack &&_didGetFirstSimilarSongInfo) {
+    delegeteViewController.nextButton.enabled = NO;
     }
+    
+    //再生開始が開始されたら次の曲を準備する。  //ここはできれば完璧再生が開始してからにしたい。
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        [self prepareNextTrack];
+    });
 
 }
 
@@ -309,6 +327,63 @@
 
 
 
+
+#pragma mart PrivateMethod (GetNextTrack)
+//-------- その時その時で次のアーティストを取得する場合のメソッド --------------------
+- (void) setArtistForPrepare: (NSString*)artistName {
+    NSLog(@"setArtistForPrepare");
+    _similarArtists = [_lastfmRequest getSimilarArtistsWithArtistName:artistName];
+    if (!_similarArtists) NSLog(@"ERROR: similar artist not found!!");
+}
+
+
+- (NSDictionary*) searchAndGetNextTrack{
+    if (_similarArtists) {
+        int randIndex = (int)arc4random_uniform( (int)[_similarArtists count] );
+        NSDictionary *artist = _similarArtists[randIndex];
+        NSString *mbid = artist[@"mbid"];
+        NSString *artistName = artist[@"name"];
+        NSLog(@"+++++++++++++++++++ similar Artist 【%@】%@",artistName, mbid);
+        
+        //次の曲の情報の取得
+        NSArray *topTracks;
+        if (![mbid isEqualToString:@""])
+            topTracks = [_lastfmRequest getTopTracksWithArtistMbid:mbid];
+        else if(![artistName isEqualToString:@""])
+            topTracks = [_lastfmRequest getTopTracksWithArtistName:artistName];
+        else
+            NSLog(@"ERROR!! : This Method must get 'artistname' or 'mbid'.");
+        
+        //topトラックがとれたら、ランダムで選んで返す
+        if (topTracks) {
+            int randIndex = (int)arc4random_uniform( (int)[topTracks count] );
+            NSDictionary* nextTrack = topTracks[randIndex];
+
+            //情報をシンプルにして返す。
+            NSString *trackImage = @"nothing";
+            BOOL is_image_exist = [nextTrack.allKeys containsObject:@"image"];
+            if (is_image_exist) trackImage = nextTrack[@"image"][3];
+            
+            NSDictionary *trackInfo = @{@"name"   : nextTrack[@"name"],
+                                      @"artist" : nextTrack[@"artist"][@"name"],
+                                      @"image"  : trackImage,
+                                      @"mbid"   : nextTrack[@"mbid"]};
+            return trackInfo;
+        }
+        else {
+            NSLog(@"ERROR: Faild to get toptrack!");
+            return nil;
+        }
+    }
+    return nil;
+}
+
+
+
+
+
+
+
 // --------------------- BackGround Playback ------------------------
 
 - (void) enableBackGroundPlayback {
@@ -335,19 +410,24 @@
 
 - (void) finishPreload {
     NSLog(@"--------- finishPreload ---------------");
-    //最初のプレイの場合はフラグを立てる。
-    if(!_didPlayFastTrack){
-        _didPlayFastTrack = YES;
-        [self.delegeteStartViewController didSuccessPlayArtistFirstTrack];
-    }
     
-    
-    if(youtubePlayer.moviePlayer.playbackState == MPMoviePlaybackStatePlaying) {
-        NSLog(@"再生開始！？");
-        //ポーズボタンを有効化する
+    if (youtubePlayer.moviePlayer.playbackState == MPMoviePlaybackStatePlaying) {
+        //再生が開始されたらポーズボタンを有効化する
         delegeteViewController.pauseButton.enabled = YES;
+        
+        if(!_didPlayFastTrack){
+            NSLog(@"一曲目の再生開始");
+            _didPlayFastTrack = YES;    //最初のプレイの場合はフラグを立てる。
+            [self.delegeteStartViewController didSuccessPlayArtistFirstTrack];
+            //最初のプレイが開始したタイミングで２曲目を準備する
+        }
+        else if(_didPlayFastTrack) {
+            NSLog(@"2曲目以降の再生準備完了！！");//再生はしてないらしい！！
+        }
     }
 }
+
+
 
 //FIXME: StartViewで再生してるときにこれくると落ちる。
 //→ _didFirstPlayFinishみたいなの必要かも。で、それだったらもっかいrandomPlayする。

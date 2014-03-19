@@ -98,8 +98,8 @@
 		B0AAF2E618997BB400670924 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B0AAF2E818997BB400670924 /* musicRadioTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = musicRadioTests.m; sourceTree = "<group>"; };
 		B0AAF2FB189A3ABD00670924 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		B0D7686B18C8E1FD001EEE8D /* MRPlaylistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRPlaylistManager.h; sourceTree = "<group>"; };
-		B0D7686C18C8E1FD001EEE8D /* MRPlaylistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRPlaylistManager.m; sourceTree = "<group>"; };
+		B0D7686B18C8E1FD001EEE8D /* MRPlaylistManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MRPlaylistManager.h; path = MainClasses/MRPlaylistManager.h; sourceTree = "<group>"; };
+		B0D7686C18C8E1FD001EEE8D /* MRPlaylistManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MRPlaylistManager.m; path = MainClasses/MRPlaylistManager.m; sourceTree = "<group>"; };
 		B0D7686D18C8E1FD001EEE8D /* MRRadio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRRadio.h; sourceTree = "<group>"; };
 		B0D7686E18C8E1FD001EEE8D /* MRRadio.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRRadio.m; sourceTree = "<group>"; };
 		B0D7687118C8E20C001EEE8D /* MRExfmRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRExfmRequest.h; sourceTree = "<group>"; };
@@ -173,6 +173,8 @@
 		B00B09DA18CF794D0088E6B6 /* noUse */ = {
 			isa = PBXGroup;
 			children = (
+				B0D7686B18C8E1FD001EEE8D /* MRPlaylistManager.h */,
+				B0D7686C18C8E1FD001EEE8D /* MRPlaylistManager.m */,
 				B0D768C018C8E2C2001EEE8D /* FirstNavigationViewController.h */,
 				B0D768C118C8E2C2001EEE8D /* FirstNavigationViewController.m */,
 				B0D768C618C8E2C2001EEE8D /* Test_SearchViewController.h */,
@@ -218,8 +220,6 @@
 			children = (
 				B0D7686D18C8E1FD001EEE8D /* MRRadio.h */,
 				B0D7686E18C8E1FD001EEE8D /* MRRadio.m */,
-				B0D7686B18C8E1FD001EEE8D /* MRPlaylistManager.h */,
-				B0D7686C18C8E1FD001EEE8D /* MRPlaylistManager.m */,
 			);
 			name = mainClasses;
 			path = MainClasses;

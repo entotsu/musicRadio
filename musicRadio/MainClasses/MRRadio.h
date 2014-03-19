@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MRPlaylistManager.h"
 #import "XCDYouTubeVideoPlayerViewController.h"
 
 
@@ -38,7 +37,7 @@
 
 
 
-@interface MRRadio : NSObject <MRPlaylistGeneratorDelegate, XCDYouTubeVideoPlayerViewControllerDelegete>
+@interface MRRadio : NSObject <XCDYouTubeVideoPlayerViewControllerDelegete>
 
 - (void) fastArtistRandomPlay: (NSString*)artistName;
 
