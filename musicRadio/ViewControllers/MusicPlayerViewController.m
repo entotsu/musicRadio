@@ -254,7 +254,6 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     [_playButton setBackgroundImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
     [_playButton addTarget:self action:@selector(onTapPlayButton) forControlEvents:UIControlEventTouchUpInside];
     [buttonSheetBlurView addSubview:_playButton];
-    
 }
 
 

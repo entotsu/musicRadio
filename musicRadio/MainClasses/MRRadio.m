@@ -19,9 +19,10 @@
     MRExfmRequest *_exfmRequest;
     MRYoutubeRequest *_youTubeRequest;
     BOOL _didPlayFastTrack;
-    BOOL _isStopPlayer;
     BOOL _didGetFirstSimilarSongInfo;
     BOOL _isFinishToGetNextTrack;
+    BOOL _isPreparingNextTrack;
+    BOOL _isStartPlaying;
     NSString *_nowPlayingText;
     
     NSString *_nextArtistName;
@@ -60,7 +61,7 @@
 }
 
 - (void) dealloc {
-    NSLog(@"dealloc MRRadio ooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo");
+    NSLog(@"dealloc MRRadio");
 }
 
 
@@ -98,9 +99,19 @@
 // 次の曲の準備
 -(void) prepareNextTrack {
     NSLog(@"★★★★★★★★★★★★★★★★★ 次の曲を準備します ★★★★★★★★★★★★★★★★★");
-    if(!_isFinishToGetNextTrack) {
+    if(!_isPreparingNextTrack && !_isFinishToGetNextTrack) {
+        _isPreparingNextTrack = YES;
         NSDictionary *songInfo = [self searchAndGetNextTrack];
-        [self prepareYouTubeWithSongInfo:songInfo];
+        if (songInfo) {
+            [self prepareYouTubeWithSongInfo:songInfo];
+        }
+        else {
+            _isPreparingNextTrack = NO;
+            [self prepareNextTrack];
+        }
+    }
+    else {
+        NSLog(@"もう準備していました");
     }
 }
 
@@ -128,32 +139,56 @@
 #pragma mark YoutubePlayer Delegete
 - (void) onYoutubeLoadingSuccess
 {
-    NSLog(@"onYoutubeLoadingSuccess　再生準備完了！！！◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆");
+    NSLog(@"onYoutubeLoadingSuccess　再生準備完了！！！◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆----PlayState: %d", (int)youtubePlayer.moviePlayer.playbackState);
+    NSLog(@"loadstate: %d   _isStartPlaying: %d", (int)youtubePlayer.moviePlayer.loadState, _isStartPlaying);
     // 最初のプレイの時
     if (!_didPlayFastTrack) { //さいしょのプレイでsimilarが再生されると次の曲が用意されない
         [self startPlaybackNextVideo];
     }
     else if(!_isFinishToGetNextTrack) {//ここが何故か２回呼ばれるから仕方なくフラグで分ける。
-        _isFinishToGetNextTrack = YES;
-        //スタートボタンを有効にする処理
-        //TODO: できればプレイヤーを表示する時にdelegeteをはずしたほうがいいかも
-        if (self.delegeteStartViewController) {
-            [self.delegeteStartViewController canStartFirstTrack];
-        }
-        //ネクストボタンを有効にする
-        if (delegeteViewController) {
-            delegeteViewController.nextButton.enabled = YES;
-        }
-        //ここで動画preloadしたいけど無理っぽい。動画再生前にpreloadして再生？next_next_playerまで用意して・・
         
-        //歌詞を取得
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            _nextLyricString = [_lyricFetcher getLyricWithTitle:_nextTrackName andArtist:_nextArtistName];
-        });
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            _nextArtistBio = [self getArtistBioWithName:_nextArtistName];
-        });
+        //もし準備完了後になにも再生されてない状態だったら再生する。
+        if (!_isStartPlaying) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                NSLog(@"---------------------------check");
+                if (!_isStartPlaying) {
+                    NSLog(@"再生準備後に音楽再生されてなかったのですぐに再生します。");
+                    [self startPlaybackNextVideo];
+                }
+                else {
+                    [self onSuccessPreparingNextTrack];
+                }
+            });
+        }
+        else {
+            [self onSuccessPreparingNextTrack];
+        }
     }
+}
+
+
+
+- (void) onSuccessPreparingNextTrack {
+    _isFinishToGetNextTrack = YES;
+    //スタートボタンを有効にする処理
+    //TODO: できればプレイヤーを表示する時にdelegeteをはずしたほうがいいかも
+    if (self.delegeteStartViewController) {
+        [self.delegeteStartViewController canStartFirstTrack];
+    }
+    //ネクストボタンを有効にする
+    if (delegeteViewController) {
+        delegeteViewController.nextButton.enabled = YES;
+    }
+    //ここで動画preloadしたいけど無理っぽい。動画再生前にpreloadして再生？next_next_playerまで用意して・・
+    
+    //歌詞を取得
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        //                _nextLyricString = [_lyricFetcher getLyricWithTitle:_nextTrackName andArtist:_nextArtistName];
+    });
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        //                _nextArtistBio = [self getArtistBioWithName:_nextArtistName];
+    });
+
 }
 
 
@@ -166,7 +201,6 @@
         [self fastArtistRandomPlay:_nowPlayingText];
     }
     else {
-        NSLog(@"Next Movie Error.");
         [self prepareNextTrack];
     }
 }
@@ -190,6 +224,8 @@
 
 - (void) prepareYouTubeWithSongInfo: (NSDictionary *)songInfo {
 
+    _isPreparingNextTrack = NO;
+    
     NSString *artistName = songInfo[@"artist"];
     NSString *trackName = songInfo[@"name"];
 
@@ -220,9 +256,9 @@
     if ([videoTitle rangeOfString:artistName options:NSCaseInsensitiveSearch].location == NSNotFound)
         return [self YouTubeErrorOccred];
     //②カラオケ　歌ってみた (弾いてみた) が入っていない
-    if ([videoTitle rangeOfString:@"歌ってみた" options:NSCaseInsensitiveSearch].location != NSNotFound)
+    if ([videoTitle rangeOfString:@"歌ってみ" options:NSCaseInsensitiveSearch].location != NSNotFound)
         return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:@"うたってみた" options:NSCaseInsensitiveSearch].location != NSNotFound)
+    if ([videoTitle rangeOfString:@"うたってみ" options:NSCaseInsensitiveSearch].location != NSNotFound)
         return [self YouTubeErrorOccred];
     if ([videoTitle rangeOfString:@"カラオケ" options:NSCaseInsensitiveSearch].location != NSNotFound)
         return [self YouTubeErrorOccred];
@@ -254,9 +290,9 @@
 - (void) startPlaybackNextVideo {
     NSLog(@"MusicPlayer : startPlaybackNextVideo >>>>>>>>>>>>>>>>>>>>> not 1st?:%d",_didPlayFastTrack);
     
-    _isStopPlayer = NO;
-    
     _isFinishToGetNextTrack = NO;
+    _isStartPlaying = NO;
+
     
     if (youtubePlayer) {
         [youtubePlayer.moviePlayer stop];
@@ -284,13 +320,8 @@
 //    if ((_didPlayFastTrack && _playlistManager.isHavingTrack) || ((!_didPlayFastTrack)&&_didGetFirstSimilarSongInfo)) {
     //↓プレイリストマネージャーを切ったのでこっちに改変
     if (!_didPlayFastTrack &&_didGetFirstSimilarSongInfo) {
-    delegeteViewController.nextButton.enabled = NO;
+        delegeteViewController.nextButton.enabled = NO;
     }
-    
-    //再生開始が開始されたら次の曲を準備する。  //ここはできれば完璧再生が開始してからにしたい。
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        [self prepareNextTrack];
-    });
 
 }
 
@@ -356,8 +387,8 @@
         
         //topトラックがとれたら、ランダムで選んで返す
         if (topTracks) {
-            int randIndex = (int)arc4random_uniform( (int)[topTracks count] );
-            NSDictionary* nextTrack = topTracks[randIndex];
+            int rand = (int)arc4random_uniform( (int)[topTracks count] );
+            NSDictionary* nextTrack = topTracks[rand];
 
             //情報をシンプルにして返す。
             NSString *trackImage = @"nothing";
@@ -404,27 +435,37 @@
 
 //-------------------- Auto play ----- 自動で次の曲にいく処理 ------------------
 - (void) enableAutoPlay {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishPreload) name:MPMoviePlayerLoadStateDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onLoadStateDidChange) name:MPMoviePlayerLoadStateDidChangeNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(finishPlayback) name:MPMoviePlayerPlaybackDidFinishNotification object:nil];
 }
 
-- (void) finishPreload {
-    NSLog(@"--------- finishPreload ---------------");
+- (void) onLoadStateDidChange {
+    NSLog(@"--------- onLoadStateDidChange ---------------　playstate:%d", (int)youtubePlayer.moviePlayer.playbackState);
+    NSLog(@"loadstate: %d",(int)youtubePlayer.moviePlayer.loadState);
     
-    if (youtubePlayer.moviePlayer.playbackState == MPMoviePlaybackStatePlaying) {
+    if (youtubePlayer.moviePlayer.loadState == 3) {
+        
+        _isStartPlaying = YES;
+        
         //再生が開始されたらポーズボタンを有効化する
         delegeteViewController.pauseButton.enabled = YES;
         
+        //一曲目の場合
         if(!_didPlayFastTrack){
-            NSLog(@"一曲目の再生開始");
             _didPlayFastTrack = YES;    //最初のプレイの場合はフラグを立てる。
             [self.delegeteStartViewController didSuccessPlayArtistFirstTrack];
             //最初のプレイが開始したタイミングで２曲目を準備する
-        }
-        else if(_didPlayFastTrack) {
-            NSLog(@"2曲目以降の再生準備完了！！");//再生はしてないらしい！！
+            [self prepareNextTrack];
         }
     }
+
+    //２秒後にもし準備してなかったら準備する。
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            [self prepareNextTrack];
+        });
+    });
+    
 }
 
 
@@ -439,10 +480,20 @@
     
     if (_didPlayFastTrack && remainTime <= 0) {
         NSLog(@"VIDEO IS END!!");
-        _isStopPlayer = YES;
+        _isStartPlaying = NO;
+        
+        //ここで再生自体に失敗した場合、次の曲をとって再生する。
+        //つまり次の曲が無いとき、prepareNextTrackする。
+        if (!_isFinishToGetNextTrack) {
+            NSLog(@"再生に失敗！！");
+            [self prepareNextTrack];
+        }
+        else {
+            [self startPlaybackNextVideo];
+        }
+        
         //ポーズボタンを無効化する
         delegeteViewController.pauseButton.enabled = NO;
-        [self startPlaybackNextVideo];
     }
 }
 

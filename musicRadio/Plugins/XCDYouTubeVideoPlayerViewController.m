@@ -102,7 +102,7 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 	if (![NSThread isMainThread])
 	{
         //なにこれ？
-        NSLog(@"setVideoIdentifier  if (![NSThread isMainThread]) |||||||||||||||||||||||||||");
+        NSLog(@"[XCDYoutube setVideoIdentifier:id] の if (![NSThread isMainThread]) なう");
 		[self performSelectorOnMainThread:_cmd withObject:videoIdentifier waitUntilDone:NO];
 		return;
 	}
