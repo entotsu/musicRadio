@@ -56,7 +56,17 @@ static NSString * const YOUTUBE_API_KEY = @"AIzaSyArZbAYSmERlrJTgQggy8bZ_8xU7Y5z
 }
 
 
-
+- (NSArray *) searchVideoByKeyword:(NSString*)keyword limit:(int)limit {
+    
+    NSDictionary *result = [self searchByKeyword:keyword andLimit:limit];
+    
+    if ([result[@"items"] count] == 0) {
+        NSLog(@"ERROR: youtube search result is 0.");
+        return nil;
+    }
+    
+    return result[@"items"];
+}
 
 
 

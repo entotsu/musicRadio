@@ -70,10 +70,11 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
         dispatch_async(dispatch_get_main_queue(), ^{
             _appRadio = [[MRRadio alloc] init];
             _appRadio.delegeteViewController = self;
+            [_appRadio fastArtistRandomPlay:_seedArtist];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                sleep(2);
                 [_appRadio generatePlaylistByArtistName:_seedArtist];
             });
-            [_appRadio fastArtistRandomPlay:_seedArtist];
         });
     }
     

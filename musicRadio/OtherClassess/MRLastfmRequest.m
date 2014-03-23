@@ -74,7 +74,7 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
 -(NSArray*) getTopTracksWithArtistName: (NSString*)artistName {
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@",
                      LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY, @"&format=json"
-                     @"&method=artist.getTopTracks",
+                     @"&method=artist.getTopTracks&limit=100",
                      @"&artist=", artistName];
 
     NSDictionary *result = [_httpRequest getJsonWithURLString:url];
@@ -88,7 +88,7 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
 -(NSArray*) getTopTracksWithArtistMbid: (NSString*)mbid {
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@",
                      LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY, @"&format=json"
-                     @"&method=artist.getTopTracks",
+                     @"&method=artist.getTopTracks&limit=100",
                      @"&mbid=", mbid];
     
     NSDictionary *result = [_httpRequest getJsonWithURLString:url];
@@ -174,7 +174,7 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@",
                      LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY,
                      @"&method=geo.gettopartists",
-                     @"&country=japan&format=json"];
+                     @"&country=japan&format=json&limit=500"];
     
     NSDictionary *result = [_httpRequest getJsonWithURLString:url];
     

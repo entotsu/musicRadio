@@ -35,6 +35,9 @@
     NSString *_nextArtistBio;
     
     NSArray *_similarArtists;
+    
+    NSMutableArray *_artistvideos;
+    NSArray *_nextTopTracks;
 }
 
 @synthesize youtubePlayer;
@@ -83,10 +86,19 @@
 - (void) fastArtistRandomPlay: (NSString*)artistName {
     _didPlayFastTrack = NO;
     _nowPlayingText = artistName;
-    NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
     _nextArtistName = artistName;
-    [self prepearYouTubePlayerWithVideoID:randomVideoID];
+    
+    //    NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
+    NSArray *artistvideos = [_youTubeRequest searchVideoByKeyword:artistName limit:15];
+    if (artistvideos) {
+        _artistvideos = [NSMutableArray arrayWithArray:artistvideos];
+        int randIndex = (int)arc4random_uniform( (int)[_artistvideos count] );
+        NSString *videoID = _artistvideos[randIndex][@"id"][@"videoId"];
+        [self prepearYouTubePlayerWithVideoID:videoID];
+        [_artistvideos removeObjectAtIndex:randIndex];
+    }
 }
+
 
 // プレイリスト作成
 -(void) generatePlaylistByArtistName: (NSString*)artistName {
@@ -97,17 +109,19 @@
 
 
 // 次の曲の準備
--(void) prepareNextTrack {
+-(void) prepareNextTrack_withArtistChange: (BOOL)isEnableArtistChange {
     NSLog(@"★★★★★★★★★★★★★★★★★ 次の曲を準備します ★★★★★★★★★★★★★★★★★");
     if(!_isPreparingNextTrack && !_isFinishToGetNextTrack) {
         _isPreparingNextTrack = YES;
-        NSDictionary *songInfo = [self searchAndGetNextTrack];
+        if (isEnableArtistChange) [self setRandomNextArtistAndGetTopTracks];
+
+        NSDictionary *songInfo = [self getTrackFrom_nextTopTracks];
         if (songInfo) {
             [self prepareYouTubeWithSongInfo:songInfo];
         }
         else {
             _isPreparingNextTrack = NO;
-            [self prepareNextTrack];
+            [self prepareNextTrack_withArtistChange:YES];
         }
     }
     else {
@@ -198,14 +212,15 @@
     if (!_didPlayFastTrack) {
         //初回のアーティスト曲再生でエラーした場合は他の動画をチョイスしてみる。
         NSLog(@"first Artist Movie Error.");
-        [self fastArtistRandomPlay:_nowPlayingText];
+        int randIndex = (int)arc4random_uniform( (int)[_artistvideos count] );
+        NSString *videoID = _artistvideos[randIndex][@"id"][@"videoId"];
+        [self prepearYouTubePlayerWithVideoID:videoID];
+        [_artistvideos removeObjectAtIndex:randIndex];
     }
     else {
-        [self prepareNextTrack];
+        [self prepareNextTrack_withArtistChange:NO];
     }
 }
-
-
 
 
 
@@ -358,7 +373,7 @@
 }
 
 
-- (NSDictionary*) searchAndGetNextTrack{
+- (BOOL) setRandomNextArtistAndGetTopTracks {
     if (_similarArtists) {
         int randIndex = (int)arc4random_uniform( (int)[_similarArtists count] );
         NSDictionary *artist = _similarArtists[randIndex];
@@ -367,40 +382,47 @@
         NSLog(@"+++++++++++++++++++ similar Artist 【%@】%@",artistName, mbid);
         
         //次の曲の情報の取得
-        NSArray *topTracks;
         if (![mbid isEqualToString:@""])
-            topTracks = [_lastfmRequest getTopTracksWithArtistMbid:mbid];
+            _nextTopTracks = [_lastfmRequest getTopTracksWithArtistMbid:mbid];
         else if(![artistName isEqualToString:@""])
-            topTracks = [_lastfmRequest getTopTracksWithArtistName:artistName];
+            _nextTopTracks = [_lastfmRequest getTopTracksWithArtistName:artistName];
         else
             NSLog(@"ERROR!! : This Method must get 'artistname' or 'mbid'.");
         
         //topトラックがとれたら、ランダムで選んで返す
-        if (topTracks) {
-            int rand = (int)arc4random_uniform( (int)[topTracks count] );
-            NSDictionary* nextTrack = topTracks[rand];
-
-            //情報をシンプルにして返す。
-            NSString *trackImage = @"nothing";
-            BOOL is_image_exist = [nextTrack.allKeys containsObject:@"image"];
-            if (is_image_exist) trackImage = nextTrack[@"image"][3];
-            
-            NSDictionary *trackInfo = @{@"name"   : nextTrack[@"name"],
-                                      @"artist" : nextTrack[@"artist"][@"name"],
-                                      @"image"  : trackImage,
-                                      @"mbid"   : nextTrack[@"mbid"]};
-            return trackInfo;
+        if (_nextTopTracks) {
+            return YES;
         }
         else {
             NSLog(@"ERROR: Faild to get toptrack!");
-            return nil;
+            return NO;
         }
     }
-    return nil;
+    return NO;
 }
 
 
-
+-(NSDictionary*) getTrackFrom_nextTopTracks {
+    if (_nextTopTracks) {
+        int rand = (int)arc4random_uniform( (int)[_nextTopTracks count] );
+        NSDictionary* nextTrack = _nextTopTracks[rand];
+        
+        //情報をシンプルにして返す。
+        NSString *trackImage = @"nothing";
+        BOOL is_image_exist = [nextTrack.allKeys containsObject:@"image"];
+        if (is_image_exist) trackImage = nextTrack[@"image"][3];
+        
+        NSDictionary *trackInfo = @{@"name"   : nextTrack[@"name"],
+                                    @"artist" : nextTrack[@"artist"][@"name"],
+                                    @"image"  : trackImage,
+                                    @"mbid"   : nextTrack[@"mbid"]};
+        return trackInfo;
+    }
+    else {
+        NSLog(@"ERROR: top track is not exist.");
+        return nil;
+    }
+}
 
 
 
@@ -445,14 +467,14 @@
             _didPlayFastTrack = YES;    //最初のプレイの場合はフラグを立てる。
             [self.delegeteStartViewController didSuccessPlayArtistFirstTrack];
             //最初のプレイが開始したタイミングで２曲目を準備する
-            [self prepareNextTrack];
+            [self prepareNextTrack_withArtistChange:YES];
         }
     }
 
     //２秒後にもし準備してなかったら準備する。
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [self prepareNextTrack];
+            [self prepareNextTrack_withArtistChange:YES];
         });
     });
     
@@ -476,7 +498,7 @@
         //つまり次の曲が無いとき、prepareNextTrackする。
         if (!_isFinishToGetNextTrack) {
             NSLog(@"再生に失敗！！");
-            [self prepareNextTrack];
+            [self prepareNextTrack_withArtistChange:NO];
         }
         else {
             [self startPlaybackNextVideo];
@@ -485,6 +507,13 @@
         //ポーズボタンを無効化する
         delegeteViewController.pauseButton.enabled = NO;
     }
+    
+    //２秒後にもし準備してなかったら準備する。
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            [self prepareNextTrack_withArtistChange:NO];
+        });
+    });
 }
 
 

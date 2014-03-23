@@ -50,20 +50,20 @@
 #pragma mark Private Method (Display Top Chart)
 
 - (void) displayTopArtists {
-    
     NSArray *topArtistsArray = [_lastfmRequest getTopArtists];
     if (topArtistsArray) {
-        
         NSMutableArray *topArtists = [NSMutableArray arrayWithArray:topArtistsArray];
-        
         NSMutableArray *resultViews_copy = [NSMutableArray arrayWithArray:[_resultViews copy]];
         int i;
         int resultViewLen = (int)[_resultViews count];
         
+        NSLog(@"going to display top artist");
+        
         for (i=0; i<resultViewLen; i++) {
-            NSLog(@"change");
-            
+
+
             int artistRand = (int)arc4random_uniform( (int)[topArtists count] );
+            NSLog(@"artist rand %d",artistRand);
             NSDictionary *artist = topArtists[artistRand];
             [topArtists removeObjectAtIndex:artistRand];
             
@@ -76,6 +76,7 @@
             NSString *imageURL = artist[@"image"][1][@"#text"];
             
             float randDelayTime = 0.03 * (int)arc4random_uniform(100);
+            
             [self changeResultView:resultView withName:artistName andImageURL:imageURL delay:randDelayTime];
         }
     }

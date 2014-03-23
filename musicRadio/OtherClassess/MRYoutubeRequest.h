@@ -14,4 +14,6 @@
 - (NSDictionary*) searchByKeyword: (NSString *)keyword;
 - (NSDictionary *) getTopVideoByKeyword: (NSString *)keyword;
 - (NSString *) getRandomVideoIDByKeyword: (NSString *)keyword;
+
+- (NSArray *) searchVideoByKeyword:(NSString*)keyword limit:(int)limit;
 @end
