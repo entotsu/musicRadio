@@ -256,22 +256,11 @@
     if ([videoTitle rangeOfString:artistName options:NSCaseInsensitiveSearch].location == NSNotFound)
         return [self YouTubeErrorOccred];
     //②カラオケ　歌ってみた (弾いてみた) が入っていない
-    if ([videoTitle rangeOfString:@"歌ってみ" options:NSCaseInsensitiveSearch].location != NSNotFound)
+    NSArray *NG_words = @[@"歌ってみ",@"うたってみ",@"カラオケ",@"カバー",@"cover",@"コピー",@"copy",@"ピッチ",@"弾いてみ"];
+    for (NSString* NG_word in NG_words) {
+        if ([videoTitle rangeOfString:NG_word options:NSCaseInsensitiveSearch].location != NSNotFound)
         return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:@"うたってみ" options:NSCaseInsensitiveSearch].location != NSNotFound)
-        return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:@"カラオケ" options:NSCaseInsensitiveSearch].location != NSNotFound)
-        return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:@"カバー" options:NSCaseInsensitiveSearch].location != NSNotFound)
-        return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:@"コピー" options:NSCaseInsensitiveSearch].location != NSNotFound)
-        return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:@"cover" options:NSCaseInsensitiveSearch].location != NSNotFound)
-        return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:@"ピッチ" options:NSCaseInsensitiveSearch].location != NSNotFound)
-        return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:@"弾いてみた" options:NSCaseInsensitiveSearch].location != NSNotFound)
-        return [self YouTubeErrorOccred];
+    }
     
     return [self prepearYouTubePlayerWithVideoID:topVideoID];
 }
