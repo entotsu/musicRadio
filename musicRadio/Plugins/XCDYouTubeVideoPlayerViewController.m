@@ -219,6 +219,7 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 	NSURL *videoURL = [self videoURLWithData:self.connectionData error:&error];
 
 	if (videoURL) {
+        NSLog(@"vodeo URL Get! :%@",videoURL);
 		self.moviePlayer.contentURL = videoURL;
         //ここで成功delgeteをradioに飛ばす
         [self.delegete onYoutubeLoadingSuccess];
@@ -259,8 +260,30 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 	NSString *videoQuery = [[NSString alloc] initWithData:data encoding:NSASCIIStringEncoding];
 	NSStringEncoding queryEncoding = NSUTF8StringEncoding;
 	NSDictionary *video = DictionaryWithQueryString(videoQuery, queryEncoding);
-	NSArray *streamQueries = [video[@"url_encoded_fmt_stream_map"] componentsSeparatedByString:@","];
-	
+//	NSArray *streamQueries = [video[@"url_encoded_fmt_stream_map"] componentsSeparatedByString:@","];
+	NSMutableArray *streamQueries = [[video[@"url_encoded_fmt_stream_map"] componentsSeparatedByString:@","] mutableCopy];
+    [streamQueries addObjectsFromArray:[video[@"adaptive_fmts"] componentsSeparatedByString:@","]];
+    
+    
+	NSMutableDictionary *streamURLs = [NSMutableDictionary new];
+	for (NSString *streamQuery in streamQueries)
+	{
+		NSDictionary *stream = DictionaryWithQueryString(streamQuery, queryEncoding);
+		NSString *type = stream[@"type"];
+		NSString *urlString = stream[@"url"];
+		if (urlString && [AVURLAsset isPlayableExtendedMIMEType:type])
+		{
+			NSURL *streamURL = [NSURL URLWithString:urlString];
+			NSString *signature = stream[@"sig"];
+			if (signature)
+				streamURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@&signature=%@", urlString, signature]];
+            
+			if ([[DictionaryWithQueryString(streamURL.query, queryEncoding) allKeys] containsObject:@"signature"])
+				streamURLs[@([stream[@"itag"] integerValue])] = streamURL;
+		}
+	}
+    
+    /*
 	NSMutableDictionary *streamURLs = [NSMutableDictionary new];
 	for (NSString *streamQuery in streamQueries)
 	{
@@ -281,6 +304,7 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 		}
         //end
 	}
+     */
 	
 	for (NSNumber *videoQuality in self.preferredVideoQualities)
 	{
