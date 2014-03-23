@@ -168,5 +168,41 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
 }
 
 
+//http://ws.audioscrobbler.com/2.0/?method=geo.gettopartists&country=japan&api_key=3119649624fae2e9531bc4639a08cba8&format=json
+
+- (NSArray *) getTopArtists {
+    NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@",
+                     LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY,
+                     @"&method=geo.gettopartists",
+                     @"&country=japan&format=json"];
+    
+    NSDictionary *result = [_httpRequest getJsonWithURLString:url];
+    
+    if (result == nil) {
+        NSLog(@"ERROR: top artist is not returned!!");
+        return nil;
+    }
+    
+    return result[@"topartists"][@"artist"];
+}
+
+
+
+- (NSArray *) getHypeArtists {
+    NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@",
+                     LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY,
+                     @"&method=geo.getmetrohypeartistchart",
+                     @"&country=japan&metro=tokyo&format=json"];
+
+    NSDictionary *result = [_httpRequest getJsonWithURLString:url];
+    
+    if (result == nil) {
+        NSLog(@"ERROR: hype artist is not returned!!");
+        return nil;
+    }
+    return result[@"topartists"][@"artist"];
+}
+
+
 
 @end

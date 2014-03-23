@@ -16,4 +16,6 @@
 -(NSArray*) getSimilarTracksWithMbid: (NSString*)mbid;
 -(NSArray*) getSimilarArtistsWithArtistName: (NSString*)artistName;
 -(NSDictionary*) getArtistInfoWithName: (NSString*)artistName;
+- (NSArray *) getTopArtists;
+- (NSArray *) getHypeArtists;
 @end

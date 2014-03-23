@@ -251,17 +251,18 @@
     if (!topVideo) return [self YouTubeErrorOccred];
     //ここでその動画のタイトルをチェックする。
     //①アーティスト名とトラック名が入っている
-    if ([videoTitle rangeOfString:trackName options:NSCaseInsensitiveSearch].location == NSNotFound)
-        return [self YouTubeErrorOccred];
-    if ([videoTitle rangeOfString:artistName options:NSCaseInsensitiveSearch].location == NSNotFound)
+    if ([videoTitle rangeOfString:trackName options:NSCaseInsensitiveSearch].location == NSNotFound
+     && [videoTitle rangeOfString:artistName options:NSCaseInsensitiveSearch].location == NSNotFound)
         return [self YouTubeErrorOccred];
     //②カラオケ　歌ってみた (弾いてみた) が入っていない
     NSArray *NG_words = @[@"歌ってみ",@"うたってみ",@"カラオケ",@"カバー",@"cover",@"コピー",@"copy",@"ピッチ",@"弾いてみ"];
     for (NSString* NG_word in NG_words) {
-        if ([videoTitle rangeOfString:NG_word options:NSCaseInsensitiveSearch].location != NSNotFound)
-        return [self YouTubeErrorOccred];
+        if ([videoTitle rangeOfString:NG_word options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            return [self YouTubeErrorOccred];
+        }
     }
     
+    //バリデーションが通れば次の動画を準備する。
     return [self prepearYouTubePlayerWithVideoID:topVideoID];
 }
 

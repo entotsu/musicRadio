@@ -33,12 +33,55 @@
     [self layoutSubViews];
     _lastfmRequest = [[MRLastfmRequest alloc] init];
     _application = [UIApplication sharedApplication];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self displayTopArtists];
+    });
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
+
+
+
+
+#pragma mark Private Method (Display Top Chart)
+
+- (void) displayTopArtists {
+    
+    NSArray *topArtistsArray = [_lastfmRequest getTopArtists];
+    if (topArtistsArray) {
+        
+        NSMutableArray *topArtists = [NSMutableArray arrayWithArray:topArtistsArray];
+        
+        NSMutableArray *resultViews_copy = [NSMutableArray arrayWithArray:[_resultViews copy]];
+        int i;
+        int resultViewLen = (int)[_resultViews count];
+        
+        for (i=0; i<resultViewLen; i++) {
+            NSLog(@"change");
+            
+            int artistRand = (int)arc4random_uniform( (int)[topArtists count] );
+            NSDictionary *artist = topArtists[artistRand];
+            [topArtists removeObjectAtIndex:artistRand];
+            
+            int viewRand = (int)arc4random_uniform( (int)[resultViews_copy count]);
+            NSLog(@"view rand %d",viewRand);
+            UIView *resultView = resultViews_copy[viewRand];
+            [resultViews_copy removeObjectAtIndex:viewRand];
+            
+            NSString *artistName = artist[@"name"];
+            NSString *imageURL = artist[@"image"][1][@"#text"];
+            
+            float randDelayTime = 0.03 * (int)arc4random_uniform(100);
+            [self changeResultView:resultView withName:artistName andImageURL:imageURL delay:randDelayTime];
+        }
+    }
+    
+}
+
 
 
 #pragma mark UITextFieldDelegate
@@ -193,7 +236,7 @@
     backButton.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
     [backButton addTarget:self action:@selector(onTapBackButton) forControlEvents:UIControlEventTouchUpInside];
     [navigationBar addSubview:backButton];
-
+    
     
     _searchBar = [[UITextField alloc] init];
     _searchBar.frame = CGRectMake(0, 0, maxW-textField_M * 2, textField_H);
@@ -204,6 +247,7 @@
     _searchBar.clearButtonMode = UITextFieldViewModeWhileEditing;
     [self.view addSubview:_searchBar];
     //TODO 左にアイコン表示
+    
     
     //下線
     UIView *underLineView = [[UIView alloc] init];
@@ -218,29 +262,35 @@
     //リザルトの数で座標を計算でだすようにする。
     UIView *resultView1 = [self makeResultViewWithSize:result1_size andCenter:CGPointMake(130, 195) isMain:YES];
     UIView *resultView2 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(55, 110) isMain:NO];
-    UIView *resultView3 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(220, 110) isMain:NO];
+    UIView *resultView3 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(220, 122) isMain:NO];
     UIView *resultView4 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(250, 215) isMain:NO];
+
+    UIView *resultView5 = [self makeResultViewWithSize:result1_size andCenter:CGPointMake(230, 360) isMain:NO];
+    UIView *resultView6 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(75, 370) isMain:NO];
+    UIView *resultView7 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(140, 450) isMain:NO];
+    UIView *resultView8 = [self makeResultViewWithSize:result2_size andCenter:CGPointMake(250, 460) isMain:NO];
     [self.view addSubview:resultView1];
     [self.view addSubview:resultView2];
     [self.view addSubview:resultView3];
     [self.view addSubview:resultView4];
+    [self.view addSubview:resultView5];
+    [self.view addSubview:resultView6];
+    [self.view addSubview:resultView7];
+    [self.view addSubview:resultView8];
     
-    _resultViews = @[resultView1, resultView2, resultView3, resultView4];
+    _resultViews = @[resultView1, resultView2, resultView3, resultView4, resultView5, resultView6, resultView7, resultView8];
 }
 
 
 - (UIView*) makeResultViewWithSize:(float)size andCenter:(CGPoint)center isMain:(BOOL)isMain {
     float result1_size = size;
     float result1_label_M = result1_size/20;
-    
     float result1_label_H;
     if (isMain)
         result1_label_H = result1_size/4;
     else
         result1_label_H = result1_size/2.5;
-    
     float result1_label_W = result1_size*1.75;
-    
     float result1_fontSize;
     if (isMain)
         result1_fontSize = 16.0;
@@ -256,7 +306,7 @@
     resultView1.userInteractionEnabled = YES;
     [resultView1 addGestureRecognizer: [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapResultView:)]];
     
-    UIImageView *imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"test_image_androp"]];
+    UIImageView *imageView1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"music2_400"]];
     imageView1.frame = CGRectMake(0, 0, result1_size, result1_size);
     imageView1.clipsToBounds = YES;
     imageView1.layer.cornerRadius = result1_size/2;
@@ -270,8 +320,10 @@
     _titleLabel1.textAlignment = NSTextAlignmentCenter;
     _titleLabel1.adjustsFontSizeToFitWidth = YES;
     _titleLabel1.adjustsLetterSpacingToFitWidth = YES;
-    [self setKernedText:@"androp" toUILabel:_titleLabel1];
+    [self setKernedText:@"artist" toUILabel:_titleLabel1];
     [resultView1 addSubview:_titleLabel1];
+    
+    resultView1.alpha = 0.2;
     
     return resultView1;
 }
@@ -288,12 +340,24 @@
     NSDictionary *artist = results[i];
     NSString *artistName = artist[@"name"];
     NSString *imageURL = artist[@"image"][1][@"#text"];
+    [self changeResultView:_resultViews[i] withName:artistName andImageURL:imageURL delay:0.25f];
     
-    UIView *resultView = _resultViews[i];
+    //次のviewを更新する。
+    [NSTimer scheduledTimerWithTimeInterval:0.25f target:[NSBlockOperation blockOperationWithBlock:^{
+        i++;
+        if (i < resultLength && i < 4) [self refreshArtistResultViewsWithArray:results index:i];
+    }] selector:@selector(main) userInfo:nil repeats:NO];
+
+}
+
+
+
+
+- (void) changeResultView:(UIView*)resultView withName:(NSString*)artistName andImageURL:(NSString*)imageURL delay:(float)delayTime{
+    
     UIImageView *imageView = resultView.subviews[0];
     UILabel *nameLabel = resultView.subviews[1];
-
-    //もし名前が違えば内容を更新する
+    
     if (! [nameLabel.text isEqualToString:artistName]) {
         resultView.alpha = 0;
         
@@ -311,24 +375,16 @@
         
         //アニメーション
         [UIView animateWithDuration:1.0f
-                              delay:0.0f
+                              delay:delayTime
                             options:UIViewAnimationOptionCurveEaseIn
                          animations:^{
                              resultView.alpha = 1.0f;
                          }
-                         completion:^(BOOL finished) {
-                         }];
+                         completion:nil];
     }
     
-    //次のviewを更新する。
-    [NSTimer scheduledTimerWithTimeInterval:0.25f target:[NSBlockOperation blockOperationWithBlock:^{
-        i++;
-        if (i < resultLength && i < 4) [self refreshArtistResultViewsWithArray:results index:i];
-    }] selector:@selector(main) userInfo:nil repeats:NO];
 
 }
-
-
 
 
 

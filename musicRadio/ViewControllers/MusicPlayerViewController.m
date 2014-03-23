@@ -57,7 +57,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     NSLog(@"view did load");
     
     //debug
-    if (!_seedArtist) _seedArtist = @"ELLEGARDEN";
+    if (!_seedArtist) _seedArtist = @"bump of chicken";
 
     
     [self layoutSubView];
