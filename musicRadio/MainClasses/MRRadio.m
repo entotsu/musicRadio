@@ -37,7 +37,7 @@
     NSArray *_similarArtists;
     
     NSMutableArray *_artistvideos;
-    NSArray *_nextTopTracks;
+    NSMutableArray *_nextTopTracks;
 }
 
 @synthesize youtubePlayer;
@@ -202,6 +202,10 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         //                _nextArtistBio = [self getArtistBioWithName:_nextArtistName];
     });
+    
+    
+    [nextYoutubePlayer presentInView:delegeteViewController.nextYoutubeBox];
+    [nextYoutubePlayer.moviePlayer stop];
 
 }
 
@@ -249,10 +253,6 @@
         return [self YouTubeErrorOccred];
     }
     
-    _nextArtistName = artistName;
-    _nextTrackName = trackName;
-    _nowPlayingText = [NSString stringWithFormat:@"%@ - %@", artistName, trackName];
-    
     NSString *searchKeyword = [NSString stringWithFormat:@"%@ %@", artistName, trackName];
     NSDictionary *topVideo = [_youTubeRequest getTopVideoByKeyword:searchKeyword];
 
@@ -267,7 +267,7 @@
     //ここでその動画のタイトルをチェックする。
     //①アーティスト名とトラック名が入っている
     if ([videoTitle rangeOfString:trackName options:NSCaseInsensitiveSearch].location == NSNotFound
-     && [videoTitle rangeOfString:artistName options:NSCaseInsensitiveSearch].location == NSNotFound)
+     || [videoTitle rangeOfString:artistName options:NSCaseInsensitiveSearch].location == NSNotFound)
         return [self YouTubeErrorOccred];
     //②カラオケ　歌ってみた (弾いてみた) が入っていない
     NSArray *NG_words = @[@"歌ってみ",@"うたってみ",@"カラオケ",@"カバー",@"cover",@"コピー",@"copy",@"ピッチ",@"弾いてみ"];
@@ -277,18 +277,26 @@
         }
     }
     
+    
+    
     //バリデーションが通れば次の動画を準備する。
+    _nextArtistName = artistName;
+    _nextTrackName = trackName;
+    _nowPlayingText = [NSString stringWithFormat:@"%@ - %@", artistName, trackName];
+    
     return [self prepearYouTubePlayerWithVideoID:topVideoID];
 }
 
 
 - (void) prepearYouTubePlayerWithVideoID: (NSString*)videoID {
-    self.nextYoutubePlayer = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
-    self.nextYoutubePlayer.delegete = self;
-    self.nextYoutubePlayer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-    self.nextYoutubePlayer.moviePlayer.allowsAirPlay = YES;
+    NSLog(@"$$$$$$$$$$$$ prepearYouTubePlayerWithVideoID $$$$$$$$$$$$");
+    nextYoutubePlayer = [[XCDYouTubeVideoPlayerViewController alloc] initWithVideoIdentifier:videoID];
+    nextYoutubePlayer.delegete = self;
+    nextYoutubePlayer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    nextYoutubePlayer.moviePlayer.allowsAirPlay = YES;
     //これで再生可能になったタイミングでonYoutubeLoadingSuccessにて↓のメソッドが呼ばれる。
     //エラーならYouTubeErrorOccredが呼ばれる。
+
 }
 
 
@@ -381,16 +389,18 @@
         NSString *artistName = artist[@"name"];
         NSLog(@"+++++++++++++++++++ similar Artist 【%@】%@",artistName, mbid);
         
+        NSArray *topTracks;
         //次の曲の情報の取得
         if (![mbid isEqualToString:@""])
-            _nextTopTracks = [_lastfmRequest getTopTracksWithArtistMbid:mbid];
+            topTracks = [_lastfmRequest getTopTracksWithArtistMbid:mbid];
         else if(![artistName isEqualToString:@""])
-            _nextTopTracks = [_lastfmRequest getTopTracksWithArtistName:artistName];
+            topTracks = [_lastfmRequest getTopTracksWithArtistName:artistName];
         else
             NSLog(@"ERROR!! : This Method must get 'artistname' or 'mbid'.");
         
         //topトラックがとれたら、ランダムで選んで返す
-        if (_nextTopTracks) {
+        if (topTracks) {
+            _nextTopTracks = [NSMutableArray arrayWithArray:topTracks];
             return YES;
         }
         else {
@@ -405,7 +415,8 @@
 -(NSDictionary*) getTrackFrom_nextTopTracks {
     if (_nextTopTracks) {
         int rand = (int)arc4random_uniform( (int)[_nextTopTracks count] );
-        NSDictionary* nextTrack = _nextTopTracks[rand];
+        NSDictionary* nextTrack = [_nextTopTracks[rand] copy];
+        [_nextTopTracks removeObjectAtIndex:rand];
         
         //情報をシンプルにして返す。
         NSString *trackImage = @"nothing";
@@ -471,12 +482,14 @@
         }
     }
 
-    //２秒後にもし準備してなかったら準備する。
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            [self prepareNextTrack_withArtistChange:YES];
+    if (!_isFinishToGetNextTrack) {
+        //２秒後にもし準備してなかったら準備する。
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                [self prepareNextTrack_withArtistChange:YES];
+            });
         });
-    });
+    }
     
 }
 

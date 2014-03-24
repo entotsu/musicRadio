@@ -23,6 +23,9 @@
     BOOL _isNotFirstType;
     NSString *_searchedArtist;
     NSString *_searchedWord;
+    NSMutableArray *_topArtists;
+    NSMutableArray *_resultViews_copy;
+
 }
 @synthesize musicPlayerView;
 
@@ -34,9 +37,24 @@
     _lastfmRequest = [[MRLastfmRequest alloc] init];
     _application = [UIApplication sharedApplication];
     
-    dispatch_async(dispatch_get_main_queue(), ^{
+    
+    // ステータスバーの表示/非表示メソッド呼び出し
+    if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
+        // iOS 7以降
+        [self prefersStatusBarHidden];
+        [self performSelector:@selector(setNeedsStatusBarAppearanceUpdate)];
+    } else {
+        // iOS 7未満
+        [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    }
+
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [self displayTopArtists];
     });
+
 }
 
 - (void)didReceiveMemoryWarning
@@ -47,40 +65,69 @@
 
 
 
+// ステータスバーの非表示
+- (BOOL)prefersStatusBarHidden
+{
+    return YES;
+}
+
+
+
 #pragma mark Private Method (Display Top Chart)
 
 - (void) displayTopArtists {
     NSArray *topArtistsArray = [_lastfmRequest getTopArtists];
+    
     if (topArtistsArray) {
-        NSMutableArray *topArtists = [NSMutableArray arrayWithArray:topArtistsArray];
-        NSMutableArray *resultViews_copy = [NSMutableArray arrayWithArray:[_resultViews copy]];
-        int i;
-        int resultViewLen = (int)[_resultViews count];
+        _topArtists = [NSMutableArray arrayWithArray:topArtistsArray];
+        _resultViews_copy = [NSMutableArray arrayWithArray:[_resultViews copy]];
         
-        NSLog(@"going to display top artist");
-        
-        for (i=0; i<resultViewLen; i++) {
-
-
-            int artistRand = (int)arc4random_uniform( (int)[topArtists count] );
-            NSLog(@"artist rand %d",artistRand);
-            NSDictionary *artist = topArtists[artistRand];
-            [topArtists removeObjectAtIndex:artistRand];
-            
-            int viewRand = (int)arc4random_uniform( (int)[resultViews_copy count]);
-            NSLog(@"view rand %d",viewRand);
-            UIView *resultView = resultViews_copy[viewRand];
-            [resultViews_copy removeObjectAtIndex:viewRand];
-            
-            NSString *artistName = artist[@"name"];
-            NSString *imageURL = artist[@"image"][1][@"#text"];
-            
-            float randDelayTime = 0.03 * (int)arc4random_uniform(100);
-            
-            [self changeResultView:resultView withName:artistName andImageURL:imageURL delay:randDelayTime];
-        }
+        [self randomDisplayTopArtist];
     }
     
+}
+
+- (void) randomDisplayTopArtist {
+    static int count;
+    NSLog(@"count:%d",count);
+    
+    int artistRand = (int)arc4random_uniform( (int)[_topArtists count] );
+    NSLog(@"artist rand %d",artistRand);
+    NSDictionary *artist = _topArtists[artistRand];
+    [_topArtists removeObjectAtIndex:artistRand];
+    
+    int viewRand = (int)arc4random_uniform( (int)[_resultViews_copy count]);
+    NSLog(@"view rand %d",viewRand);
+    UIView *resultView = _resultViews_copy[viewRand];
+    [_resultViews_copy removeObjectAtIndex:viewRand];
+    
+    NSString *artistName = artist[@"name"];
+    NSString *imageURL = artist[@"image"][1][@"#text"];
+    
+    float randDelayTime = 0.03 * (int)arc4random_uniform(100);
+    
+    [self changeResultView:resultView withName:artistName andImageURL:imageURL delay:randDelayTime];
+    
+    count++;
+    if (count < (int)[_resultViews count]) {
+        //次のviewを更新する。
+//        [NSTimer scheduledTimerWithTimeInterval:0.25f target:[NSBlockOperation blockOperationWithBlock:^{
+//            [self displayTopArtists];
+//        }] selector:@selector(main) userInfo:nil repeats:NO];
+        
+        [NSTimer scheduledTimerWithTimeInterval:0.25f
+                                                  target:self
+                                                selector:@selector(randomDisplayTopArtist)
+                                                userInfo:nil
+                                                 repeats:NO];
+        
+        
+        //２秒後にもし準備してなかったら準備する。
+//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            //            [self displayTopArtists];
+//        });
+    }
+
 }
 
 
@@ -324,7 +371,7 @@
     [self setKernedText:@"artist" toUILabel:_titleLabel1];
     [resultView1 addSubview:_titleLabel1];
     
-    resultView1.alpha = 0.2;
+    resultView1.alpha = 0;
     
     return resultView1;
 }
@@ -346,7 +393,7 @@
     //次のviewを更新する。
     [NSTimer scheduledTimerWithTimeInterval:0.25f target:[NSBlockOperation blockOperationWithBlock:^{
         i++;
-        if (i < resultLength && i < 4) [self refreshArtistResultViewsWithArray:results index:i];
+        if (i < resultLength && i < [_resultViews count]) [self refreshArtistResultViewsWithArray:results index:i];
     }] selector:@selector(main) userInfo:nil repeats:NO];
 
 }

@@ -21,7 +21,7 @@
 @implementation MusicPlayerViewController{
     MRRadio *_appRadio;
     UIView *_youTubeBox;
-    XCDYouTubeVideoPlayerViewController * _nextTrackPlayer;
+    UIView * _nextYoutubeBox;
     UIButton *_nextButton;
     ShadowStyleLabel *_nowPlayingLabel;
     UIScrollView *_artistInfoScrollView;
@@ -33,6 +33,7 @@
     UIButton *_playButton;
 }
 @synthesize youtubeBox = _youTubeBox;
+@synthesize nextYoutubeBox = _nextYoutubeBox;
 @synthesize nextButton = _nextButton;
 @synthesize nowPlayingLabel = _nowPlayingLabel;
 @synthesize seedArtist = _seedArtist;
@@ -130,12 +131,26 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
 //    [self.view addSubview:backgroundImage];
     
     
+    
+    _nextYoutubeBox = [[UIView alloc] init];
+    //    _youTubeBox.frame = CGRectMake(0, statusBar_and_nav_H + nowLabel_H, maxW, player_H);
+    _nextYoutubeBox.frame = CGRectMake(0, 0, player_W_full, maxH); //dev -40
+    _nextYoutubeBox.center = CGPointMake(maxW/2, maxH/2);
+    _nextYoutubeBox.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:_nextYoutubeBox];
+    
     _youTubeBox = [[UIView alloc] init];
     //    _youTubeBox.frame = CGRectMake(0, statusBar_and_nav_H + nowLabel_H, maxW, player_H);
     _youTubeBox.frame = CGRectMake(0, 0, player_W_full, maxH); //dev -40
     _youTubeBox.center = CGPointMake(maxW/2, maxH/2);
     _youTubeBox.backgroundColor = [UIColor clearColor];
     [self.view addSubview:_youTubeBox];
+    
+    //dev
+//    _nextYoutubeBox.frame = CGRectMake(0, maxH/2, maxW, maxH/2); //dev -40
+//    _youTubeBox.frame = CGRectMake(0, 0, maxW, maxH/2); //dev -40
+
+    
     
     
     UIToolbar *navigationBar = [[UIToolbar alloc] init];

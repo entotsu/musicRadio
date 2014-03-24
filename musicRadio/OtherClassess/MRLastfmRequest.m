@@ -174,7 +174,7 @@ static NSString * const LASTFM_API_KEY = @"3119649624fae2e9531bc4639a08cba8";
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@",
                      LASTFM_API_URL, @"?api_key=", LASTFM_API_KEY,
                      @"&method=geo.gettopartists",
-                     @"&country=japan&format=json&limit=500"];
+                     @"&country=japan&format=json&limit=260"];
     
     NSDictionary *result = [_httpRequest getJsonWithURLString:url];
     
