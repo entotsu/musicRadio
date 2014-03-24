@@ -65,6 +65,7 @@
 
 - (void) dealloc {
     NSLog(@"dealloc MRRadio");
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -204,8 +205,8 @@
     });
     
     
-    [nextYoutubePlayer presentInView:delegeteViewController.nextYoutubeBox];
-    [nextYoutubePlayer.moviePlayer stop];
+//    [nextYoutubePlayer presentInView:delegeteViewController.nextYoutubeBox];
+//    [nextYoutubePlayer.moviePlayer stop];
 
 }
 

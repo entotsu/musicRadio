@@ -54,7 +54,6 @@
 //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         [self displayTopArtists];
     });
-
 }
 
 - (void)didReceiveMemoryWarning
@@ -107,7 +106,7 @@
     float randDelayTime = 0.03 * (int)arc4random_uniform(100);
     
     [self changeResultView:resultView withName:artistName andImageURL:imageURL delay:randDelayTime];
-    
+        
     count++;
     if (count < (int)[_resultViews count]) {
         //次のviewを更新する。
@@ -225,13 +224,21 @@
     UILabel *nameLabel = resultView.subviews[1];
     NSString *artistName = nameLabel.text;
     
+    //タップイベントを停止
+    resultView.userInteractionEnabled = NO;
+    
     if (![artistName isEqualToString:@""]) {
+        [self.musicPlayerView.appRadio.youtubePlayer.moviePlayer stop];
+        self.musicPlayerView.appRadio.youtubePlayer = nil;
         self.musicPlayerView.appRadio = nil;
         self.musicPlayerView = nil;
-        self.musicPlayerView = [[MusicPlayerViewController alloc] init];
-        [self.musicPlayerView setSeedArtist:artistName];
-        self.musicPlayerView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
-        [self presentViewController:self.musicPlayerView animated:YES completion:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            self.musicPlayerView = [[MusicPlayerViewController alloc] init];
+            [self.musicPlayerView setSeedArtist:artistName];
+            self.musicPlayerView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            [self presentViewController:self.musicPlayerView animated:YES completion:nil];
+            resultView.userInteractionEnabled = YES;
+        });
     }
 }
 
@@ -409,8 +416,10 @@
     if (! [nameLabel.text isEqualToString:artistName]) {
         resultView.alpha = 0;
         
-        [self setKernedText:artistName toUILabel:nameLabel];
-        imageView.image = [UIImage imageNamed:@"music2_400"];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setKernedText:artistName toUILabel:nameLabel];
+            imageView.image = [UIImage imageNamed:@"music2_400"];
+        });
         
         //画像URLからイメージを取得
         if ([imageURL isEqualToString:@""]) {
@@ -418,7 +427,9 @@
         }else {
             NSLog(@"image URL : %@",imageURL);
             NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageURL]];
-            imageView.image = [UIImage imageWithData:imgData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                imageView.image = [UIImage imageWithData:imgData];
+            });
         }
         
         //アニメーション

@@ -72,9 +72,9 @@
 - (int) test_random_play;//test
 - (void) setTestView :(id)view;//test
 
-@property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *youtubePlayer;
-@property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *nextYoutubePlayer;
-@property (nonatomic, unsafe_unretained) UIViewController <MRRadioDelegate> *delegeteViewController;
-@property (nonatomic, unsafe_unretained) UIViewController <MRRadioStartViewDelegate> *delegeteStartViewController;
+@property (nonatomic, weak) XCDYouTubeVideoPlayerViewController *youtubePlayer;
+@property (nonatomic, weak) XCDYouTubeVideoPlayerViewController *nextYoutubePlayer;
+@property (nonatomic, weak) UIViewController <MRRadioDelegate> *delegeteViewController;
+@property (nonatomic, weak) UIViewController <MRRadioStartViewDelegate> *delegeteStartViewController;
 
 @end
