@@ -16,7 +16,10 @@
 @property (nonatomic,strong) UIView* youtubeBox;
 @property (nonatomic,strong) UIView* nextYoutubeBox;
 @property (nonatomic,strong) UIButton* nextButton;
-@property (nonatomic, strong) UILabel* nowPlayingLabel;
+//@property (nonatomic, strong) UILabel* nowPlayingLabel;
+@property (nonatomic, strong) UILabel* artistNameLabel;
+@property (nonatomic, strong) UILabel* trackNameLabel;
+@property (nonatomic, strong) UIImageView* artworkView;
 @property (nonatomic, strong) NSString* seedArtist;
 @property (nonatomic, strong) MRRadio* appRadio;
 @property (nonatomic, strong) UIButton* pauseButton;

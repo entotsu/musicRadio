@@ -23,10 +23,13 @@
     BOOL _isFinishToGetNextTrack;
     BOOL _isPreparingNextTrack;
     BOOL _isStartPlaying;
-    NSString *_nowPlayingText;
+//    NSString *_nowPlayingText;
     
     NSString *_nextArtistName;
     NSString *_nextTrackName;
+    NSString *_nextArtworkUrl;
+    NSString *_nextArtistImageUrl;
+    NSData *_nextImageData;
     
     MRLyricFetcher *_lyricFetcher;
     NSString *_nextLyricString;
@@ -86,7 +89,7 @@
 // 初回の再生
 - (void) fastArtistRandomPlay: (NSString*)artistName {
     _didPlayFastTrack = NO;
-    _nowPlayingText = artistName;
+//    _nowPlayingText = artistName;
     _nextArtistName = artistName;
     
     //    NSString *randomVideoID = [_youTubeRequest getRandomVideoIDByKeyword:artistName];
@@ -112,7 +115,7 @@
 // 次の曲の準備
 -(void) prepareNextTrack_withArtistChange: (BOOL)isEnableArtistChange {
     NSLog(@"★★★★★★★★★★★★★★★★★ 次の曲を準備します ★★★★★★★★★★★★★★★★★");
-    if(!_isPreparingNextTrack && !_isFinishToGetNextTrack) {
+    if(_didPlayFastTrack && !_isPreparingNextTrack && !_isFinishToGetNextTrack) {
         _isPreparingNextTrack = YES;
         if (isEnableArtistChange) [self setRandomNextArtistAndGetTopTracks];
 
@@ -203,6 +206,13 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         //                _nextArtistBio = [self getArtistBioWithName:_nextArtistName];
     });
+    //ジャケット画像を取得しておく
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSLog(@"********set image URL : %@",_nextArtworkUrl);
+        if (![_nextArtworkUrl isEqualToString:@"nothing"]) {
+            _nextImageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_nextArtworkUrl]];
+        }
+    });
     
     
 //    [nextYoutubePlayer presentInView:delegeteViewController.nextYoutubeBox];
@@ -218,6 +228,7 @@
         //初回のアーティスト曲再生でエラーした場合は他の動画をチョイスしてみる。
         NSLog(@"first Artist Movie Error.");
         int randIndex = (int)arc4random_uniform( (int)[_artistvideos count] );
+        NSLog(@"randIndex:%d",randIndex);
         NSString *videoID = _artistvideos[randIndex][@"id"][@"videoId"];
         [self prepearYouTubePlayerWithVideoID:videoID];
         [_artistvideos removeObjectAtIndex:randIndex];
@@ -283,7 +294,8 @@
     //バリデーションが通れば次の動画を準備する。
     _nextArtistName = artistName;
     _nextTrackName = trackName;
-    _nowPlayingText = [NSString stringWithFormat:@"%@ - %@", artistName, trackName];
+    _nextArtworkUrl = songInfo[@"image"];
+//    _nowPlayingText = [NSString stringWithFormat:@"%@ - %@", artistName, trackName];
     
     return [self prepearYouTubePlayerWithVideoID:topVideoID];
 }
@@ -315,14 +327,28 @@
     youtubePlayer = nextYoutubePlayer;
     
     youtubePlayer.moviePlayer.controlStyle = MPMovieControlStyleNone;
-    [youtubePlayer presentInView:delegeteViewController.youtubeBox];
+    [youtubePlayer presentInView:delegeteViewController.youtubeBox];//何度かbackしてるとここで落ちる
     
     [youtubePlayer.moviePlayer play];
     nextYoutubePlayer = nil;
     
     //view側のnowPlayingTextとアーティスト名の更新
-    [delegeteViewController.nowPlayingLabel setText:_nowPlayingText];
+//    [delegeteViewController.nowPlayingLabel setText:_nowPlayingText];
+    [delegeteViewController.artistNameLabel setText:_nextArtistName];
+    [delegeteViewController.trackNameLabel setText:_nextTrackName];
     
+    NSLog(@"_nextImage: %@",_nextImageData);
+    if (_nextImageData) {
+        [delegeteViewController.artworkView setImage:[UIImage imageWithData:_nextImageData]];
+    }
+    else if(_didPlayFastTrack){
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_nextArtworkUrl]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [delegeteViewController.artworkView setImage:[UIImage imageWithData:imgData]];
+            });
+        });
+    }
     //これでbioの更新が行われる  //あとでリファクタリングする
     if(_didPlayFastTrack) [delegeteViewController displayBio:_nextArtistBio];
     
@@ -388,6 +414,7 @@
         NSDictionary *artist = _similarArtists[randIndex];
         NSString *mbid = artist[@"mbid"];
         NSString *artistName = artist[@"name"];
+        _nextArtistImageUrl = artist[@"image"][2][@"#text"];
         NSLog(@"+++++++++++++++++++ similar Artist 【%@】%@",artistName, mbid);
         
         NSArray *topTracks;
@@ -420,9 +447,9 @@
         [_nextTopTracks removeObjectAtIndex:rand];
         
         //情報をシンプルにして返す。
-        NSString *trackImage = @"nothing";
+        NSString *trackImage = _nextArtistImageUrl;//もしジャケ写がなかったらアー写になる。
         BOOL is_image_exist = [nextTrack.allKeys containsObject:@"image"];
-        if (is_image_exist) trackImage = nextTrack[@"image"][3];
+        if (is_image_exist) trackImage = nextTrack[@"image"][3][@"#text"];
         
         NSDictionary *trackInfo = @{@"name"   : nextTrack[@"name"],
                                     @"artist" : nextTrack[@"artist"][@"name"],
@@ -473,6 +500,8 @@
         
         //再生が開始されたらポーズボタンを有効化する
         delegeteViewController.pauseButton.enabled = YES;
+        
+        _nextImageData = nil;
         
         //一曲目の場合
         if(!_didPlayFastTrack){

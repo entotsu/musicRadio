@@ -229,6 +229,7 @@
     
     if (![artistName isEqualToString:@""]) {
         [self.musicPlayerView.appRadio.youtubePlayer.moviePlayer stop];
+        self.musicPlayerView.appRadio.youtubePlayer.delegete = nil;
         self.musicPlayerView.appRadio.youtubePlayer = nil;
         self.musicPlayerView.appRadio = nil;
         self.musicPlayerView = nil;

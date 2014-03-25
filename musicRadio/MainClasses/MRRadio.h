@@ -20,7 +20,10 @@
 @property (nonatomic, strong) UIView* nextYoutubeBox;
 @property (nonatomic, strong) UIButton* nextButton;
 @property (nonatomic, strong) UIButton* pauseButton;
-@property (nonatomic, strong) UILabel* nowPlayingLabel;
+//@property (nonatomic, strong) UILabel* nowPlayingLabel;
+@property (nonatomic, strong) UILabel* artistNameLabel;
+@property (nonatomic, strong) UILabel* trackNameLabel;
+@property (nonatomic, strong) UIImageView* artworkView;
 - (void) displayLyric:(NSString*)lyric;
 - (void) displayBio:(NSString*)bio;
 @end
@@ -72,8 +75,8 @@
 - (int) test_random_play;//test
 - (void) setTestView :(id)view;//test
 
-@property (nonatomic, weak) XCDYouTubeVideoPlayerViewController *youtubePlayer;
-@property (nonatomic, weak) XCDYouTubeVideoPlayerViewController *nextYoutubePlayer;
+@property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *youtubePlayer;
+@property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *nextYoutubePlayer;
 @property (nonatomic, weak) UIViewController <MRRadioDelegate> *delegeteViewController;
 @property (nonatomic, weak) UIViewController <MRRadioStartViewDelegate> *delegeteStartViewController;
 

@@ -23,7 +23,9 @@
     UIView *_youTubeBox;
     UIView * _nextYoutubeBox;
     UIButton *_nextButton;
-    ShadowStyleLabel *_nowPlayingLabel;
+//    ShadowStyleLabel *_nowPlayingLabel;
+    ShadowStyleLabel *_artistNameLabel;
+    ShadowStyleLabel *_trackNameLabel;
     UIScrollView *_artistInfoScrollView;
     UILabel *_bioLabel;
     UILabel *_lyricLabel;
@@ -31,11 +33,16 @@
     BOOL _isEnableNextButton;
     UIButton *_pauseButton;
     UIButton *_playButton;
+    
+    UIImageView *_artworkView;
 }
 @synthesize youtubeBox = _youTubeBox;
 @synthesize nextYoutubeBox = _nextYoutubeBox;
 @synthesize nextButton = _nextButton;
-@synthesize nowPlayingLabel = _nowPlayingLabel;
+//@synthesize nowPlayingLabel = _nowPlayingLabel;
+@synthesize artistNameLabel = _artistNameLabel;
+@synthesize trackNameLabel = _trackNameLabel;
+@synthesize artworkView = _artworkView;
 @synthesize seedArtist = _seedArtist;
 @synthesize appRadio = _appRadio;
 @synthesize pauseButton = _pauseButton;
@@ -58,7 +65,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     NSLog(@"view did load");
     
     //debug
-    if (!_seedArtist) _seedArtist = @"bump of chicken";
+    if (!_seedArtist) _seedArtist = @"ellegarden";
 
     
     [self layoutSubView];
@@ -120,10 +127,11 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     CGFloat button_W = 40;
     CGFloat button_H = button_W;
     CGFloat button_Margin = button_W/2;
-    CGFloat nowLabel_H = 40;
+    CGFloat nowLabel_H = 30;
     CGFloat infoView_H = maxH - statusBar_and_nav_H - nowLabel_H - player_H - button_H - button_Margin*2;
     CGFloat bioLabel_Margin = 20;
     CGFloat blurRadius = 10;
+    CGFloat artworkSize = 50;
     
 //    UIImageView *backgroundImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"CRSTL_BG"]];
 //    backgroundImage.frame = CGRectMake(0, 0, maxW, maxH);
@@ -176,18 +184,57 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     [backButton addTarget:self action:@selector(onTapBackButton) forControlEvents:UIControlEventTouchUpInside];
     [navigationBar addSubview:backButton];
     
-    _nowPlayingLabel = [[ShadowStyleLabel alloc] init];
-    _nowPlayingLabel.frame = CGRectMake(maxW*0.25, maxH - maxH/4 -nowLabel_H/2, maxW*0.75, nowLabel_H);
-    _nowPlayingLabel.backgroundColor = [UIColor clearColor];
-    [_nowPlayingLabel setTextColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
-    [_nowPlayingLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0f]];
-    [_nowPlayingLabel setTextAlignment:NSTextAlignmentCenter];
-    _nowPlayingLabel.adjustsFontSizeToFitWidth = YES;
-    _nowPlayingLabel.adjustsLetterSpacingToFitWidth = YES;
-    _nowPlayingLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:1];
-    _nowPlayingLabel.shadowOffset = CGSizeMake(0, 1);
-    [self.view addSubview:_nowPlayingLabel];
     
+    _artworkView = [[UIImageView alloc] init];
+    _artworkView.frame = CGRectMake(0, 0, artworkSize, artworkSize);
+    _artworkView.center = CGPointMake(maxH/4 - (button_H+button_Margin*2), maxH - maxH/4);
+    _artworkView.image = [UIImage imageNamed:@"music2_400"];
+    [self.view addSubview:_artworkView];
+    
+    
+    _artistNameLabel = [[ShadowStyleLabel alloc] init];
+    _artistNameLabel.frame = CGRectMake(_artworkView.frame.origin.x+artworkSize+20, _artworkView.frame.origin.y, maxW*0.75, nowLabel_H);
+    _artistNameLabel.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0];
+    [_artistNameLabel setTextColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
+    [_artistNameLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18.0f]];
+    [_artistNameLabel setTextAlignment:NSTextAlignmentLeft];
+    _artistNameLabel.adjustsFontSizeToFitWidth = YES;
+    _artistNameLabel.adjustsLetterSpacingToFitWidth = YES;
+    _artistNameLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:1];
+    _artistNameLabel.shadowOffset = CGSizeMake(0, 1);
+    [self setKernedText:@"artistname" toUILabel:_artistNameLabel];
+    [self.view addSubview:_artistNameLabel];
+    
+    
+    
+    _trackNameLabel = [[ShadowStyleLabel alloc] init];
+    _trackNameLabel.frame = CGRectMake(_artworkView.frame.origin.x+artworkSize+20, _artworkView.center.y, maxW*0.75, nowLabel_H);
+    _trackNameLabel.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0];
+    [_trackNameLabel setTextColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
+    [_trackNameLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0f]];
+    [_trackNameLabel setTextAlignment:NSTextAlignmentLeft];
+    _trackNameLabel.adjustsFontSizeToFitWidth = YES;
+    _trackNameLabel.adjustsLetterSpacingToFitWidth = YES;
+    _trackNameLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:1];
+    _trackNameLabel.shadowOffset = CGSizeMake(0, 1);
+    [self setKernedText:@"trackname" toUILabel:_trackNameLabel];
+    [self.view addSubview:_trackNameLabel];
+    
+
+//    
+//    _nowPlayingLabel = [[ShadowStyleLabel alloc] init];
+//    _nowPlayingLabel.frame = CGRectMake(_artworkView.frame.origin.x+artworkSize+20, _artworkView.center.y -nowLabel_H/2, maxW*0.75, nowLabel_H);
+//    _nowPlayingLabel.backgroundColor = [UIColor clearColor];
+//    [_nowPlayingLabel setTextColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
+//    [_nowPlayingLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:12.0f]];
+//    [_nowPlayingLabel setTextAlignment:NSTextAlignmentLeft];
+//    _nowPlayingLabel.adjustsFontSizeToFitWidth = YES;
+//    _nowPlayingLabel.adjustsLetterSpacingToFitWidth = YES;
+//    _nowPlayingLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:1];
+//    _nowPlayingLabel.shadowOffset = CGSizeMake(0, 1);
+//    _nowPlayingLabel.alpha = 0.1;
+//    [self.view addSubview:_nowPlayingLabel];
+
     
     
     FXBlurView *scrollBlurBG = [[FXBlurView alloc] init];

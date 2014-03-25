@@ -165,9 +165,11 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 	                            XCDMoviePlayerPlaybackDidFinishErrorUserInfoKey: error };
 	[[NSNotificationCenter defaultCenter] postNotificationName:MPMoviePlayerPlaybackDidFinishNotification object:self.moviePlayer userInfo:userInfo];
     
-    //エラー用delegeteメソッドを呼ぶ
-    NSLog(@"%@",self.delegete);
-    [self.delegete YouTubeErrorOccred];
+    if (self.delegete) {
+        //エラー用delegeteメソッドを呼ぶ
+        NSLog(@"%@",self.delegete);
+        [self.delegete YouTubeErrorOccred];
+    }
     
     
 	if (self.isEmbedded)
