@@ -12,7 +12,6 @@
 #import "FXBlurView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "ShadowStyleLabel.h"
-#import "JCRBlurView.h"
 
 @interface MusicPlayerViewController ()
 @end
@@ -85,40 +84,6 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
                 [_appRadio generatePlaylistByArtistName:_seedArtist];
             });
         });
-        
-        
-        
-//        self.view.backgroundColor = [UIColor clearColor];
-//        UIToolbar* bgToolbar = [[UIToolbar alloc] initWithFrame:CGRectMake(100, 100, 100, 100)];
-//        bgToolbar.barStyle = UIBarStyleDefault;
-//        [self.view insertSubview:bgToolbar atIndex:0];
-        
-//        UIToolbar *bgToolbar = [[UIToolbar alloc] initWithFrame:myView.frame];
-//        bgToolbar.barStyle = UIBarStyleDefault;
-//        bgToolbar.barTintColor = [UIColor whiteColor];
-//        [myView.superview insertSubview:bgToolbar belowSubview:myView];
-        
-        
-        UIView *myView = [[UIView alloc] initWithFrame:CGRectMake(50, 380, 100, 100)];
-//        myView.backgroundColor = [UIColor clearColor];
-        [myView setClipsToBounds:YES];
-        [self.view addSubview:myView];
-        UIToolbar *toolbar = [[UIToolbar alloc] initWithFrame:myView.frame];
-        [toolbar setTranslatesAutoresizingMaskIntoConstraints:NO];
-        [myView addSubview:toolbar];
-        [myView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[toolbar]|"
-                                                                     options:0
-                                                                     metrics:0
-                                                                       views:NSDictionaryOfVariableBindings(toolbar)]];
-        [myView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[toolbar]|"
-                                                                     options:0
-                                                                     metrics:0
-                                                                       views:NSDictionaryOfVariableBindings(toolbar)]];
-        
-        
-        JCRBlurView *blurView = [JCRBlurView new];
-        [blurView setFrame:CGRectMake(160,380,100,100)];
-        [self.view addSubview:blurView];
     }
     
     // ステータスバーの表示/非表示メソッド呼び出し
@@ -198,8 +163,8 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     
     UIToolbar *navigationBar = [[UIToolbar alloc] init];
     navigationBar.frame = CGRectMake(0, 0, maxW, statusBar_and_nav_H);
-    navigationBar.barStyle = UIBarStyleBlackTranslucent;
-    navigationBar.barTintColor = [[UIColor clearColor] colorWithAlphaComponent:0.01];
+    navigationBar.barStyle = UIBarStyleBlack;
+//    navigationBar.barTintColor = [[UIColor clearColor] colorWithAlphaComponent:0.01];
     [self.view addSubview:navigationBar];
     UILabel *navigationBarLabel = [[UILabel alloc] init];
     navigationBarLabel.frame = CGRectMake(0, 0, maxW-100, statusBar_and_nav_H);
@@ -224,15 +189,12 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     _artworkView.frame = CGRectMake(0, 0, artworkSize, artworkSize);
     _artworkView.center = CGPointMake(maxH/4 - (button_H+button_Margin*2), maxH - maxH/4);
     _artworkView.image = [UIImage imageNamed:@"music2_400"];
-//    _artworkView.alpha = 0.8;
-//    _artworkView.clipsToBounds = YES;
-//    _artworkView.layer.cornerRadius = artworkSize/20;
     [self.view addSubview:_artworkView];
     
     
     _artistNameLabel = [[ShadowStyleLabel alloc] init];
-    _artistNameLabel.frame = CGRectMake(_artworkView.frame.origin.x+artworkSize+15, _artworkView.frame.origin.y-3, maxW*0.75, nowLabel_H);
-//    _artistNameLabel.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0];
+    _artistNameLabel.frame = CGRectMake(_artworkView.frame.origin.x+artworkSize+20, _artworkView.frame.origin.y, maxW*0.75, nowLabel_H);
+    _artistNameLabel.backgroundColor = [[UIColor redColor] colorWithAlphaComponent:0];
     [_artistNameLabel setTextColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
     [_artistNameLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:18.0f]];
     [_artistNameLabel setTextAlignment:NSTextAlignmentLeft];
@@ -240,14 +202,14 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     _artistNameLabel.adjustsLetterSpacingToFitWidth = YES;
     _artistNameLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:1];
     _artistNameLabel.shadowOffset = CGSizeMake(0, 1);
-//    [self setKernedText:@"artistname" toUILabel:_artistNameLabel];
+    [self setKernedText:@"artistname" toUILabel:_artistNameLabel];
     [self.view addSubview:_artistNameLabel];
     
     
     
     _trackNameLabel = [[ShadowStyleLabel alloc] init];
-    _trackNameLabel.frame = CGRectMake(_artworkView.frame.origin.x+artworkSize+15, _artworkView.center.y-3, maxW*0.75, nowLabel_H);
-//    _trackNameLabel.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0];
+    _trackNameLabel.frame = CGRectMake(_artworkView.frame.origin.x+artworkSize+20, _artworkView.center.y, maxW*0.75, nowLabel_H);
+    _trackNameLabel.backgroundColor = [[UIColor blueColor] colorWithAlphaComponent:0];
     [_trackNameLabel setTextColor:[[UIColor whiteColor] colorWithAlphaComponent:0.5]];
     [_trackNameLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Bold" size:14.0f]];
     [_trackNameLabel setTextAlignment:NSTextAlignmentLeft];
@@ -255,7 +217,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     _trackNameLabel.adjustsLetterSpacingToFitWidth = YES;
     _trackNameLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:1];
     _trackNameLabel.shadowOffset = CGSizeMake(0, 1);
-//    [self setKernedText:@"trackname" toUILabel:_trackNameLabel];
+    [self setKernedText:@"trackname" toUILabel:_trackNameLabel];
     [self.view addSubview:_trackNameLabel];
     
 
@@ -322,11 +284,8 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
 //    buttonSheetBlurView.blurRadius = 20;//blurRadius;
 //    buttonSheetBlurView.tintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.5];
 //    buttonSheetBlurView.underlyingView = _youTubeBox;
-    buttonSheetBlurView.barStyle = UIBarStyleBlackTranslucent;
-    buttonSheetBlurView.barTintColor = [[UIColor whiteColor] colorWithAlphaComponent:0.01];
-//    [buttonSheetBlurView setBackgroundImage:[UIImage new] forToolbarPosition:UIBarPositionAny barMetrics:UIBarMetricsDefault];
-    buttonSheetBlurView.translucent = YES;
-    buttonSheetBlurView.backgroundColor = [UIColor clearColor];
+    buttonSheetBlurView.barStyle = UIBarStyleBlack;
+//    buttonSheetBlurView.barTintColor = [[UIColor clearColor] colorWithAlphaComponent:0.1];
     [self.view addSubview:buttonSheetBlurView];
 //    [_youTubeBox addSubview:buttonSheetBlurView];
 //    [_youTubeBox insertSubview:buttonSheetBlurView atIndex:9999];
