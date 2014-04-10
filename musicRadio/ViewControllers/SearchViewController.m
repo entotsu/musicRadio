@@ -87,7 +87,7 @@
 }
 
 - (void) randomDisplayTopArtist {
-    static int count;
+    static int count = 0;
     NSLog(@"count:%d",count);
     
     int artistRand = (int)arc4random_uniform( (int)[_topArtists count] );
@@ -103,7 +103,9 @@
     NSString *artistName = artist[@"name"];
     NSString *imageURL = artist[@"image"][1][@"#text"];
     
-    float randDelayTime = 0.03 * (int)arc4random_uniform(100);
+    float randDelayTime;
+    if (count == 0) randDelayTime = 0;
+    else randDelayTime = 0.03 * (int)arc4random_uniform(100);
     
     [self changeResultView:resultView withName:artistName andImageURL:imageURL delay:randDelayTime];
         
@@ -223,6 +225,8 @@
     UIView *resultView = (UIView*)sender.view;
     UILabel *nameLabel = resultView.subviews[1];
     NSString *artistName = nameLabel.text;
+    UIImageView *artistImageView = resultView.subviews[0];
+    UIImage *artistImage = artistImageView.image;
     
     //タップイベントを停止
     resultView.userInteractionEnabled = NO;
@@ -236,9 +240,15 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
             self.musicPlayerView = [[MusicPlayerViewController alloc] init];
             [self.musicPlayerView setSeedArtist:artistName];
+            NSLog(@"artistImage : %@",artistImage);
             self.musicPlayerView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
             [self presentViewController:self.musicPlayerView animated:YES completion:nil];
             resultView.userInteractionEnabled = YES;
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                [self.musicPlayerView.artworkView setImage:artistImage];
+            });
+
         });
     }
 }

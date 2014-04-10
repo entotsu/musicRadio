@@ -282,7 +282,7 @@
      || [videoTitle rangeOfString:artistName options:NSCaseInsensitiveSearch].location == NSNotFound)
         return [self YouTubeErrorOccred];
     //②カラオケ　歌ってみた (弾いてみた) が入っていない
-    NSArray *NG_words = @[@"歌ってみ",@"うたってみ",@"カラオケ",@"カバー",@"cover",@"コピー",@"copy",@"ピッチ",@"弾いてみ"];
+    NSArray *NG_words = @[@"歌ってみ",@"うたってみ",@"カラオケ",@"カバー",@"cover",@"コピー",@"copy",@"ピッチ",@"弾いてみ",@"ｺﾋﾟｰ"];
     for (NSString* NG_word in NG_words) {
         if ([videoTitle rangeOfString:NG_word options:NSCaseInsensitiveSearch].location != NSNotFound) {
             return [self YouTubeErrorOccred];
@@ -337,12 +337,12 @@
     [delegeteViewController.artistNameLabel setText:_nextArtistName];
     [delegeteViewController.trackNameLabel setText:_nextTrackName];
     
-    NSLog(@"_nextImage: %@",_nextImageData);
     if (_nextImageData) {
         [delegeteViewController.artworkView setImage:[UIImage imageWithData:_nextImageData]];
     }
     else if(_didPlayFastTrack){
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            [delegeteViewController.artworkView setImage:[UIImage imageNamed:@"music2_400"]];
             NSData *imgData = [NSData dataWithContentsOfURL:[NSURL URLWithString:_nextArtworkUrl]];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [delegeteViewController.artworkView setImage:[UIImage imageWithData:imgData]];
