@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import <AVFoundation/AVFoundation.h>
 #import "SearchViewController.h"
-//#import "MusicPlayerViewController.h" //dev
+#import "MusicPlayerViewController.h" //dev
 
 @implementation AppDelegate
 
@@ -21,7 +21,7 @@
     // 起動時に最初のViewControllerを表示する
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-//    /*
+    /*
     SearchViewController *firstSearchView = [[SearchViewController alloc] init];
     firstSearchView.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil selectedImage:nil];
     
@@ -30,11 +30,11 @@
     [firstTabController setViewControllers:viewControllerArray];
     firstTabController.selectedIndex = 0;
     self.window.rootViewController = firstTabController;
-//     */
+     */
     
     // dev
-//    MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
-//    self.window.rootViewController = musicView;
+    MusicPlayerViewController *musicView = [[MusicPlayerViewController alloc] init];
+    self.window.rootViewController = musicView;
     // dev end
     
     
