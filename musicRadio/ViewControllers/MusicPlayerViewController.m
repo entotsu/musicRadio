@@ -180,8 +180,10 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     UIButton *backButton = [[UIButton alloc] init];
     backButton.frame = CGRectMake(0, 0, 40, 40);
     backButton.center = CGPointMake(statusBar_and_nav_H/2, statusBar_and_nav_H/2);
-    backButton.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
+//    backButton.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
+    [backButton setImage:[UIImage imageNamed:@"searchIcon_white_40.png"] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(onTapBackButton) forControlEvents:UIControlEventTouchUpInside];
+    backButton.alpha = 0.7;
     [navigationBar addSubview:backButton];
     
     

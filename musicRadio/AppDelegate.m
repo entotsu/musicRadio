@@ -23,13 +23,17 @@
     
 //    /*
     SearchViewController *firstSearchView = [[SearchViewController alloc] init];
-    firstSearchView.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil selectedImage:nil];
+    self.window.rootViewController = firstSearchView;
     
+    /* tab Bar
+    firstSearchView.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil selectedImage:nil];
     UITabBarController *firstTabController = [[UITabBarController alloc] init];
     NSArray *viewControllerArray = [NSArray arrayWithObjects:firstSearchView, nil];
     [firstTabController setViewControllers:viewControllerArray];
     firstTabController.selectedIndex = 0;
     self.window.rootViewController = firstTabController;
+    */
+
 //     */
     
     // dev

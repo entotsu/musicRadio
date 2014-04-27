@@ -25,6 +25,9 @@
     NSString *_searchedWord;
     NSMutableArray *_topArtists;
     NSMutableArray *_resultViews_copy;
+    
+    UIButton *_backButton;
+    BOOL _isPlayingMusic;
 
 }
 @synthesize musicPlayerView;
@@ -55,6 +58,15 @@
         [self displayTopArtists];
     });
 }
+
+
+- (void) viewWillAppear:(BOOL)animated {
+    NSLog(@"search view controller view will appear");
+    if (_isPlayingMusic) {
+        _backButton.hidden = NO;
+    }
+}
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -242,6 +254,7 @@
             [self.musicPlayerView setSeedArtist:artistName];
             NSLog(@"artistImage : %@",artistImage);
             self.musicPlayerView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+            _isPlayingMusic = YES;
             [self presentViewController:self.musicPlayerView animated:YES completion:nil];
             resultView.userInteractionEnabled = YES;
             
@@ -294,14 +307,15 @@
     [navigationBarLabel setTextAlignment:NSTextAlignmentCenter];
     navigationBarLabel.adjustsFontSizeToFitWidth = YES;
     navigationBarLabel.adjustsLetterSpacingToFitWidth = YES;
-    [self setKernedText:@"artist walk" toUILabel:navigationBarLabel];
+    [self setKernedText:@"artist mix" toUILabel:navigationBarLabel];
     [navigationBar addSubview:navigationBarLabel];
-    UIButton *backButton = [[UIButton alloc] init];
-    backButton.frame = CGRectMake(0, 0, 40, 40);
-    backButton.center = CGPointMake(maxW - statusBar_and_nav_H/2, statusBar_and_nav_H/2);
-    backButton.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.2];
-    [backButton addTarget:self action:@selector(onTapBackButton) forControlEvents:UIControlEventTouchUpInside];
-    [navigationBar addSubview:backButton];
+    _backButton = [[UIButton alloc] init];
+    _backButton.frame = CGRectMake(0, 0, 40, 40);
+    _backButton.center = CGPointMake(maxW - statusBar_and_nav_H/2, statusBar_and_nav_H/2);
+    [_backButton setImage:[UIImage imageNamed:@"music_icon_40.png"] forState:UIControlStateNormal];
+    [_backButton addTarget:self action:@selector(onTapBackButton) forControlEvents:UIControlEventTouchUpInside];
+    _backButton.hidden = YES;
+    [navigationBar addSubview:_backButton];
     
     
     _searchBar = [[UITextField alloc] init];
