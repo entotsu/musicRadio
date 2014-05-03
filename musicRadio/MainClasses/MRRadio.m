@@ -13,6 +13,7 @@
 #import "MRExfmRequest.h"
 #import "MRYoutubeRequest.h"
 #import "MRLyricFetcher.h"
+#import "Faved.h"
 
 @implementation MRRadio {
     MRLastfmRequest *_lastfmRequest;
@@ -25,17 +26,19 @@
     BOOL _isStartPlaying;
 //    NSString *_nowPlayingText;
     
+    NSDictionary *_nowPlayingInfo;
+    NSDictionary *_nextPlayingInfo;
+    
     NSString *_nextArtistName;
     NSString *_nextTrackName;
     NSString *_nextArtworkUrl;
     NSString *_nextArtistImageUrl;
     NSData *_nextImageData;
+    NSString *_nextArtistBio;
+    NSString *_nextLyricString;
     
     MRLyricFetcher *_lyricFetcher;
-    NSString *_nextLyricString;
     NSString *_lyricString;
-    
-    NSString *_nextArtistBio;
     
     NSArray *_similarArtists;
     
@@ -62,6 +65,9 @@
         
         [self enableBackGroundPlayback];
         [self enableAutoPlay];
+        
+        AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+        self.managedObjectContext = appDelegate.managedObjectContext;
     }
     return self;
 }
@@ -133,6 +139,36 @@
     }
 }
 
+
+
+#pragma mark CoreData add Faved
+- (void) addFaved {
+    NSLog(@"addFaved");
+    
+    //    NSManagedObjectContext *context = self.managedObjectContext;
+    //    NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Faved" inManagedObjectContext:context];
+    //    [newManagedObject setValue:@"ELLEGARDEN" forKey:@"artist"];
+    Faved *newFav = [NSEntityDescription insertNewObjectForEntityForName:@"Faved" inManagedObjectContext:self.managedObjectContext];
+
+    
+    newFav.artist =  _nowPlayingInfo[@"artist"];
+    newFav.title = _nowPlayingInfo[@"name"];
+    newFav.videoId = self.youtubePlayer.videoIdentifier;
+    newFav.duration = [NSNumber numberWithDouble:self.youtubePlayer.moviePlayer.duration];
+    newFav.artworkUrl = _nowPlayingInfo[@"image"];
+    if (delegeteViewController.artworkView.image) {
+        newFav.artwork = [[NSData alloc] initWithData:UIImagePNGRepresentation( delegeteViewController.artworkView.image )];
+    }
+    
+    NSError *error = nil;
+    if (![self.managedObjectContext save:&error]) {
+        NSLog(@"保存する時にエラー発生!  エラー内容: %@,  error userinfo: %@", error, [error userInfo]);
+        abort();
+    }
+    else {
+        NSLog(@"データを追加しました。 %@  \n\n artwork:%@", newFav, newFav.artwork);
+    }
+}
 
 
 
@@ -257,6 +293,8 @@
 
     _isPreparingNextTrack = NO;
     
+    _nextPlayingInfo = songInfo;
+    
     NSString *artistName = songInfo[@"artist"];
     NSString *trackName = songInfo[@"name"];
 
@@ -349,6 +387,10 @@
             });
         });
     }
+    
+    _nowPlayingInfo = [_nextPlayingInfo copy];
+    
+    
     //これでbioの更新が行われる  //あとでリファクタリングする
     if(_didPlayFastTrack) [delegeteViewController displayBio:_nextArtistBio];
     

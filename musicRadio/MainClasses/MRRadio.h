@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "XCDYouTubeVideoPlayerViewController.h"
 
+#import <CoreData/CoreData.h>
 
-
+#import "AppDelegate.h"
 
 @class MRRadio;
 
@@ -75,9 +76,16 @@
 - (int) test_random_play;//test
 - (void) setTestView :(id)view;//test
 
+- (void) addFaved;
+
 @property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *youtubePlayer;
 @property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *nextYoutubePlayer;
 @property (nonatomic, weak) UIViewController <MRRadioDelegate> *delegeteViewController;
 @property (nonatomic, weak) UIViewController <MRRadioStartViewDelegate> *delegeteStartViewController;
+
+
+//CoreData
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+
 
 @end

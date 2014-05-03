@@ -302,6 +302,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     UIButton *_heartButton = [[UIButton alloc] init];
     _heartButton.frame = CGRectMake(button_Margin, button_Margin, button_W, button_H);
     [_heartButton setBackgroundImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
+    [_heartButton addTarget:self action:@selector(onTapFavButton) forControlEvents:UIControlEventTouchUpInside];
     [buttonSheetBlurView addSubview:_heartButton];
     
     _pauseButton = [[UIButton alloc] init];
@@ -389,6 +390,10 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     _nextButton.enabled = NO;
     _pauseButton.enabled = NO;
     [_appRadio startPlaybackNextVideo];
+}
+
+- (void) onTapFavButton {
+    [_appRadio addFaved];
 }
 
 - (void) onTapLyricLabel {

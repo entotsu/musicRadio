@@ -24,5 +24,4 @@
 @property (nonatomic, strong) MRRadio* appRadio;
 @property (nonatomic, strong) UIButton* pauseButton;
 
-
 @end
