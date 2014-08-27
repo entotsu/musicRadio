@@ -27,6 +27,7 @@
 @property (nonatomic, strong) UIImageView* artworkView;
 - (void) displayLyric:(NSString*)lyric;
 - (void) displayBio:(NSString*)bio;
+- (void) onPlayTrack;
 @end
 
 
@@ -76,7 +77,8 @@
 - (int) test_random_play;//test
 - (void) setTestView :(id)view;//test
 
-- (void) addFaved;
+- (BOOL) checkAlreadyExsistingFavedWithVideoId:(NSString *)videoId;
+- (BOOL) addFaved;
 
 @property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *youtubePlayer;
 @property (nonatomic, strong) XCDYouTubeVideoPlayerViewController *nextYoutubePlayer;

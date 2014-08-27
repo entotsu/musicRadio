@@ -15,4 +15,6 @@
 @property (strong, nonatomic) UILabel *artistLabel;
 @property (strong, nonatomic) UIImageView *artworkView;
 
+@property (strong, nonatomic) NSString *videoId;
+
 @end

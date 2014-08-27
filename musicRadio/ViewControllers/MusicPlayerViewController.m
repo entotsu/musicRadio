@@ -33,7 +33,7 @@
     BOOL _isEnableNextButton;
     UIButton *_pauseButton;
     UIButton *_playButton;
-    
+    UIButton *_favButton;
     UIImageView *_artworkView;
 }
 @synthesize youtubeBox = _youTubeBox;
@@ -46,6 +46,10 @@
 @synthesize seedArtist = _seedArtist;
 @synthesize appRadio = _appRadio;
 @synthesize pauseButton = _pauseButton;
+
+@synthesize playing_favVideoId = _playing_favVideoId;
+
+@synthesize favedPlayer = _favedPlayer;
 
 
 static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでした。";
@@ -65,26 +69,37 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     NSLog(@"view did load");
     
     //debug
-    if (!_seedArtist) _seedArtist = @"ellegarden";
+//    if (!_seedArtist) _seedArtist = @"ellegarden";
 
     
     [self layoutSubView];
     
-    if (_appRadio) {     //StartViewありのばあいは　ここが動く
-        _appRadio.delegeteViewController = self;
-        [self onTapNextButton];
-    }
-    else {    //startViewなし　いまはここが動く
-        dispatch_async(dispatch_get_main_queue(), ^{
-            _appRadio = [[MRRadio alloc] init];
+    if (!_playing_favVideoId) {
+        if (_appRadio) {     //StartViewありのばあいは　ここが動く
             _appRadio.delegeteViewController = self;
-            [_appRadio fastArtistRandomPlay:_seedArtist];
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                sleep(2);
-                [_appRadio generatePlaylistByArtistName:_seedArtist];
+            [self onTapNextButton];
+        }
+        else {    //startViewなし　いまはここが動く
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _appRadio = [[MRRadio alloc] init];
+                _appRadio.delegeteViewController = self;
+                [_appRadio fastArtistRandomPlay:_seedArtist];
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+                    sleep(2);
+                    [_appRadio generatePlaylistByArtistName:_seedArtist];
+                });
             });
-        });
+        }
     }
+    else {
+        NSLog(@"fav play");
+        _favedPlayer = [[MRFavedPlayer alloc] initWithVideoIdentifier:_playing_favVideoId];
+        _favedPlayer.delegeteViewController = self;
+        [_favedPlayer playNext];
+    }
+    
+    
+    
     
     // ステータスバーの表示/非表示メソッド呼び出し
     if ([self respondsToSelector:@selector(setNeedsStatusBarAppearanceUpdate)]) {
@@ -95,7 +110,6 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
         // iOS 7未満
         [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     }
-    
     
     //ボタン表示してすぐに無効化すると表示されないのでここで無効化しておく。
     _pauseButton.enabled = NO;
@@ -204,7 +218,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     _artistNameLabel.adjustsLetterSpacingToFitWidth = YES;
     _artistNameLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:1];
     _artistNameLabel.shadowOffset = CGSizeMake(0, 1);
-    [self setKernedText:@"artistname" toUILabel:_artistNameLabel];
+    [self setKernedText:@"" toUILabel:_artistNameLabel];
     [self.view addSubview:_artistNameLabel];
     
     
@@ -219,7 +233,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     _trackNameLabel.adjustsLetterSpacingToFitWidth = YES;
     _trackNameLabel.shadowColor = [[UIColor blackColor] colorWithAlphaComponent:1];
     _trackNameLabel.shadowOffset = CGSizeMake(0, 1);
-    [self setKernedText:@"trackname" toUILabel:_trackNameLabel];
+    [self setKernedText:@"" toUILabel:_trackNameLabel];
     [self.view addSubview:_trackNameLabel];
     
 
@@ -299,11 +313,11 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     [_nextButton addTarget:self action:@selector(onTapNextButton) forControlEvents:UIControlEventTouchUpInside];
     [buttonSheetBlurView addSubview:_nextButton];
     
-    UIButton *_heartButton = [[UIButton alloc] init];
-    _heartButton.frame = CGRectMake(button_Margin, button_Margin, button_W, button_H);
-    [_heartButton setBackgroundImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
-    [_heartButton addTarget:self action:@selector(onTapFavButton) forControlEvents:UIControlEventTouchUpInside];
-    [buttonSheetBlurView addSubview:_heartButton];
+    _favButton = [[UIButton alloc] init];
+    _favButton.frame = CGRectMake(button_Margin, button_Margin, button_W, button_H);
+    [_favButton setBackgroundImage:[UIImage imageNamed:@"heart"] forState:UIControlStateNormal];
+    [_favButton addTarget:self action:@selector(onTapFavButton) forControlEvents:UIControlEventTouchUpInside];
+    [buttonSheetBlurView addSubview:_favButton];
     
     _pauseButton = [[UIButton alloc] init];
 //    _pauseButton.enabled = NO;//ここで無効化するとボタンがでない
@@ -343,7 +357,6 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
     NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] initWithString:text];
     [attributedText addAttribute:NSKernAttributeName value:[NSNumber numberWithFloat:1.2f] range:NSMakeRange(0, attributedText.length)];
     [label setAttributedText:attributedText];
-    
     [self adjustSizeOfLabel:label withText:text];
 
 }
@@ -394,6 +407,7 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
 
 - (void) onTapFavButton {
     [_appRadio addFaved];
+    _favButton.enabled = NO;
 }
 
 - (void) onTapLyricLabel {
@@ -459,6 +473,10 @@ static NSString * const LYRIC_NOTFOUND = @"歌詞が見つかりませんでし�
 }
 
 
+-(void) onPlayTrack {
+    NSLog(@"on Play Track");
+    _favButton.enabled = !([_appRadio checkAlreadyExsistingFavedWithVideoId:_appRadio.youtubePlayer.videoIdentifier]);
+}
 
 
 

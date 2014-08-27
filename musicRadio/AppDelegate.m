@@ -22,6 +22,7 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
+@synthesize tabViewController = _tabViewController;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -40,11 +41,11 @@
     favedTableViewController.managedObjectContext = self.managedObjectContext;
     favedTableViewController.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"おきにいり" image:nil selectedImage:nil];
     
-    UITabBarController *firstTabController = [[UITabBarController alloc] init];
+    _tabViewController = [[UITabBarController alloc] init];
     NSArray *viewControllerArray = [NSArray arrayWithObjects:firstSearchView, favedTableViewController, nil];
-    [firstTabController setViewControllers:viewControllerArray];
-    firstTabController.selectedIndex = 0;
-    self.window.rootViewController = firstTabController;
+    [_tabViewController setViewControllers:viewControllerArray];
+    _tabViewController.selectedIndex = 0;
+    self.window.rootViewController = _tabViewController;
 
 //     */
     

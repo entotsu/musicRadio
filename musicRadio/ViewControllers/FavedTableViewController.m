@@ -8,6 +8,9 @@
 
 #import "FavedTableViewController.h"
 #import "FavedCell.h"
+#import "AppDelegate.h"
+#import "SearchViewController.h"
+#import "MusicPlayerViewController.h"
 
 @interface FavedTableViewController ()
 - (void)configureCell:(UITableViewCell *)cell atIndexPath:(NSIndexPath *)indexPath;//ローカルメソッドの明示的な宣言？
@@ -97,7 +100,6 @@
     return [sectionInfo numberOfObjects];
 }
 
-
 //セルの定義
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -108,8 +110,11 @@
 - (void)configureCell:(FavedCell *)cell atIndexPath:(NSIndexPath *)indexPath
 {
     NSManagedObject *faved = [self.fetchedResultsController objectAtIndexPath:indexPath];
-    cell.titleLabel.text = [[faved valueForKey:@"title"] description];
     cell.artistLabel.text = [[faved valueForKey:@"artist"] description];
+    cell.titleLabel.text = [[faved valueForKey:@"title"] description];
+    cell.videoId = [[faved valueForKey:@"videoId"] description];
+    NSLog(@"artist:%@",cell.artistLabel.text);
+    NSLog(@"title:%@",cell.titleLabel.text);
 //    cell.artworkView.image = [[UIImage alloc] initWithData:[faved valueForKey:@"artwork"]];
     [cell.artworkView setImage:[[UIImage alloc] initWithData:[faved valueForKey:@"artwork"]]];
 }
@@ -118,10 +123,6 @@
 {
     return 125;
 }
-
-
-
-
 
 //編集可能
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
@@ -146,9 +147,8 @@
     }
 }
 
-
 //並び替え OFF
-//TODO : ONにしてみよう
+//TODO : あとでONにしたい
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // The table view should not be re-orderable.
@@ -159,6 +159,32 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"selected cell: %@", indexPath);
+    
+    
+    AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    SearchViewController *searchView = appDelegate.tabViewController.childViewControllers[0];
+    __block MusicPlayerViewController *musicPlayerView = searchView.musicPlayerView;
+    
+    FavedCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    [musicPlayerView.appRadio.youtubePlayer.moviePlayer stop];
+    musicPlayerView.appRadio.youtubePlayer.delegete = nil;
+    musicPlayerView.appRadio.youtubePlayer = nil;
+    musicPlayerView.appRadio = nil;
+    musicPlayerView = nil;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        musicPlayerView = [[MusicPlayerViewController alloc] init];
+        musicPlayerView.playing_favVideoId = cell.videoId;
+        musicPlayerView.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+        [self presentViewController:musicPlayerView animated:YES completion:nil];
+//        resultView.userInteractionEnabled = YES;
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [musicPlayerView.artworkView setImage:cell.artworkView.image];
+        });
+        
+    });
 }
 
 
@@ -211,7 +237,7 @@
     
     
     // Edit the sort key as appropriate.
-    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"title" ascending:NO];
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"date" ascending:YES];
     NSArray *sortDescriptors = @[sortDescriptor];
     [fetchRequest setSortDescriptors:sortDescriptors];
     

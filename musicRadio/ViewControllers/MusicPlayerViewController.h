@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MRRadio.h"
+#import "MRFavedPlayer.h"
 
 @interface MusicPlayerViewController : UIViewController <MRRadioDelegate>
 
@@ -22,6 +23,9 @@
 @property (nonatomic, strong) UIImageView* artworkView;
 @property (nonatomic, strong) NSString* seedArtist;
 @property (nonatomic, strong) MRRadio* appRadio;
+@property (nonatomic, strong) MRFavedPlayer *favedPlayer;
 @property (nonatomic, strong) UIButton* pauseButton;
+
+@property (nonatomic, strong) NSString* playing_favVideoId;
 
 @end

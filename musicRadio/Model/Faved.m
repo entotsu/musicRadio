@@ -21,4 +21,14 @@
 @dynamic cache;
 @dynamic date;
 
+
+
+//これでデフォで現在時刻がはいる
+//http://d.hatena.ne.jp/KishikawaKatsumi/20120426/1335460134
+- (void)awakeFromInsert {
+    [super awakeFromInsert];
+    self.date = [NSDate date];
+}
+
+
 @end

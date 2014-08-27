@@ -103,7 +103,10 @@
     if (artistvideos) {
         _artistvideos = [NSMutableArray arrayWithArray:artistvideos];
         int randIndex = (int)arc4random_uniform( (int)[_artistvideos count] );
-        NSString *videoID = _artistvideos[randIndex][@"id"][@"videoId"];
+        NSDictionary *firstVideoInfo = _artistvideos[randIndex];
+        NSLog(@"first Artist Data:%@",firstVideoInfo);
+        NSString *videoID = firstVideoInfo[@"id"][@"videoId"];
+        _nextTrackName = firstVideoInfo[@"snippet"][@"title"];
         [self prepearYouTubePlayerWithVideoID:videoID];
         [_artistvideos removeObjectAtIndex:randIndex];
     }
@@ -141,18 +144,26 @@
 
 
 
-#pragma mark CoreData add Faved
-- (void) addFaved {
-    NSLog(@"addFaved");
-    
-    //    NSManagedObjectContext *context = self.managedObjectContext;
-    //    NSManagedObject *newManagedObject = [NSEntityDescription insertNewObjectForEntityForName:@"Faved" inManagedObjectContext:context];
-    //    [newManagedObject setValue:@"ELLEGARDEN" forKey:@"artist"];
-    Faved *newFav = [NSEntityDescription insertNewObjectForEntityForName:@"Faved" inManagedObjectContext:self.managedObjectContext];
 
-    
-    newFav.artist =  _nowPlayingInfo[@"artist"];
-    newFav.title = _nowPlayingInfo[@"name"];
+
+
+
+
+
+
+
+
+
+
+
+
+
+#pragma mark CoreData add Faved
+- (BOOL) addFaved {
+    NSLog(@"addFaved");
+    Faved *newFav = [NSEntityDescription insertNewObjectForEntityForName:@"Faved" inManagedObjectContext:self.managedObjectContext];
+    newFav.artist =  delegeteViewController.artistNameLabel.text;
+    newFav.title = delegeteViewController.trackNameLabel.text;
     newFav.videoId = self.youtubePlayer.videoIdentifier;
     newFav.duration = [NSNumber numberWithDouble:self.youtubePlayer.moviePlayer.duration];
     newFav.artworkUrl = _nowPlayingInfo[@"image"];
@@ -166,9 +177,47 @@
         abort();
     }
     else {
-        NSLog(@"データを追加しました。 %@  \n\n artwork:%@", newFav, newFav.artwork);
+        NSLog(@"データを追加しました。");
+        return YES;
     }
 }
+
+
+
+
+- (BOOL) checkAlreadyExsistingFavedWithVideoId:(NSString *)videoId {
+    // 検索用のNSFetchRequestを生成する。
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    
+    // 検索対象のエンティティを設定する。(ここではSampleというエンティティ)
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Faved"
+                                              inManagedObjectContext:self.managedObjectContext];
+    [request setEntity:entity];
+    
+//    // 検索結果のソートを設定する。(ここではcreationDateを降順に設定)
+//    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"creationDate" ascending:NO];
+//    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:sortDescriptor, nil];
+//    [request setSortDescriptors:sortDescriptors];
+
+    // 検索条件を設定する。(ここではtitle="sample"のデータを取得)
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"videoId = %@",videoId];
+    [request setPredicate:predicate];
+    
+    // データを検索する。
+    NSError *error = nil;
+    NSArray *fetchResults = [self.managedObjectContext executeFetchRequest:request
+                                                                     error:&error];
+
+    NSLog(@"check existing search result length:%lu",(unsigned long)[fetchResults count]);
+    
+    
+    if([fetchResults count] > 0)
+        return YES;
+    else
+        return NO;
+}
+
+
 
 
 
@@ -404,6 +453,8 @@
     if (!_didPlayFastTrack &&_didGetFirstSimilarSongInfo) {
         delegeteViewController.nextButton.enabled = NO;
     }
+    
+    [delegeteViewController onPlayTrack];
 
 }
 
