@@ -13,7 +13,7 @@
 #import "FavedTableViewController.h"
 
 #import <CoreData/CoreData.h>
-
+#import "musicRadio-Swift.h"
 
 @implementation AppDelegate
 
@@ -34,7 +34,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
 //    /*
-    SearchViewController *firstSearchView = [[SearchViewController alloc] init];
+//    SearchViewController *firstSearchView = [[SearchViewController alloc] init];
+    HomeViewController *firstSearchView = [[HomeViewController alloc] init];
     firstSearchView.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"さがす" image:nil selectedImage:nil];
     
     FavedTableViewController *favedTableViewController = [[FavedTableViewController alloc] init];

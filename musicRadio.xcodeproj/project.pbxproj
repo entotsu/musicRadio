@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B010C31619C0C0AB0015F619 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B010C31519C0C0AB0015F619 /* HomeViewController.swift */; };
 		B039790D18CE335C001F0D6A /* ShadowStyleLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = B039790C18CE335C001F0D6A /* ShadowStyleLabel.m */; };
 		B039791018CE39F6001F0D6A /* next40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B039790E18CE39F6001F0D6A /* next40@2x.png */; };
 		B039791118CE39F6001F0D6A /* heart40@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B039790F18CE39F6001F0D6A /* heart40@2x.png */; };
@@ -23,6 +24,7 @@
 		B073B03B18D9A5BB006CC3A4 /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B073B03818D9A5BB006CC3A4 /* play@2x.png */; };
 		B073B03C18D9A5BB006CC3A4 /* pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B073B03918D9A5BB006CC3A4 /* pause@2x.png */; };
 		B073B03E18D9A64E006CC3A4 /* heart@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B073B03D18D9A64E006CC3A4 /* heart@2x.png */; };
+		B082892C19C0D1AC009E8B4D /* cancelButton_30_alpha70.png in Resources */ = {isa = PBXBuildFile; fileRef = B082892B19C0D1AC009E8B4D /* cancelButton_30_alpha70.png */; };
 		B0AAF2BB18997BB400670924 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BA18997BB400670924 /* Foundation.framework */; };
 		B0AAF2BD18997BB400670924 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BC18997BB400670924 /* CoreGraphics.framework */; };
 		B0AAF2BF18997BB400670924 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B0AAF2BE18997BB400670924 /* UIKit.framework */; };
@@ -80,6 +82,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B010C31419C0C0AB0015F619 /* musicRadio-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "musicRadio-Bridging-Header.h"; sourceTree = "<group>"; };
+		B010C31519C0C0AB0015F619 /* HomeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		B02A696118A2C3EE009FF1EB /* musicRadio.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = musicRadio.entitlements; sourceTree = "<group>"; };
 		B039790B18CE335C001F0D6A /* ShadowStyleLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShadowStyleLabel.h; sourceTree = SOURCE_ROOT; };
 		B039790C18CE335C001F0D6A /* ShadowStyleLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ShadowStyleLabel.m; sourceTree = SOURCE_ROOT; };
@@ -101,6 +105,7 @@
 		B073B03818D9A5BB006CC3A4 /* play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		B073B03918D9A5BB006CC3A4 /* pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pause@2x.png"; sourceTree = "<group>"; };
 		B073B03D18D9A64E006CC3A4 /* heart@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "heart@2x.png"; sourceTree = "<group>"; };
+		B082892B19C0D1AC009E8B4D /* cancelButton_30_alpha70.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cancelButton_30_alpha70.png; sourceTree = "<group>"; };
 		B0AAF2B718997BB400670924 /* musicRadio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musicRadio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B0AAF2BA18997BB400670924 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		B0AAF2BC18997BB400670924 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -253,6 +258,7 @@
 		B0865B9018B30CF4007E9B3A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				B082892B19C0D1AC009E8B4D /* cancelButton_30_alpha70.png */,
 				B0D768A018C8E293001EEE8D /* artist.png */,
 				B0D768A118C8E293001EEE8D /* blurBG@2x.png */,
 				B0D768A218C8E293001EEE8D /* blurBG2@2x.png */,
@@ -379,6 +385,7 @@
 		B0F3ACAE18AC245800021126 /* viewClasses */ = {
 			isa = PBXGroup;
 			children = (
+				B010C31519C0C0AB0015F619 /* HomeViewController.swift */,
 				B0D768D818C8FA0D001EEE8D /* SearchViewController.h */,
 				B0D768D918C8FA0D001EEE8D /* SearchViewController.m */,
 				B0D768C218C8E2C2001EEE8D /* MusicPlayerViewController.h */,
@@ -387,6 +394,7 @@
 				B050ECEA1912DC3E00041C0C /* FavedTableViewController.m */,
 				B050ECEC1912DC9C00041C0C /* FavedCell.h */,
 				B050ECED1912DC9C00041C0C /* FavedCell.m */,
+				B010C31419C0C0AB0015F619 /* musicRadio-Bridging-Header.h */,
 			);
 			name = viewClasses;
 			path = ViewControllers;
@@ -490,6 +498,7 @@
 				B0AAF2D618997BB400670924 /* Images.xcassets in Resources */,
 				B0D768B918C8E293001EEE8D /* heart_80@2x.png in Resources */,
 				B0D768B718C8E293001EEE8D /* empty34.png in Resources */,
+				B082892C19C0D1AC009E8B4D /* cancelButton_30_alpha70.png in Resources */,
 				B073B03B18D9A5BB006CC3A4 /* play@2x.png in Resources */,
 				B0D768B218C8E293001EEE8D /* blurBG2@2x.png in Resources */,
 				B0D768BE18C8E293001EEE8D /* nextButton@2x.png in Resources */,
@@ -530,6 +539,7 @@
 				B0D7687018C8E1FD001EEE8D /* MRRadio.m in Sources */,
 				B0D7687F18C8E20C001EEE8D /* MRYoutubeRequest.m in Sources */,
 				B0D7687B18C8E20C001EEE8D /* MRExfmRequest.m in Sources */,
+				B010C31619C0C0AB0015F619 /* HomeViewController.swift in Sources */,
 				B0D768D118C8E302001EEE8D /* XCDYouTubeVideoPlayerViewController.m in Sources */,
 				B0D768DA18C8FA0D001EEE8D /* SearchViewController.m in Sources */,
 				B050ECE81912D96B00041C0C /* Faved.m in Sources */,
@@ -666,14 +676,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "musicRadio/musicRadio-Prefix.pch";
 				INFOPLIST_FILE = "musicRadio/musicRadio-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "musicRadio/ViewControllers/musicRadio-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -683,14 +697,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "musicRadio/musicRadio-Prefix.pch";
 				INFOPLIST_FILE = "musicRadio/musicRadio-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "musicRadio/ViewControllers/musicRadio-Bridging-Header.h";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -71,10 +71,11 @@ static void *XCDYouTubeVideoPlayerViewControllerKey = &XCDYouTubeVideoPlayerView
 	return [self initWithVideoIdentifier:nil];
 }
 
-- (id) initWithContentURL:(NSURL *)contentURL
-{
-	@throw [NSException exceptionWithName:NSGenericException reason:@"Use the `initWithVideoIdentifier:` method instead." userInfo:nil];
-}
+// Xcode6だとなぜか呼ばれるからコメントアウトしたら動いた
+//- (id) initWithContentURL:(NSURL *)contentURL
+//{
+//	@throw [NSException exceptionWithName:NSGenericException reason:@"Use the `initWithVideoIdentifier:` method instead." userInfo:nil];
+//}
 
 - (id) initWithVideoIdentifier:(NSString *)videoIdentifier
 {
